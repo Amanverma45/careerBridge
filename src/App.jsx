@@ -3,6 +3,7 @@ import Navbar from "./component/Navbar.jsx"
 import Home from './component/Home.jsx'
 import Signup from './component/Signup.jsx'
 import Login from './component/Login.jsx'
+import Footer from './component/Footer.jsx'
 import { Route,Routes } from 'react-router-dom'
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/login" element={<Login/>}/>
       </Routes>
     </div>
+    <Footer/>
     </>
   )
 }
