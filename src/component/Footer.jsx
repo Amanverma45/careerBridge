@@ -56,7 +56,7 @@ function Footer() {
             </a>
             <a href="mailto:support@careerbridge.com" className="block group">
               <p className="text-[10px] text-slate-500 uppercase font-bold mb-1">Email Support</p>
-              <p className="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">support@careerbridge.com</p>
+              <p className="text-sm text-slate-300 group-hover:text-indigo-400 transition-colors">av478136@gmail.com</p>
             </a>
           </div>
         </div>

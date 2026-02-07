@@ -1,22 +1,34 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 function Login() {
     const [email,setemail]= useState('');
     const [password,setpassword]= useState('')
+    const navigate = useNavigate()
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
         console.log(email)
         console.log(password)
-
-        const response = await axios.post('http://localhost:5000/api/loginUser',{
-            email,
-            password 
-        })
-        console.log(response)
-        alert('Login Successfully')
+        try{
+            const response = await axios.post('http://localhost:5000/api/loginUser',{
+                email,
+                password 
+            })
+            const token = response.data.token
+            if(token){
+                localStorage.setItem('token',token)
+                localStorage.setItem('user', JSON.stringify(response.data.user))
+                navigate('/welcome')
+                window.location.reload()
+            }
+            console.log(response)
+            alert('Login Successfully')
+        }catch(error){
+            console.log(error)
+            alert('Envalid Email or password')
+        }
     }
     return (
         <div className="min-h-screen bg-[#0f172a] text-white flex items-center justify-center p-6 relative overflow-hidden">
