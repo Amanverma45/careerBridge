@@ -12,7 +12,7 @@ function Login() {
         console.log(email)
         console.log(password)
         try{
-            const response = await axios.post('http://localhost:5000/api/loginUser',{
+            const response = await axios.post('https://careerbridge-b-1.onrender.com/api/loginUser',{
                 email,
                 password 
             })
@@ -20,7 +20,7 @@ function Login() {
             if(token){
                 localStorage.setItem('token',token)
                 localStorage.setItem('user', JSON.stringify(response.data.user))
-                navigate('/welcome')
+                navigate('/dashboard')
                 window.location.reload()
             }
             console.log(response)

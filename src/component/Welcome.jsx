@@ -5,13 +5,6 @@ import {FaUserCircle,FaBriefcase,FaFileAlt,FaChartLine,FaArrowRight} from 'react
 function Welcome() {
   const navigate = useNavigate()
 
-//   useEffect(() => {
-//     const token = localStorage.getItem('token')
-//     if (!token) {
-//       navigate('/login')
-//     }
-//   }, [navigate])
-
   const stats = [
     { label: "Profile Strength", value: "85%", icon: <FaChartLine />, color: "text-emerald-400" },
     { label: "Applied Jobs", value: "12", icon: <FaBriefcase />, color: "text-blue-400" },

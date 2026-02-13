@@ -65,7 +65,7 @@ function Footer() {
 
       <div className="border-t border-slate-800/50 py-8 text-center">
         <p className="text-xs text-slate-600 font-medium tracking-wide">
-          © {new Date().getFullYear()} CareerBridge. Made with ❤️ for your future.
+          © {new Date().getFullYear()} CareerBridge. Empowering Your Future.
         </p>
       </div>
 
