@@ -8,6 +8,7 @@ import Footer from './component/Footer.jsx'
 import Welcome from './component/Welcome.jsx'
 import { Route,Routes } from 'react-router-dom'
 import ProtectedRoute from './component/ProtectedRoute.jsx'
+import Profile from './component/Profile.jsx'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/dashboard" element={<ProtectedRoute><Welcome/></ProtectedRoute>}/>
+          <Route path="/profile" element={<Profile/>}/>
         </Routes>
       </div>
       <Footer/>

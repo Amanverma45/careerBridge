@@ -1,9 +1,10 @@
 // import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {FaUserCircle,FaBriefcase,FaFileAlt,FaChartLine,FaArrowRight} from 'react-icons/fa'
+import { FaUserCircle, FaBriefcase, FaFileAlt, FaChartLine, FaArrowRight } from 'react-icons/fa'
 
 function Welcome() {
   const navigate = useNavigate()
+  const user = JSON.parse(localStorage.getItem("user"))
 
   const stats = [
     { label: "Profile Strength", value: "85%", icon: <FaChartLine />, color: "text-emerald-400" },
@@ -22,8 +23,9 @@ function Welcome() {
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
             <h1 className="text-3xl md:text-5xl font-bold mb-2">
-              Welcome back <span className="text-indigo-400">👋</span>
+              Welcome back <span className="text-indigo-400">{user?.name}</span>
             </h1>
+
             <p className="text-slate-400 text-lg">
               Here's what's happening with your career search today.
             </p>
