@@ -26,7 +26,7 @@ function Login() {
             console.log(response)
             alert('Login Successfully')
         }catch(error){
-            console.log(error)
+            console.log(error.message)
             alert('Envalid Email or password')
         }
     }
@@ -44,17 +44,6 @@ function Login() {
                         Don't have an account? <Link to="/signup" className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition font-medium">Sign up</Link>
                     </p>
                 </div>
-
-                {/* <button className="w-full py-3 bg-white text-slate-900 font-semibold rounded-xl flex items-center justify-center gap-3 hover:bg-slate-100 transition shadow-sm mb-6">
-                    <img src="https://www.svgrepo.com/show/355037/google.svg" className="w-5 h-5" alt="Google" />
-                    Continue with Google
-                </button> */}
-
-                {/* <div className="relative my-8">
-                    <div className="absolute inset-0 flex items-center"><span className="w-full border-t border-slate-800"></span></div>
-                    <div className="relative flex justify-center text-xs uppercase"><span className="bg-[#11192d] px-4 text-slate-500 tracking-widest">Or login with email</span></div>
-                </div> */}
-
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-slate-300 ml-1">Email Address</label>
