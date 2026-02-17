@@ -30,6 +30,11 @@ function Profile() {
                     bio
                 }
             )
+            console.log("FULL RESPONSE:", response)
+            console.log("UPDATED USER:", response.data.user)
+            console.log(response.data.user.skills)
+            console.log(response.data.user.experience)
+            console.log(response.data.user.bio)
 
             localStorage.setItem('user', JSON.stringify(response.data.user))
             alert("Profile updated successfully")
@@ -56,7 +61,7 @@ function Profile() {
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full mt-2 p-3 bg-slate-800 rounded-lg"/>
+                        className="w-full mt-2 p-3 bg-slate-800 rounded-lg" />
                 </div>
 
                 <div>

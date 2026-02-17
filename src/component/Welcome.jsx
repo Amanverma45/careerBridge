@@ -4,12 +4,19 @@ import { FaUserCircle, FaBriefcase, FaFileAlt, FaChartLine, FaArrowRight } from 
 
 function Welcome() {
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem("user"))
+  const storedUser = localStorage.getItem("user")
+  const user = storedUser ? JSON.parse(storedUser) : null
+
+  let strength = 0;
+  if (user?.name) strength += 25
+  if (user?.skills) strength += 25
+  if (user?.experience) strength += 25
+  if (user?.bio) strength += 25
 
   const stats = [
-    { label: "Profile Strength", value: "85%", icon: <FaChartLine />, color: "text-emerald-400" },
-    { label: "Applied Jobs", value: "12", icon: <FaBriefcase />, color: "text-blue-400" },
-    { label: "Draft Resumes", value: "3", icon: <FaFileAlt />, color: "text-purple-400" },
+    { label: "Profile Strength", value: `${strength}%`, icon: <FaChartLine />, color: "text-emerald-400" },
+    { label: "Skills", value: user?.skills || "Not added", icon: <FaBriefcase />, color: "text-blue-400" },
+    { label: "Experience", value: user?.experience || "Not added", icon: <FaFileAlt />, color: "text-purple-400" },
   ]
 
   return (
@@ -44,6 +51,7 @@ function Welcome() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
           {stats.map((stat, i) => (
+
             <div
               key={i}
               className="bg-slate-900/50 border border-slate-800 p-6 rounded-3xl backdrop-blur-sm"
@@ -56,6 +64,28 @@ function Welcome() {
             </div>
           ))}
         </div>
+
+        {/* //process */}
+        <div className="bg-slate-900/50 border border-slate-800 p-6 rounded-3xl backdrop-blur-sm mb-12">
+          <h2 className="text-xl font-bold mb-4">Profile Overview</h2>
+
+          <p className="mb-2">
+            <strong>Name:</strong> {user?.name}
+          </p>
+
+          <p className="mb-2">
+            <strong>Skills:</strong> {user?.skills || "Not added"}
+          </p>
+
+          <p className="mb-2">
+            <strong>Experience:</strong> {user?.experience || "Not added"}
+          </p>
+
+          <p>
+            <strong>Bio:</strong> {user?.bio || "Not added"}
+          </p>
+        </div>
+
 
         <div className="grid lg:grid-cols-2 gap-8">
 
