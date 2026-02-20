@@ -5,6 +5,9 @@ import axios from 'axios';
 function Job() {
   const [jobs, setJobs] = useState([])
 
+  const storedUser = localStorage.getItem('user')
+  const user = storedUser? JSON.parse(storedUser):null
+
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
 
@@ -21,13 +24,20 @@ function Job() {
     fetchJobs()
   }, [])
 
-  // const handleApply = () => {
-  //   if (token) {
-  //     alert('Application Submitted')
-  //   } else {
-  //     navigate('/login')
-  //   }
-  // }
+  const handleApply = async (jobId) => {
+    if (!user) {
+      navigate('/login')
+    }
+    try{
+      const response = await axios.post('https://careerbridge-b-1.onrender.com/application/applyJob',{
+        userId:user._id,
+        jobId:jobId
+      })
+      alert(response.data.message)
+    }catch(error){
+      alert('Application failed')
+    }
+  }
   return (
     <div className="min-h-screen bg-[#0f172a] text-white p-10">
       <h1 className="text-3xl font-bold mb-8">Available Jobs</h1>
@@ -47,6 +57,7 @@ function Job() {
             <p className="text-sm text-slate-500 mt-2">
               {job.description}
             </p>
+            <button onClick={()=>handleApply(job._id)} className="mt-4 px-6 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500">Apply Now</button>
           </div>
         ))}
       </div>
