@@ -35,7 +35,7 @@ function Job() {
       })
       alert(response.data.message)
     }catch(error){
-      alert('Application failed')
+      alert(error.response?.data?.message,'Application failed')
     }
   }
   return (
