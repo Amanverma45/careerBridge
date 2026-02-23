@@ -27,6 +27,7 @@ function Job() {
   const handleApply = async (jobId) => {
     if (!user) {
       navigate('/login')
+      return;
     }
     try{
       const response = await axios.post('https://careerbridge-b-1.onrender.com/application/applyJob',{
@@ -35,7 +36,7 @@ function Job() {
       })
       alert(response.data.message)
     }catch(error){
-      alert(error.response?.data?.message,'Application failed')
+      alert(error.response?.data?.message || 'Application failed')
     }
   }
   return (

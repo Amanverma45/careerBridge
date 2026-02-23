@@ -9,6 +9,7 @@ import Welcome from './component/Welcome.jsx'
 import { Route,Routes } from 'react-router-dom'
 import ProtectedRoute from './component/ProtectedRoute.jsx'
 import Profile from './component/Profile.jsx'
+import AppliedJobs from './component/AppliedJobs.jsx'
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Home/>}/>
-          <Route path="/job" element={<ProtectedRoute><Job/></ProtectedRoute>}/>
+          <Route path="/jobs" element={<ProtectedRoute><Job/></ProtectedRoute>}/>
           <Route path="/signup" element={<Signup/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/dashboard" element={<ProtectedRoute><Welcome/></ProtectedRoute>}/>
           <Route path="/profile" element={<Profile/>}/>
+          <Route path="/applied-jobs" element={<ProtectedRoute><AppliedJobs/></ProtectedRoute>} />
         </Routes>
       </div>
       <Footer/>

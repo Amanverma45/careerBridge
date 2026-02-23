@@ -48,7 +48,7 @@ function Navbar() {
         {token && (
           <>
             <Link to="/dashboard" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Dashboard</Link>
-            <Link to="/job" className="px-6 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 transition-all active:scale-95">Jobs</Link>
+            <Link to="/jobs" className="px-6 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 transition-all active:scale-95">Jobs</Link>
             <button
               onClick={() => {
                 localStorage.removeItem('token')
