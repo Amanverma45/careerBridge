@@ -1,67 +1,56 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from 'axios'
 
-function Job() {
-  const [jobs, setJobs] = useState([])
+function AppliedJobs() {
+  const [appliedJobs, setAppliedJobs] = useState([])
 
   const storedUser = localStorage.getItem('user')
-  const user = storedUser? JSON.parse(storedUser):null
-
-  const navigate = useNavigate()
-  const token = localStorage.getItem("token")
+  const user = storedUser ? JSON.parse(storedUser) : null
 
   useEffect(() => {
-    const fetchJobs = async () => {
+    const fetchApplied = async () => {
       try {
-        const response = await axios.get('https://careerbridge-b-1.onrender.com/job/getJob')
-        setJobs(response.data.jobs)
+        const response = await axios.get(
+          `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
+        )
+
+        setAppliedJobs(response.data)
       } catch (error) {
-        console.log("FETCH JOB ERROR:", error)
+        console.log("FETCH APPLIED ERROR:", error)
       }
     }
 
-    fetchJobs()
+    if (user) {
+      fetchApplied()
+    }
   }, [])
 
-  const handleApply = async (jobId) => {
-    if (!user) {
-      navigate('/login')
-    }
-    try{
-      const response = await axios.post('https://careerbridge-b-1.onrender.com/application/applyJob',{
-        userId:user._id,
-        jobId:jobId
-      })
-      alert(response.data.message)
-    }catch(error){
-      alert(error.response?.data?.message,'Application failed')
-    }
-  }
   return (
     <div className="min-h-screen bg-[#0f172a] text-white p-10">
-      <h1 className="text-3xl font-bold mb-8">Available Jobs</h1>
+      <h1 className="text-3xl font-bold mb-8">Applied Jobs</h1>
 
       <div className="grid md:grid-cols-2 gap-6">
-        {jobs.map((job) => (
+        {appliedJobs.map((app) => (
           <div
-            key={job._id}
+            key={app._id}
             className="bg-slate-900 p-6 rounded-2xl border border-slate-800"
           >
-            <h2 className="text-xl font-bold mb-2">{job.title}</h2>
-            <p className="text-slate-400">{job.company}</p>
-            <p className="text-slate-400">{job.location}</p>
+            <h2 className="text-xl font-bold mb-2">
+              {app.jobId.title}
+            </h2>
+
+            <p className="text-slate-400">
+              {app.jobId.company}
+            </p>
+
             <p className="text-emerald-400 font-semibold mt-2">
-              ₹ {job.salary}
+              ₹ {app.jobId.salary}
             </p>
-            <p className="text-sm text-slate-500 mt-2">
-              {job.description}
-            </p>
-            <button onClick={()=>handleApply(job._id)} className="mt-4 px-6 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500">Apply Now</button>
           </div>
         ))}
       </div>
     </div>
   )
 }
-export default Job;
+
+export default AppliedJobs
