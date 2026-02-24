@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-
+// console.log("USER:", user)
 function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([])
 
