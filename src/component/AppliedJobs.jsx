@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-// console.log("USER:", user)
 function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([])
 
@@ -13,7 +12,6 @@ function AppliedJobs() {
         const response = await axios.get(
           `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
         )
-
         setAppliedJobs(response.data)
       } catch (error) {
         console.log("FETCH APPLIED ERROR:", error)

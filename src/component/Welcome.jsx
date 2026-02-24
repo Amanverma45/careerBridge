@@ -48,7 +48,7 @@ function Welcome() {
             </button>
 
             <button
-              onClick={() => navigate('/applied-jobs')}
+              onClick={() => navigate('/appliedJobs')}
               className="flex items-center gap-3 bg-slate-800/50 border border-slate-700 hover:bg-slate-800 px-6 py-3 rounded-2xl transition-all">
               📄 Applied Jobs
             </button>

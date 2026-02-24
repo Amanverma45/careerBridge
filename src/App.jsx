@@ -23,7 +23,7 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/dashboard" element={<ProtectedRoute><Welcome/></ProtectedRoute>}/>
           <Route path="/profile" element={<Profile/>}/>
-          <Route path="/applied-jobs" element={<ProtectedRoute><AppliedJobs/></ProtectedRoute>} />
+          <Route path="/appliedJobs" element={<ProtectedRoute><AppliedJobs/></ProtectedRoute>} />
         </Routes>
       </div>
       <Footer/>
