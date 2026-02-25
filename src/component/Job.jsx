@@ -4,9 +4,10 @@ import axios from 'axios';
 
 function Job() {
   const [jobs, setJobs] = useState([])
+  const [appliedIds, setAppliedIds] = useState([])
 
   const storedUser = localStorage.getItem('user')
-  const user = storedUser? JSON.parse(storedUser):null
+  const user = storedUser ? JSON.parse(storedUser) : null
 
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
@@ -16,6 +17,9 @@ function Job() {
       try {
         const response = await axios.get('https://careerbridge-b-1.onrender.com/job/getJob')
         setJobs(response.data.jobs)
+
+        const ids = response.data.map(app => app.jobId._Id)
+        setAppliedIds(ids)
       } catch (error) {
         console.log("FETCH JOB ERROR:", error)
       }
@@ -25,17 +29,18 @@ function Job() {
   }, [])
 
   const handleApply = async (jobId) => {
+    setAppliedIds(prev=>[...prev,jobId])
     if (!user) {
       navigate('/login')
       return;
     }
-    try{
-      const response = await axios.post('https://careerbridge-b-1.onrender.com/application/applyJob',{
-        userId:user._id,
-        jobId:jobId
+    try {
+      const response = await axios.post('https://careerbridge-b-1.onrender.com/application/applyJob', {
+        userId: user._id,
+        jobId: jobId
       })
       alert(response.data.message)
-    }catch(error){
+    } catch (error) {
       alert(error.response?.data?.message || 'Application failed')
     }
   }
@@ -58,7 +63,16 @@ function Job() {
             <p className="text-sm text-slate-500 mt-2">
               {job.description}
             </p>
-            <button onClick={()=>handleApply(job._id)} className="mt-4 px-6 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500">Apply Now</button>
+            <button
+              disabled={appliedIds.includes(job._id)}
+              onClick={() => handleApply(job._id)}
+              className={`mt-4 px-6 py-2 rounded-lg ${appliedIds.includes(job._id)
+                  ? "bg-green-600 cursor-not-allowed"
+                  : "bg-indigo-600 hover:bg-indigo-500"
+                }`}
+            >
+              {appliedIds.includes(job._id) ? "Applied " : "Apply Now"}
+            </button>
           </div>
         ))}
       </div>

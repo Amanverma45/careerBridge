@@ -7,6 +7,9 @@ function Navbar() {
   const token = localStorage.getItem('token')
   const navigate = useNavigate();
 
+  const storedUser = localStorage.getItem("user")
+  const user = storedUser ? JSON.parse(storedUser) : null
+
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800 text-white px-6 py-3 flex items-center justify-between">
 
@@ -47,17 +50,26 @@ function Navbar() {
 
         {token && (
           <>
-            <Link to="/dashboard" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Dashboard</Link>
-            <Link to="/jobs" className="px-6 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 transition-all active:scale-95">Jobs</Link>
+            {user?.role === "user" && (
+              <>
+                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/jobs">Jobs</Link>
+              </>
+            )}
+
+            {user?.role === "recruiter" && (
+              <>
+                <Link to="/recruiterdashboard">Recruiter Dashboard</Link>
+              </>
+            )}
             <button
               onClick={() => {
                 localStorage.removeItem('token')
+                localStorage.removeItem('user')
                 navigate('/')
               }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all duration-300 group shadow-lg shadow-rose-500/10"
             >
-              <span className="text-sm font-bold">Logout</span>
-              <HiOutlineLogout className="text-xl group-hover:translate-x-1 transition-transform" />
+              Logout
             </button>
           </>
         )}

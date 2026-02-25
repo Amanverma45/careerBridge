@@ -10,6 +10,7 @@ import { Route,Routes } from 'react-router-dom'
 import ProtectedRoute from './component/ProtectedRoute.jsx'
 import Profile from './component/Profile.jsx'
 import AppliedJobs from './component/AppliedJobs.jsx'
+import RecruiterDashboard from './component/RecruiterDashboard.jsx'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/dashboard" element={<ProtectedRoute><Welcome/></ProtectedRoute>}/>
           <Route path="/profile" element={<Profile/>}/>
           <Route path="/appliedJobs" element={<ProtectedRoute><AppliedJobs/></ProtectedRoute>} />
+          <Route path="/recuiterdashboard" element={<ProtectedRoute><RecruiterDashboard/></ProtectedRoute>} />
         </Routes>
       </div>
       <Footer/>

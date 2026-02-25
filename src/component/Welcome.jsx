@@ -1,23 +1,44 @@
-// import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaUserCircle, FaBriefcase, FaFileAlt, FaChartLine, FaArrowRight } from 'react-icons/fa'
-
+import axios from 'axios'
 function Welcome() {
+  const [appliedCount, setAppliedCount] = useState(0)
+
   const navigate = useNavigate()
   const storedUser = localStorage.getItem("user")
   const user = storedUser ? JSON.parse(storedUser) : null
 
+  useEffect(() => {
+    if (!user?._id) return
+
+    const fetchAppliedCount = async () => {
+      try {
+        const response = await axios.get(
+          `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
+        )
+        
+        setAppliedCount(response.data.length)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    fetchAppliedCount()
+  }, [user])
+  
   let strength = 0;
   if (user?.name) strength += 25
   if (user?.skills) strength += 25
   if (user?.experience) strength += 25
   if (user?.bio) strength += 25
 
-  const stats = [
-    { label: "Profile Strength", value: `${strength}%`, icon: <FaChartLine />, color: "text-emerald-400" },
-    { label: "Skills", value: user?.skills || "Not added", icon: <FaBriefcase />, color: "text-blue-400" },
-    { label: "Experience", value: user?.experience || "Not added", icon: <FaFileAlt />, color: "text-purple-400" },
-  ]
+ const stats = [
+  { label: "Profile Strength", value: `${strength}%`, icon: <FaChartLine />, color: "text-emerald-400" },
+  { label: "Skills", value: user?.skills || "Not added", icon: <FaBriefcase />, color: "text-blue-400" },
+  { label: "Experience", value: user?.experience || "Not added", icon: <FaFileAlt />, color: "text-purple-400" },
+  { label: "Applied Jobs", value: appliedCount, icon: <FaBriefcase />, color: "text-indigo-400" }
+]
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white p-6 md:p-12 relative overflow-hidden">
@@ -40,17 +61,16 @@ function Welcome() {
 
           <div className="flex gap-4">
             <button
+              onClick={() => navigate('/appliedJobs')}
+              className="flex items-center gap-3 bg-slate-800/50 border border-slate-700 hover:bg-slate-800 px-6 py-3 rounded-2xl transition-all">
+              📄 Applied Jobs
+            </button>
+            <button
               onClick={() => navigate('/profile')}
               className="flex items-center gap-3 bg-slate-800/50 border border-slate-700 hover:bg-slate-800 px-6 py-3 rounded-2xl transition-all"
             >
               <FaUserCircle className="text-2xl text-indigo-400" />
               <span>Edit Profile</span>
-            </button>
-
-            <button
-              onClick={() => navigate('/appliedJobs')}
-              className="flex items-center gap-3 bg-slate-800/50 border border-slate-700 hover:bg-slate-800 px-6 py-3 rounded-2xl transition-all">
-              📄 Applied Jobs
             </button>
           </div>
         </header>
