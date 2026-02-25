@@ -25,7 +25,7 @@ function Signup() {
         role
       })
       console.log(response)
-      alert('User Created successfully')
+      alert('Ragistered successfully')
       navigate('/login')
     } catch (error) {
       console.log("Full Error:", error);
