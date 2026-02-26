@@ -59,6 +59,7 @@ function Navbar() {
 
             {user?.role === "recruiter" && (
               <>
+                <Link to="/addJobs" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Add-Jobs</Link>
                 <Link to="/recruiterdashboard" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Recuiter-Dashboard</Link>
               </>
             )}
