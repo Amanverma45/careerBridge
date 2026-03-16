@@ -85,7 +85,7 @@ function Signup() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">Role</label>
-              <input onChange={(e) => setrole(e.target.value)} type="text" placeholder="user or requitor" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
+              <input onChange={(e) => setrole(e.target.value)} type="text" placeholder="User or Recruiter" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
             </div>
 
             <button className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-4">

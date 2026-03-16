@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FiSearch } from "react-icons/fi";
 
 function Job() {
   const [jobs, setJobs] = useState([])
@@ -76,21 +77,27 @@ function Job() {
     }
   }
   return (
-    <div className="min-h-screen bg-[#0f172a] text-white p-10">
+    <div className="min-h-screen bg-gray-100 text-gray-800 p-10">
       <h1 className="text-3xl font-bold mb-8">Available Jobs</h1>
 
-      <input
-        type="text"
-        placeholder="Search by job title or company..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full mb-6 p-3 rounded-lg text-black"
-      />
+      <div className="relative mb-8">
+
+        <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+
+        <input
+          type="text"
+          placeholder="Search by job title or company..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
+        />
+
+      </div>
       <div className="grid md:grid-cols-2 gap-6">
         {filteredJobs.map((job) => (
           <div
             key={job._id}
-            className="bg-slate-900 p-6 rounded-2xl border border-slate-800"
+            className="bg-white p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-lg transition"
           >
             <h2 className="text-xl font-bold mb-2">{job.title}</h2>
             <p className="text-slate-400">{job.company}</p>
