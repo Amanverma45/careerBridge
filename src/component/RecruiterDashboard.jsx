@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function RecruiterDashboard() {
+    const navigate = useNavigate()
 
     const [jobs, setJobs] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
@@ -175,6 +177,12 @@ function RecruiterDashboard() {
                                                 className="px-4 py-2 bg-red-500 text-white rounded-lg"
                                             >
                                                 Delete
+                                            </button>
+                                            <button
+                                                onClick={() => navigate(`/applicants/${job._id}`)}
+                                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+                                            >
+                                                View Applicants
                                             </button>
                                         </div>
                                     </>

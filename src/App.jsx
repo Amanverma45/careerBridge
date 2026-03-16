@@ -12,6 +12,7 @@ import Profile from './component/Profile.jsx'
 import AppliedJobs from './component/AppliedJobs.jsx'
 import RecruiterDashboard from './component/RecruiterDashboard.jsx'
 import AddJob from './component/AddJob.jsx'
+import Applicants from './component/Applicants.jsx'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/appliedJobs" element={<ProtectedRoute><AppliedJobs/></ProtectedRoute>} />
           <Route path="/addJobs" element={<ProtectedRoute><AddJob/></ProtectedRoute>} />
           <Route path="/recruiterdashboard" element={<ProtectedRoute><RecruiterDashboard/></ProtectedRoute>} />
+          <Route path="/applicants/:jobId" element={<Applicants/>}/>
         </Routes>
       </div>
       <Footer/>
