@@ -15,13 +15,11 @@ function RecruiterDashboard() {
     const storedUser = localStorage.getItem("user")
     const user = storedUser ? JSON.parse(storedUser) : null
 
-    // ---------------- Pagination ----------------
     const indexOfLastJob = currentPage * jobsPerPage
     const indexOfFirstJob = indexOfLastJob - jobsPerPage
     const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob)
     const totalPages = Math.ceil(jobs.length / jobsPerPage) || 1
 
-    // ---------------- Fetch Jobs ----------------
     useEffect(() => {
         const fetchJobs = async () => {
             try {
@@ -39,7 +37,6 @@ function RecruiterDashboard() {
         }
     }, [])
 
-    // ---------------- Delete ----------------
     const handleDelete = async (id) => {
         const confirmDelete = window.confirm(
             "⚠️ This action cannot be undone. Delete this job?"
@@ -58,7 +55,6 @@ function RecruiterDashboard() {
         }
     }
 
-    // ---------------- Save Edit ----------------
     const handleUpdate = async (id) => {
         try {
             await axios.put(

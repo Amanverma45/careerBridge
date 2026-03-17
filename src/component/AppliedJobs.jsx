@@ -44,6 +44,10 @@ function AppliedJobs() {
             <p className="text-emerald-400 font-semibold mt-2">
               ₹ {app.jobId.salary}
             </p>
+            <p className={`mt-2 text-sm font-semibold 
+              ${app.status === "shortlisted" ? "text-green-600" : "text-yellow-600"}`}>
+              Status: {app.status === "shortlisted" ? "Shortlisted ✅" : "Pending ⏳"}
+            </p>
           </div>
         ))}
       </div>

@@ -27,7 +27,7 @@ function Login() {
                     navigate('/dashboard')
                 }
 
-                window.location.reload()
+                // window.location.reload()
             }
 
             alert('Login Successfully')
