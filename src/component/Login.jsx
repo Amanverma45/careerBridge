@@ -3,37 +3,52 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 
 function Login() {
-    const [email,setemail]= useState('');
-    const [password,setpassword]= useState('')
+    const [email, setemail] = useState('');
+    const [password, setpassword] = useState('');
+    const [loading, setLoading] = useState(false);
+
     const navigate = useNavigate()
 
-    const handleSubmit = async (e)=>{
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        try{
-            const response = await axios.post('https://careerbridge-b-1.onrender.com/api/loginUser',{
-                email,
-                password 
-            })
+
+        if (!email || !password) {
+            alert("Please fill all fields")
+            return
+        }
+
+        try {
+            setLoading(true)
+
+            const response = await axios.post(
+                'https://careerbridge-b-1.onrender.com/api/loginUser',
+                {
+                    email: email.toLowerCase(),
+                    password
+                }
+            )
+
             const token = response.data.token
             const user = response.data.user
 
-            if(token){
-                localStorage.setItem('token',token)
+            if (token) {
+                localStorage.setItem('token', token)
                 localStorage.setItem('user', JSON.stringify(user))
 
-                if(user.role === "recruiter"){
+                alert('Login Successfully')
+
+                if (user.role === "recruiter") {
                     navigate('/recruiterdashboard')
-                }else{
+                } else {
                     navigate('/dashboard')
                 }
-
-                // window.location.reload()
             }
 
-            alert('Login Successfully')
-        }catch(error){
-            console.log(error.message)
-            alert('Envalid Email or password')
+        } catch (error) {
+            console.log(error)
+            alert(error.response?.data?.message || 'Invalid Email or Password')
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -48,7 +63,7 @@ function Login() {
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
                     <p className="text-slate-400">
-                        Don't have an account? <Link to="/signup" className="text-indigo-400 cursor-pointer hover:text-indigo-300 transition font-medium">Sign up</Link>
+                        Don't have an account? <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 transition font-medium">Sign up</Link>
                     </p>
                 </div>
 
@@ -57,7 +72,7 @@ function Login() {
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-slate-300 ml-1">Email Address</label>
                         <input
-                            onChange={(e)=>setemail(e.target.value)}
+                            onChange={(e) => setemail(e.target.value)}
                             type="email"
                             placeholder="you@example.com"
                             className="w-full bg-slate-800/40 border border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50 transition-all placeholder:text-slate-600"
@@ -65,25 +80,26 @@ function Login() {
                     </div>
 
                     <div className="space-y-2">
-                        <div className="flex justify-between items-center ml-1">
-                            <label className="text-sm font-medium text-slate-300">Password</label>
-                        </div>
+                        <label className="text-sm font-medium text-slate-300 ml-1">Password</label>
                         <input
-                            onChange={(e)=>setpassword(e.target.value)}
+                            onChange={(e) => setpassword(e.target.value)}
                             type="password"
                             placeholder="••••••••"
                             className="w-full bg-slate-800/40 border border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50 transition-all placeholder:text-slate-600"
                         />
                     </div>
 
-                    <button className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-2">
-                        Sign In
+                    <button
+                        disabled={loading}
+                        className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] disabled:opacity-50"
+                    >
+                        {loading ? "Signing In..." : "Sign In"}
                     </button>
 
                 </form>
 
-                <p className="mt-8 text-center text-xs text-slate-500 leading-relaxed">
-                    By signing in, you agree to our <span className="underline cursor-pointer">Terms of Service</span> and <span className="underline cursor-pointer">Privacy Policy</span>.
+                <p className="mt-8 text-center text-xs text-slate-500">
+                    By signing in, you agree to our Terms of Service and Privacy Policy.
                 </p>
 
             </div>

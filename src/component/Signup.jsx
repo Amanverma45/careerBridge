@@ -20,7 +20,7 @@ function Signup() {
     try {
       const response = await axios.post('https://careerbridge-b-1.onrender.com/api/saveUser', {
         name,
-        email,
+        email:email.toLowerCase(),
         password,
         role
       })
