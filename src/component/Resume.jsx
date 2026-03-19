@@ -24,7 +24,7 @@ function Resume() {
                 formData
             )
             console.log(res.data)
-            setuploaded(res.data.file.filename)
+            setuploaded(res.data.user.resume)
             alert(res.data.message)
 
         } catch (error) {
