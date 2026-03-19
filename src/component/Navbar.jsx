@@ -13,13 +13,13 @@ function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800 text-white px-6 py-3 flex items-center justify-between">
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4 h-16">
         <img
           src={logo}
           alt="CareerBridge Logo"
-          className="h-12 w-auto"
+          className="h-14 md:h-16 w-auto object-contain drop-shadow-lg"
         />
-        <span className="text-xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent hidden sm:block">
+        <span className="text-2xl md:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
           CareerBridge
         </span>
       </div>
