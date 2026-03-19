@@ -5,9 +5,10 @@ function Resume() {
     const [uploaded, setuploaded] = useState(null)
     const [file, setFile] = useState(null)
 
-    const storedUser = localStorage.getItem("user")
-    const user = storedUser ? JSON.parse(storedUser) : null
-
+    const [user, setUser] = useState(() => {
+        const storedUser = localStorage.getItem("user")
+        return storedUser ? JSON.parse(storedUser) : null
+    })
     const handleUpload = async (e) => {
         e.preventDefault()
 
@@ -17,20 +18,30 @@ function Resume() {
         formData.append("resume", file)
         formData.append("userId", user._id)
 
-        try {
+        console.log("USER:", user)
+        console.log("UPLOADED:", uploaded)
 
+        try {
             const res = await axios.post(
                 "https://careerbridge-b-1.onrender.com/api/uploadResume",
                 formData
             )
-            console.log(res.data)
-            setuploaded(res.data.user.resume)
+
+            console.log("RESPONSE:", res.data)
+
+            const newResume = res.data.user.resume
+
+            setuploaded(newResume)
+
+            const updatedUser = { ...user, resume: newResume }
+            localStorage.setItem("user", JSON.stringify(updatedUser))
+            setUser(updatedUser)
+
             alert(res.data.message)
 
         } catch (error) {
-            console.log(error)
+            console.log("ERROR:", error)
         }
-
     }
 
     return (
@@ -69,12 +80,15 @@ function Resume() {
                                 Resume Uploaded Successfully
                             </p>
 
-                            <a
+                            {/* <a
                                 href={`https://careerbridge-b-1.onrender.com/uploads/${uploaded}`}
                                 target="_blank"
                                 rel="noreferrer"
                                 className="text-indigo-600 underline"
                             >
+                                View Resume
+                            </a> */}
+                            <a href={uploaded} target="_blank" rel="noreferrer">
                                 View Resume
                             </a>
                         </div>
