@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import axios from "axios"
 
 function Resume() {
-    const [uploaded, setuploaded] = useState(null)
     const [file, setFile] = useState(null)
 
     const [user, setUser] = useState(() => {
@@ -18,25 +17,14 @@ function Resume() {
         formData.append("resume", file)
         formData.append("userId", user._id)
 
-        console.log("USER:", user)
-        console.log("UPLOADED:", uploaded)
-
         try {
             const res = await axios.post(
                 "https://careerbridge-b-1.onrender.com/api/uploadResume",
                 formData
             )
+            localStorage.setItem("user", JSON.stringify(res.data.user))
 
-            console.log("RESPONSE:", res.data)
-
-            const newResume = res.data.user.resume
-
-            setuploaded(newResume)
-
-            const updatedUser = { ...user, resume: newResume }
-            localStorage.setItem("user", JSON.stringify(updatedUser))
-            setUser(updatedUser)
-
+            setUser(res.data.user)
             alert(res.data.message)
 
         } catch (error) {
@@ -74,21 +62,13 @@ function Resume() {
                     <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold transition">
                         Upload Resume
                     </button>
-                    {uploaded && (
+                    {user?.resume && (
                         <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
                             <p className="text-green-700 font-medium">
                                 Resume Uploaded Successfully
                             </p>
 
-                            {/* <a
-                                href={`https://careerbridge-b-1.onrender.com/uploads/${uploaded}`}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-indigo-600 underline"
-                            >
-                                View Resume
-                            </a> */}
-                            <a href={uploaded} target="_blank" rel="noreferrer">
+                            <a href={user.resume} target="_blank" rel="noreferrer">
                                 View Resume
                             </a>
                         </div>
