@@ -35,6 +35,8 @@ function Login() {
                 localStorage.setItem('token', token)
                 localStorage.setItem('user', JSON.stringify(user))
 
+                localStorage.setItem("loginTime", Date.now())
+
                 alert('Login Successfully')
 
                 if (user.role === "recruiter") {
@@ -63,14 +65,22 @@ function Login() {
                 <div className="text-center mb-10">
                     <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
                     <p className="text-slate-400">
-                        Don't have an account? <Link to="/signup" className="text-indigo-400 hover:text-indigo-300 transition font-medium">Sign up</Link>
+                        Don't have an account?{" "}
+                        <Link
+                            to="/signup"
+                            className="text-indigo-400 hover:text-indigo-300 transition font-medium"
+                        >
+                            Sign up
+                        </Link>
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300 ml-1">Email Address</label>
+                        <label className="text-sm font-medium text-slate-300 ml-1">
+                            Email Address
+                        </label>
                         <input
                             onChange={(e) => setemail(e.target.value)}
                             type="email"
@@ -80,7 +90,9 @@ function Login() {
                     </div>
 
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300 ml-1">Password</label>
+                        <label className="text-sm font-medium text-slate-300 ml-1">
+                            Password
+                        </label>
                         <input
                             onChange={(e) => setpassword(e.target.value)}
                             type="password"
