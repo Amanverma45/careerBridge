@@ -3,11 +3,13 @@ import { useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
+
 function Signup() {
   const [name, setname] = useState('');
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('')
   const [role, setrole] = useState('')
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -18,9 +20,10 @@ function Signup() {
     console.log(role)
 
     try {
+      setLoading(true)
       const response = await axios.post('https://careerbridge-b-1.onrender.com/api/saveUser', {
         name,
-        email:email.toLowerCase(),
+        email: email.toLowerCase(),
         password,
         role
       })
@@ -32,7 +35,9 @@ function Signup() {
       console.log("Error Response:", error.response);
       console.log("Error Data:", error.response?.data);
       console.log("Status Code:", error.response?.status);
-      alert("Signup Failed ❌");
+      alert("Signup Failed ");
+    } finally {
+      setLoading(false)
     }
   }
   return (
@@ -87,9 +92,18 @@ function Signup() {
               <label className="text-sm font-medium text-slate-300">Role</label>
               <input onChange={(e) => setrole(e.target.value)} type="text" placeholder="User or Recruiter" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
             </div>
-
-            <button className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-4">
-              Create Account
+            <button
+              disabled={loading}
+              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-4 flex items-center justify-center gap-2"
+            >
+              {loading ? (
+                <>
+                  <span className="loader border-white"></span>
+                  Creating Account...
+                </>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
         </div>

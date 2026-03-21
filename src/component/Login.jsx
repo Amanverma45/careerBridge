@@ -103,9 +103,16 @@ function Login() {
 
                     <button
                         disabled={loading}
-                        className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] disabled:opacity-50"
+                        className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                        {loading ? "Signing In..." : "Sign In"}
+                        {loading ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                Signing In...
+                            </>
+                        ) : (
+                            "Sign In"
+                        )}
                     </button>
 
                 </form>

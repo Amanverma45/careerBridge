@@ -1,221 +1,262 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function RecruiterDashboard() {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
 
-    const [jobs, setJobs] = useState([])
-    const [currentPage, setCurrentPage] = useState(1)
-    const [editJobId, setEditJobId] = useState(null)
-    const [editData, setEditData] = useState({})
+  const [jobs, setJobs] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [editJobId, setEditJobId] = useState(null)
+  const [editData, setEditData] = useState({})
 
-    const jobsPerPage = 6
+  const [loading, setLoading] = useState(true)
+  const [deleteLoadingId, setDeleteLoadingId] = useState(null)
+  const [updateLoadingId, setUpdateLoadingId] = useState(null)
 
-    const storedUser = localStorage.getItem("user")
-    const user = storedUser ? JSON.parse(storedUser) : null
+  const jobsPerPage = 6
 
-    const indexOfLastJob = currentPage * jobsPerPage
-    const indexOfFirstJob = indexOfLastJob - jobsPerPage
-    const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob)
-    const totalPages = Math.ceil(jobs.length / jobsPerPage) || 1
+  const storedUser = localStorage.getItem("user")
+  const user = storedUser ? JSON.parse(storedUser) : null
 
-    useEffect(() => {
-        const fetchJobs = async () => {
-            try {
-                const response = await axios.get(
-                    `https://careerbridge-b-1.onrender.com/job/recruiterJobs/${user._id}`
-                )
-                setJobs(response.data)
-            } catch (error) {
-                console.log(error.message)
-            }
-        }
+  const indexOfLastJob = currentPage * jobsPerPage
+  const indexOfFirstJob = indexOfLastJob - jobsPerPage
+  const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob)
+  const totalPages = Math.ceil(jobs.length / jobsPerPage) || 1
 
-        if (user) {
-            fetchJobs()
-        }
-    }, [])
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true)
 
-    const handleDelete = async (id) => {
-        const confirmDelete = window.confirm(
-            "⚠️ This action cannot be undone. Delete this job?"
+        const response = await axios.get(
+          `https://careerbridge-b-1.onrender.com/job/recruiterJobs/${user._id}`
         )
-        if (!confirmDelete) return
 
-        try {
-            await axios.delete(
-                `https://careerbridge-b-1.onrender.com/job/deletejob/${id}`
-            )
+        setJobs(response.data)
 
-            setJobs(jobs.filter(job => job._id !== id))
-
-        } catch (error) {
-            console.log(error.message)
-        }
+      } catch (error) {
+        console.log(error.message)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    const handleUpdate = async (id) => {
-        try {
-            await axios.put(
-                `https://careerbridge-b-1.onrender.com/job/updatejob/${id}`,
-                {
-                    title: editData.title,
-                    company: editData.company,
-                    location: editData.location,
-                    salary: editData.salary,
-                    description: editData.description,
-                    jobType: editData.jobType
-                }
-            )
-
-            setJobs(jobs.map(job =>
-                job._id === id ? { ...job, ...editData } : job
-            ))
-
-            setEditJobId(null)
-
-        } catch (error) {
-            console.log(error.message)
-        }
+    if (user) {
+      fetchJobs()
     }
+  }, [])
 
-    return (
-        <div className="min-h-screen bg-[#f8f5f0] text-gray-800 p-10">
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "This action cannot be undone. Delete this job?"
+    )
+    if (!confirmDelete) return
 
-            <div className="max-w-6xl mx-auto">
+    try {
+      setDeleteLoadingId(id)
 
-                <h2 className="text-3xl font-bold mb-10 text-gray-800">
-                    Recruiter Dashboard
-                </h2>
+      await axios.delete(
+        `https://careerbridge-b-1.onrender.com/job/deletejob/${id}`
+      )
 
-                {jobs.length === 0 ? (
-                    <div className="bg-white border border-gray-200 p-8 rounded-2xl text-center shadow-sm">
-                        <p className="text-gray-500 text-lg">
-                            No jobs posted yet
-                        </p>
-                    </div>
+      setJobs(jobs.filter(job => job._id !== id))
+
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setDeleteLoadingId(null)
+    }
+  }
+
+  const handleUpdate = async (id) => {
+    try {
+      setUpdateLoadingId(id)
+
+      await axios.put(
+        `https://careerbridge-b-1.onrender.com/job/updatejob/${id}`,
+        editData
+      )
+
+      setJobs(jobs.map(job =>
+        job._id === id ? { ...job, ...editData } : job
+      ))
+
+      setEditJobId(null)
+
+    } catch (error) {
+      console.log(error.message)
+    } finally {
+      setUpdateLoadingId(null)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#f8f5f0] text-gray-800 p-10">
+
+      <div className="max-w-6xl mx-auto">
+
+        <h2 className="text-3xl font-bold mb-10 text-gray-800">
+          Recruiter Dashboard
+        </h2>
+
+        {/* Page Loading */}
+        {loading ? (
+          <div className="flex justify-center items-center h-[50vh]">
+            <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="bg-white border border-gray-200 p-8 rounded-2xl text-center shadow-sm">
+            <p className="text-gray-500 text-lg">
+              No jobs posted yet
+            </p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {currentJobs.map((job) => (
+
+              <div
+                key={job._id}
+                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-md"
+              >
+
+                {editJobId === job._id ? (
+                  <>
+                    <input
+                      value={editData.title}
+                      onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                      className="w-full border p-2 mb-2 rounded"
+                    />
+
+                    <input
+                      value={editData.company}
+                      onChange={(e) => setEditData({ ...editData, company: e.target.value })}
+                      className="w-full border p-2 mb-2 rounded"
+                    />
+
+                    <input
+                      value={editData.location}
+                      onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                      className="w-full border p-2 mb-2 rounded"
+                    />
+
+                    <input
+                      value={editData.salary}
+                      onChange={(e) => setEditData({ ...editData, salary: e.target.value })}
+                      className="w-full border p-2 mb-2 rounded"
+                    />
+
+                    {/* SAVE BUTTON */}
+                    <button
+                      onClick={() => handleUpdate(job._id)}
+                      disabled={updateLoadingId === job._id}
+                      className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg flex items-center gap-2"
+                    >
+                      {updateLoadingId === job._id ? (
+                        <>
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Saving...
+                        </>
+                      ) : (
+                        "Save"
+                      )}
+                    </button>
+
+                    <button
+                      onClick={() => setEditJobId(null)}
+                      className="mt-2 ml-2 px-4 py-2 bg-gray-400 text-white rounded-lg"
+                    >
+                      Cancel
+                    </button>
+                  </>
                 ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {currentJobs.map((job) => (
+                  <>
+                    <h3 className="text-xl font-semibold text-indigo-600 mb-2">
+                      {job.title}
+                    </h3>
 
-                            <div
-                                key={job._id}
-                                className="bg-white border border-gray-200 rounded-2xl p-6 shadow-md"
-                            >
+                    <p className="text-gray-700 mb-1">
+                      <span className="font-medium">Company:</span> {job.company}
+                    </p>
 
-                                {editJobId === job._id ? (
-                                    <>
-                                        <input
-                                            value={editData.title}
-                                            onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                                            className="w-full border p-2 mb-2 rounded"
-                                        />
+                    <p className="text-gray-700 mb-1">
+                      <span className="font-medium">Location:</span> {job.location}
+                    </p>
 
-                                        <input
-                                            value={editData.company}
-                                            onChange={(e) => setEditData({ ...editData, company: e.target.value })}
-                                            className="w-full border p-2 mb-2 rounded"
-                                        />
+                    <div className="flex gap-3 mt-4">
 
-                                        <input
-                                            value={editData.location}
-                                            onChange={(e) => setEditData({ ...editData, location: e.target.value })}
-                                            className="w-full border p-2 mb-2 rounded"
-                                        />
+                      {/* EDIT */}
+                      <button
+                        onClick={() => {
+                          setEditJobId(job._id)
+                          setEditData(job)
+                        }}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
+                      >
+                        Edit
+                      </button>
 
-                                        <input
-                                            value={editData.salary}
-                                            onChange={(e) => setEditData({ ...editData, salary: e.target.value })}
-                                            className="w-full border p-2 mb-2 rounded"
-                                        />
+                      {/* DELETE */}
+                      <button
+                        onClick={() => handleDelete(job._id)}
+                        disabled={deleteLoadingId === job._id}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg flex items-center gap-2"
+                      >
+                        {deleteLoadingId === job._id ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            Deleting...
+                          </>
+                        ) : (
+                          "Delete"
+                        )}
+                      </button>
 
-                                        <button
-                                            onClick={() => handleUpdate(job._id)}
-                                            className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg"
-                                        >
-                                            Save
-                                        </button>
+                      {/* VIEW */}
+                      <button
+                        onClick={() => navigate(`/applicants/${job._id}`)}
+                        className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+                      >
+                        View Applicants
+                      </button>
 
-                                        <button
-                                            onClick={() => setEditJobId(null)}
-                                            className="mt-2 ml-2 px-4 py-2 bg-gray-400 text-white rounded-lg"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <h3 className="text-xl font-semibold text-indigo-600 mb-2">
-                                            {job.title}
-                                        </h3>
-                                        <p className="text-gray-700 mb-1">
-                                            <span className="font-medium">Company:</span> {job.company}
-                                        </p>
-
-                                        <p className="text-gray-700 mb-1">
-                                            <span className="font-medium">Location:</span> {job.location}
-                                        </p>
-
-                                        <div className="flex gap-3 mt-4">
-                                            <button
-                                                onClick={() => {
-                                                    setEditJobId(job._id)
-                                                    setEditData(job)
-                                                }}
-                                                className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
-                                            >
-                                                Edit
-                                            </button>
-
-                                            <button
-                                                onClick={() => handleDelete(job._id)}
-                                                className="px-4 py-2 bg-red-500 text-white rounded-lg"
-                                            >
-                                                Delete
-                                            </button>
-                                            <button
-                                                onClick={() => navigate(`/applicants/${job._id}`)}
-                                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
-                                            >
-                                                View Applicants
-                                            </button>
-                                        </div>
-                                    </>
-                                )}
-
-                            </div>
-                        ))}
                     </div>
+                  </>
                 )}
 
-                {/* Pagination Controls */}
-                <div className="flex justify-center items-center gap-4 mt-10">
+              </div>
+            ))}
+          </div>
+        )}
 
-                    <button
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage(currentPage - 1)}
-                        className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50"
-                    >
-                        Previous
-                    </button>
+        {/* Pagination */}
+        <div className="flex justify-center items-center gap-4 mt-10">
 
-                    <span className="text-gray-700 font-medium">
-                        Page {currentPage} of {totalPages}
-                    </span>
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className="px-5 py-2 bg-gray-200 text-gray-700 rounded-lg disabled:opacity-50"
+          >
+            Previous
+          </button>
 
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                        className="px-5 py-2 bg-indigo-600 text-white rounded-lg disabled:opacity-50"
-                    >
-                        Next
-                    </button>
-                </div>
+          <span className="text-gray-700 font-medium">
+            Page {currentPage} of {totalPages}
+          </span>
 
-            </div>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="px-5 py-2 bg-indigo-600 text-white rounded-lg disabled:opacity-50"
+          >
+            Next
+          </button>
+
         </div>
-    )
+
+      </div>
+    </div>
+  )
 }
 
 export default RecruiterDashboard

@@ -32,9 +32,9 @@ function AddJob() {
           postedBy: user._id
         }
       )
-console.log("USER:", user)
+      console.log("USER:", user)
       console.log(response)
-      alert("Job Created Successfully ✅")
+      alert("Job Created Successfully ")
       navigate('/recruiter/dashboard')
 
     } catch (error) {
@@ -42,7 +42,7 @@ console.log("USER:", user)
       console.log("Error Response:", error.response)
       console.log("Error Data:", error.response?.data)
       console.log("Status Code:", error.response?.status)
-      alert("Job Creation Failed ❌")
+      alert("Job Creation Failed ")
     }
   }
 
@@ -84,7 +84,15 @@ console.log("USER:", user)
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">Job Type</label>
-              <input onChange={(e) => setJobType(e.target.value)} type="text" placeholder="Full-Time / Remote" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
+              <select
+                value={jobType}
+                onChange={(e) => setJobType(e.target.value)}
+                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
+                <option value="">Select Job Type</option>
+                <option value="full-time">Full Time</option>
+                <option value="part-time">Part Time</option>
+                <option value="internship">Internship</option>
+              </select>
             </div>
 
             <div className="space-y-2">
