@@ -18,6 +18,22 @@ function Signup() {
     e.preventDefault();
 
     try {
+      if (!name || !email || !password || !role) {
+        toast.error("Please fill all fields")
+        return
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+      if (!emailRegex.test(email)) {
+        toast.error("Enter valid email address")
+        return
+      }
+
+      if (password.length < 6) {
+        toast.error("Password must be at least 6 characters")
+        return
+      }
       setLoading(true)
       const response = await axios.post('https://careerbridge-b-1.onrender.com/api/saveUser', {
         name,
@@ -26,8 +42,8 @@ function Signup() {
         role
       })
       console.log(response)
-      toast.success('Ragistered successfully')
-      navigate('/login')
+      toast.success('OTP sent to your email')
+      navigate("/verify-otp", { state: { email } })
     } catch (error) {
       console.log("Full Error:", error);
       console.log("Error Response:", error.response);

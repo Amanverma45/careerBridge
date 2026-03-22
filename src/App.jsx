@@ -15,6 +15,7 @@ import AddJob from './component/AddJob.jsx'
 import Applicants from './component/Applicants.jsx'
 import Resume from './component/Resume.jsx'
 import { Toaster } from 'react-hot-toast'
+import OTP from './component/OTP.jsx'
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="/recruiterdashboard" element={<ProtectedRoute><RecruiterDashboard /></ProtectedRoute>} />
           <Route path="/applicants/:jobId" element={<ProtectedRoute><Applicants /></ProtectedRoute>} />
           <Route path="/resume" element={<ProtectedRoute><Resume /></ProtectedRoute>} />
+          <Route path="/verify-otp" element={<OTP />} />
         </Routes>
       </div>
       <Footer />
