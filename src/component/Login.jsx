@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
+import Button from './Button';
+import toast from 'react-hot-toast';
 
 function Login() {
     const [email, setemail] = useState('');
@@ -13,7 +15,7 @@ function Login() {
         e.preventDefault()
 
         if (!email || !password) {
-            alert("Please fill all fields")
+            toast.error("Please fill all fields")
             return
         }
 
@@ -37,18 +39,18 @@ function Login() {
 
                 localStorage.setItem("loginTime", Date.now())
 
-                alert('Login Successfully')
+                toast.success('Login Successfully')
 
                 if (user.role === "recruiter") {
-                    navigate('/recruiterdashboard')
+                    navigate('/recruiterdashboard', { replace: true })
                 } else {
-                    navigate('/dashboard')
+                    navigate('/dashboard', { replace: true })
                 }
             }
 
         } catch (error) {
             console.log(error)
-            alert(error.response?.data?.message || 'Invalid Email or Password')
+            toast.error(error.response?.data?.message || 'Invalid Email or Password')
         } finally {
             setLoading(false)
         }
@@ -101,19 +103,9 @@ function Login() {
                         />
                     </div>
 
-                    <button
-                        disabled={loading}
-                        className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2"
-                    >
-                        {loading ? (
-                            <>
-                                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Signing In...
-                            </>
-                        ) : (
-                            "Sign In"
-                        )}
-                    </button>
+                    <Button type="submit" loading={loading} className="bg-indigo-600 text-white w-full">
+                        {loading ? "Signing in..." : "Sign in"}
+                    </Button>
 
                 </form>
 

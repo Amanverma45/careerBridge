@@ -6,7 +6,7 @@ import Login from './component/Login.jsx'
 import Job from './component/Job.jsx'
 import Footer from './component/Footer.jsx'
 import Welcome from './component/Welcome.jsx'
-import { Route,Routes } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import ProtectedRoute from './component/ProtectedRoute.jsx'
 import Profile from './component/Profile.jsx'
 import AppliedJobs from './component/AppliedJobs.jsx'
@@ -14,27 +14,29 @@ import RecruiterDashboard from './component/RecruiterDashboard.jsx'
 import AddJob from './component/AddJob.jsx'
 import Applicants from './component/Applicants.jsx'
 import Resume from './component/Resume.jsx'
+import { Toaster } from 'react-hot-toast'
 
 function App() {
   return (
     <>
       <Navbar />
+      <Toaster position="top-right" />
       <div>
         <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/jobs" element={<ProtectedRoute><Job/></ProtectedRoute>}/>
-          <Route path="/signup" element={<Signup/>}/>
-          <Route path="/login" element={<Login/>}/>
-          <Route path="/dashboard" element={<ProtectedRoute><Welcome/></ProtectedRoute>}/>
-          <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>}/>
-          <Route path="/appliedJobs" element={<ProtectedRoute><AppliedJobs/></ProtectedRoute>} />
-          <Route path="/addJobs" element={<ProtectedRoute role="recruiter"><AddJob/></ProtectedRoute>} />
-          <Route path="/recruiterdashboard" element={<ProtectedRoute><RecruiterDashboard/></ProtectedRoute>} />
-          <Route path="/applicants/:jobId" element={<ProtectedRoute><Applicants/></ProtectedRoute>}/>
-          <Route path="/resume" element={<ProtectedRoute><Resume/></ProtectedRoute>}/>
+          <Route path="/" element={<Home />} />
+          <Route path="/jobs" element={<ProtectedRoute><Job /></ProtectedRoute>} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/appliedJobs" element={<ProtectedRoute><AppliedJobs /></ProtectedRoute>} />
+          <Route path="/addJobs" element={<ProtectedRoute role="recruiter"><AddJob /></ProtectedRoute>} />
+          <Route path="/recruiterdashboard" element={<ProtectedRoute><RecruiterDashboard /></ProtectedRoute>} />
+          <Route path="/applicants/:jobId" element={<ProtectedRoute><Applicants /></ProtectedRoute>} />
+          <Route path="/resume" element={<ProtectedRoute><Resume /></ProtectedRoute>} />
         </Routes>
       </div>
-      <Footer/>
+      <Footer />
     </>
   )
 }

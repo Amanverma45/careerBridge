@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Button from './Button';
+import toast from 'react-hot-toast';
 
 
 function Signup() {
@@ -14,10 +16,6 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(name)
-    console.log(email)
-    console.log(password)
-    console.log(role)
 
     try {
       setLoading(true)
@@ -28,14 +26,14 @@ function Signup() {
         role
       })
       console.log(response)
-      alert('Ragistered successfully')
+      toast.success('Ragistered successfully')
       navigate('/login')
     } catch (error) {
       console.log("Full Error:", error);
       console.log("Error Response:", error.response);
       console.log("Error Data:", error.response?.data);
       console.log("Status Code:", error.response?.status);
-      alert("Signup Failed ");
+      toast.error(error.response?.data?.message || "Signup Failed");
     } finally {
       setLoading(false)
     }
@@ -90,21 +88,21 @@ function Signup() {
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-slate-300">Role</label>
-              <input onChange={(e) => setrole(e.target.value)} type="text" placeholder="User or Recruiter" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
+
+              <select
+                value={role}
+                onChange={(e) => setrole(e.target.value)}
+                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition text-white"
+              >
+                <option value="">Select Role</option>
+                <option value="user">User</option>
+                <option value="recruiter">Recruiter</option>
+              </select>
             </div>
-            <button
-              disabled={loading}
-              className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-4 flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <>
-                  <span className="loader border-white"></span>
-                  Creating Account...
-                </>
-              ) : (
-                "Create Account"
-              )}
-            </button>
+            <Button type="submit" loading={loading} className="bg-indigo-600 text-white w-full">
+              {loading ? "Creating Account..." : "Create Account"}
+            </Button>
+
           </form>
         </div>
       </div>

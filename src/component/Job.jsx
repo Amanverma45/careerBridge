@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FiSearch } from "react-icons/fi";
+import toast from 'react-hot-toast';
+import Button from "./Button";
 
 function Job() {
   const [jobs, setJobs] = useState([])
@@ -111,10 +113,10 @@ function Job() {
 
       setAppliedIds(prev => [...prev, jobId])
 
-      alert(response.data.message)
+      toast.success(response.data.message);
 
     } catch (error) {
-      alert(error.response?.data?.message || "Application failed")
+      toast.error(error.response?.data?.message || "Application failed")
     } finally {
       setApplyLoadingId(null)
     }
@@ -223,29 +225,22 @@ function Job() {
                 {job.description}
               </p>
 
-              <button
-                disabled={
-                  appliedIds.includes(job._id) ||
-                  applyLoadingId === job._id
-                }
+              <Button
+                loading={applyLoadingId === job._id}
+                disabled={appliedIds.includes(job._id)}
                 onClick={() => handleApply(job._id)}
-                className={`mt-4 px-6 py-2 rounded-lg flex items-center justify-center gap-2
-    ${appliedIds.includes(job._id)
-                    ? "bg-green-600 cursor-not-allowed"
-                    : "bg-indigo-600 hover:bg-indigo-500"}
-  `}
+                className={
+                  appliedIds.includes(job._id)
+                    ? "bg-green-600"
+                    : "bg-indigo-600 text-white"
+                }
               >
-                {applyLoadingId === job._id ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Applying...
-                  </>
-                ) : appliedIds.includes(job._id) ? (
-                  "Applied"
-                ) : (
-                  "Apply Now"
-                )}
-              </button>
+                {applyLoadingId === job._id
+                  ? "Applying..."
+                  : appliedIds.includes(job._id)
+                    ? "Applied"
+                    : "Apply Now"}
+              </Button>
             </div>
           ))
         )}
