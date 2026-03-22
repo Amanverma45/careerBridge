@@ -1,89 +1,125 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
-import { HiOutlineLogout } from "react-icons/hi"
+import { HiOutlineLogout, HiMenu, HiX } from "react-icons/hi"
 import logo from "./Images/logo.png"
 
 function Navbar() {
   const token = localStorage.getItem('token')
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const storedUser = localStorage.getItem("user")
   const user = storedUser ? JSON.parse(storedUser) : null
 
-  //  Session expires 
+  // Session expire
   useEffect(() => {
     const loginTime = localStorage.getItem("loginTime")
 
     if (loginTime) {
       const now = Date.now()
-      const diff = now - loginTime
-
-      if (diff > 3600000) {
-        alert("Session expired, please login again")
-
-        localStorage.removeItem("token")
-        localStorage.removeItem("user")
-        localStorage.removeItem("loginTime")
-
+      if (now - loginTime > 3600000) {
+        localStorage.clear()
         navigate("/login")
       }
     }
   }, [navigate])
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/80 backdrop-blur-md border-b border-slate-800 text-white px-6 py-3 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/90 backdrop-blur-md border-b border-slate-800 text-white">
 
-      <div className="flex items-center gap-2 flex-nowrap overflow-hidden">
-        <img
-          src={logo}
-          alt="CareerBridge Logo"
-          className="h-8 md:h-7 w-auto object-contain"
-        />
-        <span className="text-lg md:text-2xl font-extrabold tracking-wide bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent whitespace-nowrap">
-          CareerBridge
-        </span>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
-      <div className="flex items-center gap-2">
-        {!token && (
-          <div className="flex items-center gap-2 md:gap-4">
-            <Link to="/" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Home</Link>
-            <Link to="/login" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Login</Link>
-            <Link to="/signup" className="px-6 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 transition-all active:scale-95">Signup</Link>
-          </div>
-        )}
+        <div className="flex items-center gap-2 min-w-0">
+          <img src={logo} className="h-8 md:h-9 w-auto shrink-0" />
+          <span className="text-lg md:text-xl font-bold truncate">
+            CareerBridge
+          </span>
+        </div>
 
-        {token && (
-          <>
-            {user?.role === "user" && (
-              <>
-                <Link to="/dashboard" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Dashboard</Link>
-                <Link to="/jobs" className="px-6 py-2 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 transition-all active:scale-95">Jobs</Link>
-              </>
-            )}
+        <div className="hidden md:flex items-center gap-4">
 
-            {user?.role === "recruiter" && (
-              <>
-                <Link to="/addJobs" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Add-Jobs</Link>
-                <Link to="/recruiterdashboard" className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all">Recruiter-Dashboard</Link>
-              </>
-            )}
+          {!token && (
+            <>
+              <Link to="/" className="nav-link">Home</Link>
+              <Link to="/login" className="nav-link">Login</Link>
+              <Link to="/signup" className="btn-primary">Signup</Link>
+            </>
+          )}
 
+          {token && user?.role === "user" && (
+            <>
+              <Link to="/dashboard" className="nav-link">Dashboard</Link>
+              <Link to="/jobs" className="btn-primary">Jobs</Link>
+            </>
+          )}
+
+          {token && user?.role === "recruiter" && (
+            <>
+              <Link to="/addJobs" className="nav-link">Add Jobs</Link>
+              <Link to="/recruiterdashboard" className="nav-link">Dashboard</Link>
+            </>
+          )}
+
+          {token && (
             <button
               onClick={() => {
-                localStorage.removeItem('token')
-                localStorage.removeItem('user')
-                localStorage.removeItem('loginTime')
+                localStorage.clear()
                 navigate('/')
               }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all duration-300 group shadow-lg shadow-rose-500/10"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition"
             >
-              <span className="text-sm font-bold">Logout</span>
-              <HiOutlineLogout className="text-xl group-hover:translate-x-1 transition-transform" />
+              Logout <HiOutlineLogout />
             </button>
-          </>
-        )}
+          )}
+        </div>
+
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <HiX /> : <HiMenu />}
+        </button>
       </div>
+
+      {menuOpen && (
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-[#0f172a]">
+
+          {!token && (
+            <>
+              <Link to="/" onClick={()=>setMenuOpen(false)} className="nav-link">Home</Link>
+              <Link to="/login" onClick={()=>setMenuOpen(false)} className="nav-link">Login</Link>
+              <Link to="/signup" onClick={()=>setMenuOpen(false)} className="btn-primary">Signup</Link>
+            </>
+          )}
+
+          {token && user?.role === "user" && (
+            <>
+              <Link to="/dashboard" onClick={()=>setMenuOpen(false)} className="nav-link">Dashboard</Link>
+              <Link to="/jobs" onClick={()=>setMenuOpen(false)} className="btn-primary">Jobs</Link>
+            </>
+          )}
+
+          {token && user?.role === "recruiter" && (
+            <>
+              <Link to="/addJobs" onClick={()=>setMenuOpen(false)} className="nav-link">Add Jobs</Link>
+              <Link to="/recruiterdashboard" onClick={()=>setMenuOpen(false)} className="nav-link">Dashboard</Link>
+            </>
+          )}
+
+          {token && (
+            <button
+              onClick={() => {
+                localStorage.clear()
+                navigate('/')
+              }}
+              className="px-4 py-2 rounded-lg bg-rose-500 text-white"
+            >
+              Logout
+            </button>
+          )}
+        </div>
+      )}
+
     </nav>
   )
 }
