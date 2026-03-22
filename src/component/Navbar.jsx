@@ -37,9 +37,9 @@ function Navbar() {
         <img
           src={logo}
           alt="CareerBridge Logo"
-          className="h-14 md:h-16 w-auto object-contain drop-shadow-lg"
+          className="h-14 md:h-12 w-auto object-contain drop-shadow-lg"
         />
-        <span className="text-2xl md:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
+        <span className="text-1xl md:text-3xl font-extrabold tracking-wide bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
           CareerBridge
         </span>
       </div>
