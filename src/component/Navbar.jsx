@@ -61,15 +61,15 @@ function Navbar() {
           )}
 
           {token && (
-            <button
-              onClick={() => {
-                localStorage.clear()
-                navigate('/')
-              }}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition"
-            >
-              Logout <HiOutlineLogout />
-            </button>
+      <button
+  onClick={() => {
+    localStorage.clear()
+    navigate('/')
+  }}
+  className="flex items-center text-white gap-2 px-4 py-2 rounded-lg bg-rose-500/10 text-rose-400 font-semibold hover:bg-rose-500 hover:text-white transition"
+>
+  Logout <HiOutlineLogout />
+</button>
           )}
         </div>
 
@@ -86,23 +86,23 @@ function Navbar() {
 
           {!token && (
             <>
-              <Link to="/" onClick={()=>setMenuOpen(false)} className="nav-link">Home</Link>
-              <Link to="/login" onClick={()=>setMenuOpen(false)} className="nav-link">Login</Link>
-              <Link to="/signup" onClick={()=>setMenuOpen(false)} className="btn-primary">Signup</Link>
+              <Link to="/" onClick={() => setMenuOpen(false)} className="nav-link">Home</Link>
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="nav-link">Login</Link>
+              <Link to="/signup" onClick={() => setMenuOpen(false)} className="btn-primary">Signup</Link>
             </>
           )}
 
           {token && user?.role === "user" && (
             <>
-              <Link to="/dashboard" onClick={()=>setMenuOpen(false)} className="nav-link">Dashboard</Link>
-              <Link to="/jobs" onClick={()=>setMenuOpen(false)} className="btn-primary">Jobs</Link>
+              <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="nav-link">Dashboard</Link>
+              <Link to="/jobs" onClick={() => setMenuOpen(false)} className="btn-primary">Jobs</Link>
             </>
           )}
 
           {token && user?.role === "recruiter" && (
             <>
-              <Link to="/addJobs" onClick={()=>setMenuOpen(false)} className="nav-link">Add Jobs</Link>
-              <Link to="/recruiterdashboard" onClick={()=>setMenuOpen(false)} className="nav-link">Dashboard</Link>
+              <Link to="/addJobs" onClick={() => setMenuOpen(false)} className="nav-link">Add Jobs</Link>
+              <Link to="/recruiterdashboard" onClick={() => setMenuOpen(false)} className="nav-link">Dashboard</Link>
             </>
           )}
 
