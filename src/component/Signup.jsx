@@ -35,6 +35,7 @@ function Signup() {
         return
       }
       setLoading(true)
+      await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
       const response = await axios.post('https://careerbridge-b-1.onrender.com/api/saveUser', {
         name,
         email: email.toLowerCase(),
@@ -44,6 +45,7 @@ function Signup() {
       console.log(response)
       toast.success('OTP sent to your email')
       navigate("/verify-otp", { state: { email } })
+
     } catch (error) {
       console.log("Full Error:", error);
       console.log("Error Response:", error.response);
