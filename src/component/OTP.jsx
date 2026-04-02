@@ -38,8 +38,10 @@ function OTP() {
         <div className="flex flex-col items-center justify-center h-screen">
             <input
                 type="number"
-                maxLength="6"
-                placeholder="Enter 6-digit OTP"
+                maxLength="4"
+                placeholder="Enter 4-digit OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
             />
             <button onClick={handleVerify}>Verify</button>
         </div>
