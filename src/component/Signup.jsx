@@ -15,47 +15,47 @@ function Signup() {
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      if (!name || !email || !password || !role) {
-        toast.error("Please fill all fields")
-        return
-      }
-
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-      if (!emailRegex.test(email)) {
-        toast.error("Enter valid email address")
-        return
-      }
-
-      if (password.length < 6) {
-        toast.error("Password must be at least 6 characters")
-        return
-      }
-      setLoading(true)
-      await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
-      const response = await axios.post('https://careerbridge-b-1.onrender.com/api/saveUser', {
-        name,
-        email: email.toLowerCase(),
-        password,
-        role
-      })
-      console.log(response)
-      toast.success('OTP sent to your email')
-      navigate("/verify-otp", { state: { email } })
-
-    } catch (error) {
-      console.log("Full Error:", error);
-      console.log("Error Response:", error.response);
-      console.log("Error Data:", error.response?.data);
-      console.log("Status Code:", error.response?.status);
-      toast.error(error.response?.data?.message || "Signup Failed");
-    } finally {
-      setLoading(false)
+  try {
+    if (!name || !email || !password || !role) {
+      toast.error("Please fill all fields")
+      return
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+    if (!emailRegex.test(email)) {
+      toast.error("Enter valid email address")
+      return
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters")
+      return
+    }
+
+    setLoading(true)
+
+    await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
+   console.log("OTP API called")
+    localStorage.setItem("otpData", JSON.stringify({
+      name,
+      email,
+      password,
+      role
+    }))
+    console.log("Sending OTP to:", email)
+    toast.success('OTP sent to your email')
+
+    navigate("/verify-otp", { state: { email } })
+
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Signup Failed");
+  } finally {
+    setLoading(false)
   }
+}
   return (
     <div className="min-h-screen bg-[#0f172a] text-white flex items-center justify-center p-6 relative overflow-hidden">
 
