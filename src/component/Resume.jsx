@@ -68,7 +68,10 @@ function Resume() {
                                 Resume Uploaded Successfully
                             </p>
 
-                            <a href={user.resume} target="_blank" rel="noreferrer">
+                            {/* <a href={user.resume} target="_blank" rel="noreferrer">
+                                View Resume
+                            </a> */}
+                            <a href={`${user.resume}?fl_attachment=false`} target="_blank">
                                 View Resume
                             </a>
                         </div>
