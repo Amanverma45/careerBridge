@@ -46,7 +46,7 @@ function Signup() {
       role
     }))
     console.log("Sending OTP to:", email)
-    toast.success('OTP sent to your email')
+    toast.success("OTP sent successfully")
 
     navigate("/verify-otp", { state: { email } })
 
