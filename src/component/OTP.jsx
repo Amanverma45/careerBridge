@@ -21,7 +21,7 @@ function OTP() {
                 toast.error("Enter OTP")
                 return
             }
-            const res = await axios.post("/api/verifyOTP", {
+            const res = await axios.post("https://careerbridge-b-1.onrender.com/api/verifyOTP", {
                 email,
                 otp
             })
