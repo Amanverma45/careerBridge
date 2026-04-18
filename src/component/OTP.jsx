@@ -17,16 +17,25 @@ function OTP() {
                 navigate("/signup")
                 return
             }
+
             if (!otp) {
                 toast.error("Enter OTP")
                 return
             }
-            const res = await axios.post("https://careerbridge-b-1.onrender.com/api/verifyOTP", {
-                email,
-                otp
-            })
 
-            toast.success(res.data.message)
+            const res = await axios.post(
+                "https://careerbridge-b-1.onrender.com/api/verifyOTP",
+                { email, otp }
+            )
+
+            const otpData = JSON.parse(localStorage.getItem("otpData"))
+
+            await axios.post(
+                "https://careerbridge-b-1.onrender.com/api/saveUser",
+                otpData
+            )
+
+            toast.success("Signup successful")
             navigate("/login")
 
         } catch (err) {

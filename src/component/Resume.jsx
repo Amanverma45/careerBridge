@@ -141,10 +141,15 @@ function Resume() {
         formData.append("userId", user?._id)
 
         try {
-            const res = await axios.post(
-                "https://careerbridge-b-1.onrender.com/api/uploadResume",
-                formData
-            )
+           const res = await axios.post(
+    "https://careerbridge-b-1.onrender.com/api/uploadResume",
+    formData,
+    {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }
+)
             localStorage.setItem("user", JSON.stringify(res.data.user))
             setUser(res.data.user)
             setFile(null)
