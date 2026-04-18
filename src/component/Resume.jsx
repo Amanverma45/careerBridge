@@ -141,19 +141,18 @@ function Resume() {
         formData.append("userId", user?._id)
 
         try {
-           const res = await axios.post(
-    "https://careerbridge-b-1.onrender.com/api/uploadResume",
-    formData,
-    {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    }
-)
+            const res = await axios.post("https://careerbridge-b-1.onrender.com/api/uploadResume", formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }
+            )
             localStorage.setItem("user", JSON.stringify(res.data.user))
             setUser(res.data.user)
             setFile(null)
             alert("Resume uploaded successfully")
+            console.log("USER AFTER UPLOAD:", res.data.user)
         } catch (error) {
             console.log(error)
             alert("Upload failed")
@@ -232,6 +231,16 @@ function Resume() {
                             <span className="text-sm font-semibold text-gray-700">Current Resume:</span>
                             <div className="flex space-x-3">
                                 <button
+                                    // onClick={() => {
+                                    //     if (!user?.resume) {
+                                    //         alert("No resume found")
+                                    //         return
+                                    //     }
+
+                                    //     const viewUrl = user.resume.replace("/upload/", "/upload/fl_attachment:false/")
+
+                                    //     window.open(viewUrl, "_blank", "noopener,noreferrer")
+                                    // }}
                                     onClick={() => {
                                         if (!user?.resume) {
                                             alert("No resume found")
