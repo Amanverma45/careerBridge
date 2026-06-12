@@ -1,124 +1,3 @@
-// import React, { useState } from "react"
-// import axios from "axios"
-
-// function Resume() {
-//   const [file, setFile] = useState(null)
-
-//   const [user, setUser] = useState(() => {
-//     const storedUser = localStorage.getItem("user")
-//     return storedUser ? JSON.parse(storedUser) : null
-//   })
-
-//   const handleUpload = async (e) => {
-//     e.preventDefault()
-
-//     if (!file) return alert("Please select resume")
-
-//     const formData = new FormData()
-//     formData.append("resume", file)
-//     formData.append("userId", user._id)
-
-//     try {
-//       const res = await axios.post(
-//         "https://careerbridge-b-1.onrender.com/api/uploadResume",
-//         formData
-//       )
-
-//       localStorage.setItem("user", JSON.stringify(res.data.user))
-//       setUser(res.data.user)
-//       alert("Resume uploaded successfully")
-
-//     } catch (error) {
-//       console.log(error)
-//       alert("Upload failed")
-//     }
-//   }
-
-//   const handleDelete = async () => {
-//     try {
-//       await axios.delete(
-//         `https://careerbridge-b-1.onrender.com/api/deleteResume/${user._id}`
-//       )
-
-//       const updatedUser = { ...user, resume: "" }
-//       localStorage.setItem("user", JSON.stringify(updatedUser))
-//       setUser(updatedUser)
-
-//       alert("Resume deleted")
-
-//     } catch (error) {
-//       console.log(error)
-//       alert("Delete failed")
-//     }
-//   }
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-blue-50 p-6">
-
-//       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-gray-100">
-
-//         <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
-//           Upload Resume
-//         </h2>
-
-//         <form onSubmit={handleUpload} className="space-y-5">
-
-//           <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-indigo-400 transition">
-//             <p className="text-gray-500 mb-2">
-//               Select your resume (PDF / DOC)
-//             </p>
-
-//             <input
-//               type="file"
-//               accept=".pdf,.doc,.docx"
-//               onChange={(e) => setFile(e.target.files[0])}
-//               className="w-full cursor-pointer"
-//             />
-//           </div>
-
-//           <button className="w-full bg-indigo-600 hover:bg-indigo-500 text-white py-3 rounded-xl font-semibold transition">
-//             Upload Resume
-//           </button>
-
-//         </form>
-
-//         {user?.resume && (
-//           <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
-
-//             <p className="text-green-700 text-sm mb-3 text-center">
-//               Resume uploaded successfully
-//             </p>
-
-//             <div className="flex justify-center gap-6">
-
-//               <button
-//                 onClick={() => window.open(user.resume, "_blank")}
-//                 className="text-blue-600 font-medium hover:underline"
-//               >
-//                 View Resume
-//               </button>
-
-//               <button
-//                 onClick={handleDelete}
-//                 className="text-red-600 font-medium hover:underline"
-//               >
-//                 Delete Resume
-//               </button>
-
-//             </div>
-
-//           </div>
-//         )}
-
-//       </div>
-
-//     </div>
-//   )
-// }
-
-// export default Resume
-
-
 import React, { useState } from "react"
 import axios from "axios"
 
@@ -148,6 +27,7 @@ function Resume() {
                     }
                 }
             )
+            console.log("USER AFTER UPLOAD:", res.data.user)
             localStorage.setItem("user", JSON.stringify(res.data.user))
             setUser(res.data.user)
             setFile(null)
@@ -176,6 +56,12 @@ function Resume() {
             alert("Delete failed")
         }
     }
+    const handleView = () => {
+    if (!user?.resume) return alert("No resume found");
+    const viewUrl = user.resume.replace("/upload/", "/upload/fl_attachment:false,f_auto/");
+
+    window.open(viewUrl, "_blank", "noopener,noreferrer");
+};
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#f3f4f6] p-4">
@@ -231,28 +117,11 @@ function Resume() {
                             <span className="text-sm font-semibold text-gray-700">Current Resume:</span>
                             <div className="flex space-x-3">
                                 <button
-                                    // onClick={() => {
-                                    //     if (!user?.resume) {
-                                    //         alert("No resume found")
-                                    //         return
-                                    //     }
-
-                                    //     const viewUrl = user.resume.replace("/upload/", "/upload/fl_attachment:false/")
-
-                                    //     window.open(viewUrl, "_blank", "noopener,noreferrer")
-                                    // }}
-                                    onClick={() => {
-                                        if (!user?.resume) {
-                                            alert("No resume found")
-                                            return
-                                        }
-
-                                        window.open(user.resume, "_blank", "noopener,noreferrer")
-                                    }}
-                                    className="text-indigo-600 hover:text-indigo-800 text-sm font-bold transition"
-                                >
-                                    View
-                                </button>
+    onClick={handleView} // Hamara naya function
+    className="text-indigo-600 hover:text-indigo-800 text-sm font-bold transition"
+>
+    View
+</button>
                                 <span className="text-gray-300">|</span>
                                 <button
                                     onClick={handleDelete}
