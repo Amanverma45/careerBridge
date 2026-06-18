@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { HiOutlineLogout, HiMenu, HiX } from "react-icons/hi"
-import logo from "./Images/logo.png"
+import logo from "./Images/lgo.png"
 
 function Navbar() {
   const token = localStorage.getItem('token')
@@ -25,13 +25,16 @@ function Navbar() {
   }, [navigate])
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/90 backdrop-blur-md border-b border-slate-800 text-white">
+    <nav className="sticky top-0 z-50 w-full bg-[#0f172a]/70 backdrop-blur-md border-b border-slate-800 text-white">
 
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-1 min-w-0">
+          <img
+            src={logo}
+            className="h-14 md:h-16 w-auto shrink-0"
+          />
 
-        <div className="flex items-center gap-2 min-w-0">
-          <img src={logo} className="h-8 md:h-9 w-auto shrink-0" />
-          <span className="text-lg md:text-xl font-bold truncate">
+          <span className="text-xl md:text-2xl font-bold text-white">
             CareerBridge
           </span>
         </div>
@@ -56,7 +59,7 @@ function Navbar() {
 
               <Link
                 to="/signup"
-                className="px-6 py-2 rounded-xl text-sm font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition-all duration-200 shadow-md shadow-indigo-500/20 active:scale-95"
+                className="px-6 py-2 rounded-xl text-sm font-semibold bg-[#2E7D32] text-white hover:bg-[#256728] transition-all duration-200 shadow-md shadow-indigo-500/20 active:scale-95"
               >
                 Signup
               </Link>
@@ -99,7 +102,7 @@ function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-[#0f172a]">
+        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-[#2E7D32]">
 
           {!token && (
             <>
@@ -129,7 +132,7 @@ function Navbar() {
                 localStorage.clear()
                 navigate('/')
               }}
-              className="px-4 py-2 rounded-lg bg-rose-500 text-white"
+              className="px-4 py-2 rounded-lg bg-rose-50 text-white"
             >
               Logout
             </button>

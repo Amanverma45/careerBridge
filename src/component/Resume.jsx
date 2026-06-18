@@ -51,10 +51,10 @@ function Resume() {
             localStorage.setItem("user", JSON.stringify(updatedUser))
             setUser(updatedUser)
             alert("Resume deleted")
-        } catch (error) {
-            console.log(error)
-            alert("Delete failed")
-        }
+        }catch (error) {
+  console.log("DELETE RESPONSE:", error.response?.data)
+  console.log(error)
+}
     }
     const handleView = () => {
     if (!user?.resume) return alert("No resume found");

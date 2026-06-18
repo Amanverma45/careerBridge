@@ -55,67 +55,75 @@ function Login() {
             setLoading(false)
         }
     }
+return (
+    <div className="min-h-screen bg-[#F8F7F4] flex items-center justify-center p-6 relative overflow-hidden">
 
-    return (
-        <div className="min-h-screen bg-[#0f172a] text-white flex items-center justify-center p-6 relative overflow-hidden">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#2E7D32]/10 blur-[120px]" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#F4A261]/10 blur-[120px]" />
 
-            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-600/10 blur-[120px]" />
-            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-600/10 blur-[120px]" />
+        <div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl p-8 md:p-10 shadow-xl relative z-10">
 
-            <div className="w-full max-w-md bg-slate-900/50 backdrop-blur-2xl border border-slate-800 rounded-3xl p-8 md:p-10 shadow-2xl relative z-10">
+            <div className="text-center mb-10">
+                <h1 className="text-3xl font-bold text-[#374151] mb-2">
+                    Welcome Back
+                </h1>
 
-                <div className="text-center mb-10">
-                    <h1 className="text-3xl font-bold mb-2">Welcome Back</h1>
-                    <p className="text-slate-400">
-                        Don't have an account?{" "}
-                        <Link
-                            to="/signup"
-                            className="text-indigo-400 hover:text-indigo-300 transition font-medium"
-                        >
-                            Sign up
-                        </Link>
-                    </p>
+                <p className="text-gray-500">
+                    Don't have an account?{" "}
+                    <Link
+                        to="/signup"
+                        className="text-[#2E7D32] hover:text-[#256728] transition font-medium"
+                    >
+                        Sign up
+                    </Link>
+                </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-600 ml-1">
+                        Email Address
+                    </label>
+
+                    <input
+                        onChange={(e) => setemail(e.target.value)}
+                        type="email"
+                        placeholder="you@example.com"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] transition-all"
+                    />
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-600 ml-1">
+                        Password
+                    </label>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300 ml-1">
-                            Email Address
-                        </label>
-                        <input
-                            onChange={(e) => setemail(e.target.value)}
-                            type="email"
-                            placeholder="you@example.com"
-                            className="w-full bg-slate-800/40 border border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50 transition-all placeholder:text-slate-600"
-                        />
-                    </div>
+                    <input
+                        onChange={(e) => setpassword(e.target.value)}
+                        type="password"
+                        placeholder="••••••••"
+                        className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] transition-all"
+                    />
+                </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-slate-300 ml-1">
-                            Password
-                        </label>
-                        <input
-                            onChange={(e) => setpassword(e.target.value)}
-                            type="password"
-                            placeholder="••••••••"
-                            className="w-full bg-slate-800/40 border border-slate-700 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500/50 transition-all placeholder:text-slate-600"
-                        />
-                    </div>
+                <Button
+                    type="submit"
+                    loading={loading}
+                    className="bg-[#2E7D32] hover:bg-[#256728] text-white w-full"
+                >
+                    {loading ? "Signing in..." : "Sign In"}
+                </Button>
 
-                    <Button type="submit" loading={loading} className="bg-indigo-600 text-white w-full">
-                        {loading ? "Signing in..." : "Sign in"}
-                    </Button>
+            </form>
 
-                </form>
+            <p className="mt-8 text-center text-xs text-gray-400">
+                By signing in, you agree to our Terms of Service and Privacy Policy.
+            </p>
 
-                <p className="mt-8 text-center text-xs text-slate-500">
-                    By signing in, you agree to our Terms of Service and Privacy Policy.
-                </p>
-
-            </div>
         </div>
-    )
+    </div>
+)
 }
 
 export default Login
