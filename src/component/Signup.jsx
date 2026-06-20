@@ -56,76 +56,100 @@ function Signup() {
     setLoading(false)
   }
 }
-  return (
-    <div className="min-h-screen bg-[#0f172a] text-white flex items-center justify-center p-6 relative overflow-hidden">
+return (
+  <div className="min-h-screen bg-[#F8F7F4] flex items-center justify-center p-6 relative overflow-hidden">
 
-      <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[120px]" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px]" />
+    <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#2E7D32]/10 blur-[120px]" />
+    <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-[#F4A261]/10 blur-[120px]" />
 
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+    <div className="w-full max-w-md bg-white border border-gray-200 rounded-3xl p-8 md:p-10 shadow-xl">
 
-        <div className="hidden lg:flex flex-col justify-center p-12 bg-indigo-600/10 border-r border-slate-800">
-          <h2 className="text-3xl font-bold mb-6">Join the future of <br /><span className="text-indigo-400">Career Building.</span></h2>
-          <ul className="space-y-6">
-            <li className="flex items-start gap-4">
-              <div className="p-2 bg-indigo-500/20 rounded-lg text-indigo-400">✓</div>
-              <p className="text-slate-300">Access to 10,000+ exclusive tech roles.</p>
-            </li>
-            <li className="flex items-start gap-4">
-              <div className="p-2 bg-indigo-500/20 rounded-lg text-indigo-400">✓</div>
-              <p className="text-slate-300">AI-powered resume optimization tools.</p>
-            </li>
-            <li className="flex items-start gap-4">
-              <div className="p-2 bg-indigo-500/20 rounded-lg text-indigo-400">✓</div>
-              <p className="text-slate-300">Direct networking with industry hiring managers.</p>
-            </li>
-          </ul>
-        </div>
+      <div className="mb-8 text-center">
+        <h1 className="text-3xl font-bold text-[#374151] mb-2">
+          Create Account
+        </h1>
 
-        <div className="p-8 md:p-12">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-2">Create an account</h1>
-            <p className="text-slate-400">Already have an account? <Link to="/login" className="text-indigo-400 cursor-pointer hover:underline">Log in</Link></p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Name</label>
-              <input onChange={(e) => setname(e.target.value)} type="text" placeholder="John Doe" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Email Address</label>
-              <input onChange={(e) => setemail(e.target.value)} type="email" placeholder="name@gmail.com" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Password</label>
-              <input onChange={(e) => setpassword(e.target.value)} type="password" placeholder="••••••••" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Role</label>
-
-              <select
-                value={role}
-                onChange={(e) => setrole(e.target.value)}
-                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition text-white"
-              >
-                <option value="">Select Role</option>
-                <option value="user">User</option>
-                <option value="recruiter">Recruiter</option>
-              </select>
-            </div>
-            <Button type="submit" loading={loading} className="bg-indigo-600 text-white w-full">
-              {loading ? "Creating Account..." : "Create Account"}
-            </Button>
-
-          </form>
-        </div>
+        <p className="text-gray-500">
+          Already have an account?
+          <Link
+            to="/login"
+            className="text-[#2E7D32] hover:underline ml-1 font-medium"
+          >
+            Login
+          </Link>
+        </p>
       </div>
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-600">
+            Name
+          </label>
+
+          <input
+            onChange={(e) => setname(e.target.value)}
+            type="text"
+            placeholder="John Doe"
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32]"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-600">
+            Email Address
+          </label>
+
+          <input
+            onChange={(e) => setemail(e.target.value)}
+            type="email"
+            placeholder="name@gmail.com"
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32]"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-600">
+            Password
+          </label>
+
+          <input
+            onChange={(e) => setpassword(e.target.value)}
+            type="password"
+            placeholder="••••••••"
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32]"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium text-gray-600">
+            Role
+          </label>
+
+          <select
+            value={role}
+            onChange={(e) => setrole(e.target.value)}
+            className="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#2E7D32]/20 focus:border-[#2E7D32] text-gray-700"
+          >
+            <option value="">Select Role</option>
+            <option value="user">User</option>
+            <option value="recruiter">Recruiter</option>
+          </select>
+        </div>
+
+        <Button
+          type="submit"
+          loading={loading}
+          className="bg-[#2E7D32] hover:bg-[#256728] text-white w-full"
+        >
+          {loading ? "Creating Account..." : "Create Account"}
+        </Button>
+
+      </form>
+
     </div>
-  )
+  </div>
+)
 }
 
 export default Signup

@@ -8,6 +8,11 @@
   height: 18px;
   animation: spin 0.6s linear infinite;
 }
+body {
+margin: 0;
+padding: 0;
+background-color: #F8F7F4;
+}
 
 @keyframes spin {
   to {
