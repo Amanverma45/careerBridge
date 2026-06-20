@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 function RecruiterDashboard() {
   const navigate = useNavigate()
@@ -59,10 +60,12 @@ function RecruiterDashboard() {
       await axios.delete(
         `https://careerbridge-b-1.onrender.com/job/deletejob/${id}`
       )
+      toast.success("Job deleted successfully")
 
       setJobs(jobs.filter(job => job._id !== id))
 
     } catch (error) {
+      toast.error("Failed to delete job")
       console.log(error.message)
     } finally {
       setDeleteLoadingId(null)
