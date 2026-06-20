@@ -26,7 +26,7 @@ function Navbar() {
 
   return (
     // <nav className="sticky top-2 z-50 w-[90%] md:w-[90%] max-w-[1300px] h-20 mx-auto bg-[#0f172a]/60 backdrop-blur-md border-border-slate-700 rounded-tl-[60px] rounded-br-[60px] shadow-none text-white">
-    <nav className="sticky top-2 z-50w-full md:w-[90%]max-w-[1300px]h-20mx-autobg-[#0f172a]/85 backdrop-blur-mdrounded-none md:rounded-tl-[60px] md:rounded-br-[60px]shadow-xltext-white">
+    <nav className="sticky top-2 z-50 w-full md:w-[90%] max-w-[1300px] h-20 mx-auto bg-[#0f172a]/85      backdrop-blur-md rounded-none md:rounded-tl-[60px] md:rounded-br-[60px] shadow-xl text-white">
 
       <div className="px-6 md:px-15 py-3 flex items-center justify-between">
         <div className="flex items-center gap-1 min-w-0">
