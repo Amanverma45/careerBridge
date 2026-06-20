@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import toast from "react-hot-toast"
 
 function Profile() {
 
@@ -20,89 +21,125 @@ function Profile() {
         }
     }, [])
 
-    const handleUpdate = async () => {
-        try {
-            const response = await axios.put(`https://careerbridge-b-1.onrender.com/api/updateUser/${user._id}`,
-                {
-                    name,
-                    skills,
-                    experience,
-                    bio
-                }
-            )
-            console.log("FULL RESPONSE:", response)
-            console.log("UPDATED USER:", response.data.user)
-            console.log(response.data.user.skills)
-            console.log(response.data.user.experience)
-            console.log(response.data.user.bio)
+   const handleUpdate = async () => {
+    try {
 
-            localStorage.setItem('user', JSON.stringify(response.data.user))
-            alert("Profile updated successfully")
-
-        } catch (error) {
-            console.log(error.response?.data || error.message)
-            alert("Update failed")
-        }
+        const response = await axios.put(
+            `https://careerbridge-b-1.onrender.com/api/updateUser/${user._id}`,
+            {
+                name,
+                skills,
+                experience,
+                bio
+            }
+        )
+        localStorage.setItem(
+            "user",
+            JSON.stringify(response.data.user)
+        )
+        toast.success("Profile updated successfully")
+    } catch (error) {
+        console.log(error.response?.data || error.message)
+        toast.error("Update failed")
     }
+}
 
     if (!user) {
-        return <div className="text-white p-10">Please login again</div>
-    }
-
     return (
-        <div className="min-h-screen bg-[#0f172a] text-white p-10">
-            <h1 className="text-3xl font-bold mb-6">Edit Profile</h1>
+        <div className="min-h-screen bg-[#F8F7F4] flex items-center justify-center">
+            <div className="bg-white p-8 rounded-3xl border border-gray-200 shadow-sm">
+                <p className="text-gray-600">
+                    Please login again
+                </p>
+            </div>
+        </div>
+    )
+}
+    return (
+    <div className="min-h-screen bg-[#F8F7F4] p-6 md:p-10">
 
-            <div className="bg-slate-900 p-6 rounded-xl max-w-lg space-y-4">
+        <div className="max-w-2xl mx-auto">
+
+            <div className="mb-8">
+                <h1 className="text-4xl font-bold text-[#374151]">
+                    Edit Profile
+                </h1>
+
+                <p className="text-gray-500 mt-2">
+                    Keep your profile updated to improve job matching.
+                </p>
+            </div>
+
+            <div className="bg-white border border-gray-200 rounded-3xl p-8 shadow-sm space-y-6">
 
                 <div>
-                    <label>Name</label>
+                    <label className="block mb-2 font-medium text-gray-700">
+                        Name
+                    </label>
+
                     <input
                         type="text"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
-                        className="w-full mt-2 p-3 bg-slate-800 rounded-lg" />
+                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[#2E7D32]"
+                    />
                 </div>
 
                 <div>
-                    <label>Skills</label>
+                    <label className="block mb-2 font-medium text-gray-700">
+                        Skills
+                    </label>
+
                     <input
                         type="text"
                         value={skills}
                         onChange={(e) => setSkills(e.target.value)}
-                        placeholder="React, Node, MongoDB"
-                        className="w-full mt-2 p-3 bg-slate-800 rounded-lg"
+                        placeholder="React, Node.js, MongoDB"
+                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[#2E7D32]"
                     />
                 </div>
 
                 <div>
-                    <label>Experience</label>
+                    <label className="block mb-2 font-medium text-gray-700">
+                        Experience
+                    </label>
+
                     <input
                         type="text"
                         value={experience}
                         onChange={(e) => setExperience(e.target.value)}
-                        placeholder="2 years"
-                        className="w-full mt-2 p-3 bg-slate-800 rounded-lg"
+                        placeholder="Fresher / 1 Year / 2 Years"
+                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[#2E7D32]"
                     />
                 </div>
 
                 <div>
-                    <label>Bio</label>
+                    <label className="block mb-2 font-medium text-gray-700">
+                        Bio
+                    </label>
+
                     <textarea
                         value={bio}
                         onChange={(e) => setBio(e.target.value)}
-                        className="w-full mt-2 p-3 bg-slate-800 rounded-lg"
-                        rows="4"
+                        rows="5"
+                        placeholder="Write something about yourself..."
+                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:border-[#2E7D32]"
                     />
                 </div>
+
                 <button
                     onClick={handleUpdate}
-                    className="bg-indigo-600 px-6 py-3 rounded-lg w-full">
+                    className="w-full bg-[#2E7D32] hover:bg-[#256728] text-white py-3 rounded-xl font-semibold transition"
+                >
                     Update Profile
                 </button>
+
             </div>
+
         </div>
-    )
+
+    </div>
+)
 }
 
 export default Profile

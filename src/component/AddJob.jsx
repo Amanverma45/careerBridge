@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import axios from 'axios'
+import toast from "react-hot-toast"
 import { useNavigate } from 'react-router-dom'
 
 function AddJob() {
@@ -34,81 +35,133 @@ function AddJob() {
       )
       console.log("USER:", user)
       console.log(response)
-      alert("Job Created Successfully ")
-      navigate('/recruiter/dashboard')
+      toast.success("Job Created Successfully")
+      navigate('/recruiterdashboard')
 
     } catch (error) {
       console.log("Full Error:", error)
       console.log("Error Response:", error.response)
       console.log("Error Data:", error.response?.data)
       console.log("Status Code:", error.response?.status)
-      alert("Job Creation Failed ")
+      toast.error("Job Creation Failed")
     }
   }
 
-  return (
-    <div className="min-h-screen bg-[#0f172a] text-white flex items-center justify-center p-6 relative overflow-hidden">
+ return (
+  <div className="min-h-screen bg-[#F8F7F4] text-[#374151] flex items-center justify-center p-6">
 
-      <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[50%] rounded-full bg-indigo-600/10 blur-[120px]" />
-      <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[50%] rounded-full bg-blue-600/10 blur-[120px]" />
+    <div className="w-full max-w-4xl bg-white border border-gray-200 rounded-3xl shadow-sm">
 
-      <div className="w-full max-w-5xl bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-3xl overflow-hidden shadow-2xl">
+      <div className="p-8 md:p-12">
 
-        <div className="p-8 md:p-12">
-          <div className="mb-8">
-            <h1 className="text-2xl font-bold mb-2">Create New Job</h1>
-            <p className="text-slate-400">Fill in the details to post a new opportunity.</p>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-[#374151] mb-2">
+            Create New Job
+          </h1>
+
+          <p className="text-gray-500">
+            Fill in the details to post a new opportunity.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#374151]">
+              Job Title
+            </label>
+
+            <input
+              onChange={(e) => setTitle(e.target.value)}
+              type="text"
+              placeholder="Backend Developer"
+              className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#374151]">
+              Company Name
+            </label>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Job Title</label>
-              <input onChange={(e) => setTitle(e.target.value)} type="text" placeholder="Backend Developer" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
+            <input
+              onChange={(e) => setCompany(e.target.value)}
+              type="text"
+              placeholder="CodeNest Pvt Ltd"
+              className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Company Name</label>
-              <input onChange={(e) => setCompany(e.target.value)} type="text" placeholder="CodeNest Pvt Ltd" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#374151]">
+              Location
+            </label>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Location</label>
-              <input onChange={(e) => setLocation(e.target.value)} type="text" placeholder="Bangalore" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
+            <input
+              onChange={(e) => setLocation(e.target.value)}
+              type="text"
+              placeholder="Bangalore"
+              className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Salary</label>
-              <input onChange={(e) => setSalary(e.target.value)} type="text" placeholder="70000" className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#374151]">
+              Salary
+            </label>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Job Type</label>
-              <select
-                value={jobType}
-                onChange={(e) => setJobType(e.target.value)}
-                className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition">
-                <option value="">Select Job Type</option>
-                <option value="full-time">Full Time</option>
-                <option value="part-time">Part Time</option>
-                <option value="internship">Internship</option>
-              </select>
-            </div>
+            <input
+              onChange={(e) => setSalary(e.target.value)}
+              type="text"
+              placeholder="70000"
+              className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            />
+          </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-slate-300">Description</label>
-              <textarea onChange={(e) => setDescription(e.target.value)} placeholder="Enter job description..." className="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition" />
-            </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#374151]">
+              Job Type
+            </label>
 
-            <button className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 font-semibold rounded-xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98] mt-4">
-              Post Job
-            </button>
+            <select
+              value={jobType}
+              onChange={(e) => setJobType(e.target.value)}
+              className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            >
+              <option value="">Select Job Type</option>
+              <option value="full-time">Full Time</option>
+              <option value="part-time">Part Time</option>
+              <option value="internship">Internship</option>
+            </select>
+          </div>
 
-          </form>
-        </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-[#374151]">
+              Description
+            </label>
+
+            <textarea
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Enter job description..."
+              rows="5"
+              className="w-full bg-white border border-gray-300 rounded-2xl px-4 py-3 focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            />
+          </div>
+
+          <button
+            className="w-full py-4 bg-[#2E7D32] hover:bg-[#256728] text-white font-semibold rounded-2xl transition-all"
+          >
+            Post Job
+          </button>
+
+        </form>
+
       </div>
+
     </div>
-  )
+
+  </div>
+)
 }
 
 export default AddJob

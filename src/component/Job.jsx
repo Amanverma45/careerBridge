@@ -21,7 +21,7 @@ function Job() {
   const user = storedUser ? JSON.parse(storedUser) : null
 
   const navigate = useNavigate()
-  const token = localStorage.getItem("token")
+  // const token = localStorage.getItem("token")
 
   const filteredJobs = jobs.filter(job => {
     const matchSearch =
@@ -122,131 +122,168 @@ function Job() {
     }
   }
   return (
-    <div className="min-h-screen bg-gray-100 text-gray-800 p-10">
-      <h1 className="text-3xl font-bold mb-8">Available Jobs</h1>
+    <div className="min-h-screen bg-[#F8F7F4] text-[#374151] p-6 md:p-10">
 
-      <div className="grid md:grid-cols-4 gap-4 mb-8">
+      <div className="max-w-7xl mx-auto">
 
-        {/* Search */}
-        <div className="relative">
-          <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-[#374151]">
+            Available Jobs
+          </h1>
 
-          <input
-            type="text"
-            placeholder="Search by job title or company..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+          <p className="text-gray-500 mt-2">
+            Discover opportunities that match your skills and career goals.
+          </p>
         </div>
 
-        {/* Location */}
-        <select
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full p-3 rounded-xl border border-gray-300 bg-white shadow-sm"
-        >
-          <option value="">All Locations</option>
-          <option value="indore">Indore</option>
-          <option value="pune">Pune</option>
-          <option value="bangalore">Bangalore</option>
-          <option value="hyderabad">Hyderabad</option>
-        </select>
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          {/* Search */}
+          <div className="relative">
 
-        {/* jobtype  */}
-        <select
-          value={jobType}
-          onChange={(e) => setJobType(e.target.value)}
-          className="w-full p-3 rounded-xl border border-gray-300 bg-white shadow-sm"
-        >
-          <option value="">All Types</option>
-          <option value="full-time">Full Time</option>
-          <option value="part-time">Part Time</option>
-          <option value="internship">Internship</option>
-        </select>
+            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
 
+            <input
+              type="text"
+              placeholder="Search jobs or companies..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            />
 
-        {/* salary  */}
-        <select
-          value={salary}
-          onChange={(e) => setSalary(e.target.value)}
-          className="w-full p-3 rounded-xl border border-gray-300 bg-white shadow-sm"
-        >
-          <option value="">All Salaries</option>
-          <option value="0-30000">0 - 30K</option>
-          <option value="30000-60000">30K - 60K</option>
-          <option value="60000-100000">60K - 1L</option>
-          <option value="100000+">1L+</option>
-        </select>
-
-        <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="w-full p-3 rounded-xl border border-gray-300 bg-white shadow-sm"
-        >
-          <option value="">Sort By</option>
-          <option value="low">Salary: Low to High</option>
-          <option value="high">Salary: High to Low</option>
-        </select>
-      </div>
-
-      {/* clr filter  */}
-      <div className="flex justify-end mb-6">
-        <button
-          onClick={handleClearFilters}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        >
-          Clear Filters
-        </button>
-      </div>
-      <div className="grid md:grid-cols-2 gap-6">
-        {loading ? (
-          <div className="flex justify-center items-center h-[50vh] col-span-full">
-            <div className="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           </div>
-        ) : sortedJobs.length === 0 ? (
-          <div className="col-span-full text-center py-10 text-gray-500">
-            <p className="text-lg font-medium">No jobs found</p>
-            <p className="text-sm">Try changing filters</p>
+          {/* Location */}
+          <select
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+          >
+            <option value="">All Locations</option>
+            <option value="indore">Indore</option>
+            <option value="pune">Pune</option>
+            <option value="bangalore">Bangalore</option>
+            <option value="hyderabad">Hyderabad</option>
+          </select>
+
+          {/* jobtype */}
+          <select
+            value={jobType}
+            onChange={(e) => setJobType(e.target.value)}
+            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+          >
+            <option value="">All Types</option>
+            <option value="full-time">Full Time</option>
+            <option value="part-time">Part Time</option>
+            <option value="internship">Internship</option>
+          </select>
+
+          <select
+            value={salary}
+            onChange={(e) => setSalary(e.target.value)}
+            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+          >
+            <option value="">All Salaries</option>
+            <option value="0-30000">0 - 30K</option>
+            <option value="30000-60000">30K - 60K</option>
+            <option value="60000-100000">60K - 1L</option>
+            <option value="100000+">1L+</option>
+          </select>
+
+          <select
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+          >
+            <option value="">Sort By</option>
+            <option value="low">Salary: Low to High</option>
+            <option value="high">Salary: High to Low</option>
+          </select>
           </div>
-        ) : (
-          sortedJobs.map((job) => (
-            <div
-              key={job._id}
-              className="bg-white p-6 rounded-2xl border border-gray-200 shadow-md hover:shadow-lg transition"
+
+          {/* clr filter  */}
+          <div className="flex justify-end mb-6">
+            <button
+              onClick={handleClearFilters}
+              className="px-5 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition font-medium shadow-sm"
             >
-              <h2 className="text-xl font-bold mb-2">{job.title}</h2>
-              <p className="text-slate-400">{job.company}</p>
-              <p className="text-slate-400">{job.location}</p>
-              <p className="text-emerald-400 font-semibold mt-2">
-                ₹ {job.salary}
-              </p>
-              <p className="text-sm text-slate-500 mt-2">
-                {job.description}
-              </p>
+              Clear Filters
+            </button>
+          </div>
 
-              <Button
-                loading={applyLoadingId === job._id}
-                disabled={appliedIds.includes(job._id)}
-                onClick={() => handleApply(job._id)}
-                className={
-                  appliedIds.includes(job._id)
-                    ? "bg-green-600"
-                    : "bg-indigo-600 text-white"
-                }
-              >
-                {applyLoadingId === job._id
-                  ? "Applying..."
-                  : appliedIds.includes(job._id)
-                    ? "Applied"
-                    : "Apply Now"}
-              </Button>
-            </div>
-          ))
-        )}
+          <div className="grid md:grid-cols-2 gap-6">
+
+            {loading ? (
+
+              <div className="flex justify-center items-center h-[50vh] col-span-full">
+                <div className="w-10 h-10 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+
+            ) : sortedJobs.length === 0 ? (
+
+              <div className="col-span-full bg-white border border-gray-200 rounded-3xl p-10 text-center shadow-sm">
+                <p className="text-xl font-semibold text-[#374151]">
+                  No Jobs Found
+                </p>
+
+                <p className="text-gray-500 mt-2">
+                  Try changing filters or search keywords.
+                </p>
+              </div>
+
+            ) : (
+
+              sortedJobs.map((job) => (
+
+                <div
+                  key={job._id}
+                  className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
+                >
+
+                  <h2 className="text-2xl font-bold text-[#374151] mb-2">
+                    {job.title}
+                  </h2>
+
+                  <p className="text-gray-500">
+                    {job.company}
+                  </p>
+
+                  <p className="text-gray-500">
+                    {job.location}
+                  </p>
+
+                  <p className="text-[#F4A261] font-semibold mt-3 text-lg">
+                    ₹ {job.salary}
+                  </p>
+
+                  <p className="text-sm text-gray-500 mt-3 line-clamp-3">
+                    {job.description}
+                  </p>
+
+                  <div className="mt-5">
+
+                    <Button
+                      loading={applyLoadingId === job._id}
+                      disabled={appliedIds.includes(job._id)}
+                      onClick={() => handleApply(job._id)}
+                      className={
+                        appliedIds.includes(job._id)
+                          ? "bg-green-600 text-white w-full"
+                          : "bg-[#2E7D32] hover:bg-[#256728] text-white w-full"
+                      }
+                    >
+                      {applyLoadingId === job._id
+                        ? "Applying..."
+                        : appliedIds.includes(job._id)
+                          ? "Applied"
+                          : "Apply Now"}
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+                   </div>
+        </div>
       </div>
-
-    </div>
   )
 }
-export default Job;
+
+export default Job

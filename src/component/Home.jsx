@@ -19,7 +19,7 @@ function Home() {
     <>
       <div className="relative min-h-screen bg-[#F8F7F4] overflow-hidden flex flex-col items-center justify-center px-6">
 
-        <div className="absolute top-[-10%] left-[-10%] w-[35%] h-[35%] rounded-full bg-[#2E7D32]/10 blur-[120px]" />
+        <div className="absolute left-[-10%] w-[35%] h-[35%] rounded-full bg-[#2E7D32]/10 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[35%] h-[35%] rounded-full bg-[#F4A261]/10 blur-[120px]" />
 
         <div className="mb-6 px-5 py-2 rounded-full border border-[#2E7D32]/20 bg-white text-[#2E7D32] text-sm font-medium tracking-wide shadow-sm">
