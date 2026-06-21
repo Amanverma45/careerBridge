@@ -91,7 +91,7 @@ function Navbar() {
         </div>
 
         <button
-          className="md:hidden text-2xl"
+          className="md:hidden text-2xl z-[60]"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           {menuOpen ? <HiX /> : <HiMenu />}
@@ -99,27 +99,39 @@ function Navbar() {
       </div>
 
       {menuOpen && (
-       <div className="md:hidden px-4 pb-4 flex flex-col items-start gap-3 bg-[#2E7D32]">
+        <div
+          className="fixed inset-0 bg-black/40 z-40 md:hidden"
+          onClick={() => setMenuOpen(false)}
+        />
+      )}
+      <div
+        className={`fixed top-20 right-0 h-[calc(100vh-80px)] w-72 bg-[#0f172a]/95 backdrop-blur-md z-50 transform transition-transform duration-300 md:hidden ${menuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+      >
+
+        <div className="px-6 py-4 flex flex-col gap-6 text-white text-lg">
 
           {!token && (
             <>
-              <Link to="/" onClick={() => setMenuOpen(false)} className="nav-link">Home</Link>
-              <Link to="/login" onClick={() => setMenuOpen(false)} className="nav-link">Login</Link>
-              <Link to="/signup" onClick={() => setMenuOpen(false)} className="btn-primary">Signup</Link>
+              <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+              <Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link>
+              <Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link>
             </>
           )}
 
           {token && user?.role === "user" && (
             <>
-              <Link to="/dashboard" onClick={() => setMenuOpen(false)} className="nav-link">Dashboard</Link>
-              <Link to="/jobs" onClick={() => setMenuOpen(false)} className="btn-primary">Jobs</Link>
+              <Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link>
+              <Link to="/jobs" onClick={() => setMenuOpen(false)}>Jobs</Link>
             </>
           )}
 
           {token && user?.role === "recruiter" && (
             <>
-              <Link to="/addJobs" onClick={() => setMenuOpen(false)} className="nav-link">Add Jobs</Link>
-              <Link to="/recruiterdashboard" onClick={() => setMenuOpen(false)} className="nav-link">Dashboard</Link>
+              <Link to="/addJobs" onClick={() => setMenuOpen(false)}>Add Jobs</Link>
+              <Link to="/recruiterdashboard" onClick={() => setMenuOpen(false)}>
+                Dashboard
+              </Link>
             </>
           )}
 
@@ -127,17 +139,16 @@ function Navbar() {
             <button
               onClick={() => {
                 localStorage.clear()
-                navigate('/')
+                navigate("/")
               }}
-              className="inline-flex items-center px-4 py-2 rounded-xl border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition whitespace-nowrap"
+              className="w-fit px-5 py-2 border border-red-500 text-red-500 rounded-xl"
             >
               Logout
             </button>
           )}
         </div>
-      )}
-
-    </nav>
+      </div>
+    </nav >
   )
 }
 
