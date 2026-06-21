@@ -34,14 +34,12 @@ function Navbar() {
             src={logo}
             className="h-14 md:h-16 w-auto shrink-0"
           />
-
           <span className="text-xl md:text-2xl font-bold text-white">
             CareerBridge
           </span>
         </div>
 
         <div className="hidden md:flex items-center gap-4">
-
           {!token && (
             <>
               <Link
@@ -53,15 +51,13 @@ function Navbar() {
 
               <Link
                 to="/login"
-                className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all duration-200"
-              >
+                className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all duration-200">
                 Login
               </Link>
 
               <Link
                 to="/signup"
-                className="px-6 py-2 rounded-xl text-sm font-semibold bg-[#2E7D32] text-white hover:bg-[#256728] transition-all duration-200 shadow-md shadow-indigo-500/20 active:scale-95"
-              >
+                className="px-6 py-2 rounded-xl text-sm font-semibold bg-[#2E7D32] text-white hover:bg-[#256728] transition-all duration-200 shadow-md shadow-indigo-500/20 active:scale-95">
                 Signup
               </Link>
             </>
@@ -103,7 +99,7 @@ function Navbar() {
       </div>
 
       {menuOpen && (
-        <div className="md:hidden px-4 pb-4 flex flex-col gap-3 bg-[#2E7D32]">
+       <div className="md:hidden px-4 pb-4 flex flex-col items-start gap-3 bg-[#2E7D32]">
 
           {!token && (
             <>
@@ -133,7 +129,7 @@ function Navbar() {
                 localStorage.clear()
                 navigate('/')
               }}
-              className="px-4 py-2 rounded-lg bg-rose-50 text-white"
+              className="inline-flex items-center px-4 py-2 rounded-xl border border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition whitespace-nowrap"
             >
               Logout
             </button>
