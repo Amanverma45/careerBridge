@@ -47,120 +47,128 @@ function Resume() {
             await axios.delete(
                 `https://careerbridge-b-1.onrender.com/api/deleteResume/${user._id}`
             )
-            const updatedUser = { ...user, resume: "" }
+           const updatedUser = {...user,resume: "",resumePublicId: ""}
             localStorage.setItem("user", JSON.stringify(updatedUser))
             setUser(updatedUser)
             alert("Resume deleted")
-        }catch (error) {
-  console.log("DELETE RESPONSE:", error.response?.data)
-  console.log(error)
-}
+        } catch (error) {
+            console.log("DELETE RESPONSE:", error.response?.data)
+            console.log(error)
+        }
     }
-    const handleView = () => {
-    if (!user?.resume) return alert("No resume found");
-    const viewUrl = user.resume.replace("/upload/", "/upload/fl_attachment:false,f_auto/");
 
-    window.open(viewUrl, "_blank", "noopener,noreferrer");
-};
+    const handleView = async () => {
+        try {
+            const res = await axios.get(
+                `https://careerbridge-b-1.onrender.com/api/viewResume/${user._id}`
+            );
 
-return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F8F7F4] p-4">
+            window.open(res.data.resume, "_blank");
+        } catch (error) {
+            console.log(error);
+            alert("No resume found");
+        }
+    };
 
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-200 w-full max-w-md">
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-[#F8F7F4] p-4">
 
-            <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-[#374151]">
-                    Resume Manager
-                </h2>
+            <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-200 w-full max-w-md">
 
-                <p className="text-gray-500 text-sm mt-2">
-                    Upload and manage your latest resume
-                </p>
-            </div>
+                <div className="text-center mb-8">
+                    <h2 className="text-3xl font-bold text-[#374151]">
+                        Resume Manager
+                    </h2>
 
-            <form onSubmit={handleUpload} className="space-y-6">
-
-                <div className="relative group">
-
-                    <input
-                        type="file"
-                        id="resume-upload"
-                        accept=".pdf,.doc,.docx"
-                        onChange={(e) => setFile(e.target.files[0])}
-                        className="hidden"
-                    />
-
-                    <label
-                        htmlFor="resume-upload"
-                        className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gray-50 hover:bg-green-50 hover:border-[#2E7D32] transition-all"
-                    >
-
-                        <div className="flex flex-col items-center justify-center">
-
-                            <svg
-                                className="w-8 h-8 mb-3 text-gray-400 group-hover:text-[#2E7D32]"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                />
-                            </svg>
-
-                            <p className="text-sm font-medium text-gray-600 text-center px-2">
-                                {file ? file.name : "Choose Resume (PDF, DOC, DOCX)"}
-                            </p>
-
-                        </div>
-
-                    </label>
-
+                    <p className="text-gray-500 text-sm mt-2">
+                        Upload and manage your latest resume
+                    </p>
                 </div>
 
-                <button
-                    disabled={loading || !file}
-                    className={`w-full py-4 rounded-2xl font-semibold text-white transition-all duration-300 ${
-                        loading || !file
-                            ? "bg-green-300 cursor-not-allowed"
-                            : "bg-[#2E7D32] hover:bg-[#256728] hover:shadow-lg"
-                    }`}
-                >
-                    {loading ? "Uploading..." : "Upload Resume"}
-                </button>
+                <form onSubmit={handleUpload} className="space-y-6">
 
-            </form>
+                    <div className="relative group">
 
-            {user?.resume && (
+                        <input
+                            type="file"
+                            id="resume-upload"
+                            accept=".pdf,.doc,.docx"
+                            onChange={(e) => setFile(e.target.files[0])}
+                            className="hidden"
+                        />
 
-                <div className="mt-8 pt-6 border-t border-gray-200">
+                        <label
+                            htmlFor="resume-upload"
+                            className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-gray-300 rounded-2xl cursor-pointer bg-gray-50 hover:bg-green-50 hover:border-[#2E7D32] transition-all"
+                        >
 
-                    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+                            <div className="flex flex-col items-center justify-center">
 
-                        <div className="flex items-center justify-between">
-
-                            <span className="font-medium text-gray-700">
-                                Resume Uploaded
-                            </span>
-
-                            <div className="flex items-center gap-4">
-
-                                <button
-                                    onClick={handleView}
-                                    className="text-[#2E7D32] hover:underline font-semibold"
+                                <svg
+                                    className="w-8 h-8 mb-3 text-gray-400 group-hover:text-[#2E7D32]"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
                                 >
-                                    View
-                                </button>
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                    />
+                                </svg>
 
-                                <button
-                                    onClick={handleDelete}
-                                    className="text-red-500 hover:text-red-700 font-semibold"
-                                >
-                                    Delete
-                                </button>
+                                <p className="text-sm font-medium text-gray-600 text-center px-2">
+                                    {file ? file.name : "Choose Resume (PDF, DOC, DOCX)"}
+                                </p>
+
+                            </div>
+
+                        </label>
+
+                    </div>
+
+                    <button
+                        disabled={loading || !file}
+                        className={`w-full py-4 rounded-2xl font-semibold text-white transition-all duration-300 ${loading || !file
+                                ? "bg-green-300 cursor-not-allowed"
+                                : "bg-[#2E7D32] hover:bg-[#256728] hover:shadow-lg"
+                            }`}
+                    >
+                        {loading ? "Uploading..." : "Upload Resume"}
+                    </button>
+
+                </form>
+
+                {user?.resume && (
+
+                    <div className="mt-8 pt-6 border-t border-gray-200">
+
+                        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4">
+
+                            <div className="flex items-center justify-between">
+
+                                <span className="font-medium text-gray-700">
+                                    Resume Uploaded
+                                </span>
+
+                                <div className="flex items-center gap-4">
+
+                                    <button
+                                        onClick={handleView}
+                                        className="text-[#2E7D32] hover:underline font-semibold"
+                                    >
+                                        View
+                                    </button>
+
+                                    <button
+                                        onClick={handleDelete}
+                                        className="text-red-500 hover:text-red-700 font-semibold"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </div>
 
                             </div>
 
@@ -168,14 +176,12 @@ return (
 
                     </div>
 
-                </div>
+                )}
 
-            )}
+            </div>
 
         </div>
-
-    </div>
-)
+    )
 
 }
 
