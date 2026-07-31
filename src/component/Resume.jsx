@@ -128,10 +128,10 @@ function Resume() {
                     <button
                         type="submit"
                         disabled={loading || !file}
-                        className={`w-full py-3.5 rounded-xl font-bold text-white transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer ${
+                        className={`w-full py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                             loading || !file
-                                ? "bg-brand-primary/45 cursor-not-allowed shadow-none"
-                                : "bg-brand-primary hover:bg-brand-primary-hover"
+                                ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed shadow-none"
+                                : "bg-brand-primary hover:bg-brand-primary-hover text-white shadow-md hover:shadow-lg active:scale-95"
                         }`}
                     >
                         {loading ? "Uploading..." : "Upload Resume"}
