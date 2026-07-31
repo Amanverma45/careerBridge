@@ -151,7 +151,24 @@ function Resume() {
                                 type="file"
                                 id="resume-upload"
                                 accept=".pdf,.doc,.docx"
-                                onChange={(e) => setFile(e.target.files[0])}
+                                onChange={(e) => {
+                                    const selectedFile = e.target.files[0];
+                                    if (!selectedFile) return;
+
+                                    if (user?.resume) {
+                                        const parts = user.resume.split('/');
+                                        const lastPart = parts[parts.length - 1];
+                                        const currentName = lastPart.replace(/_\d+\.[^.]+$/, '').toLowerCase();
+                                        const selectedName = selectedFile.name.split('.')[0].toLowerCase();
+
+                                        if (selectedName === currentName) {
+                                            toast.error("This resume is already uploaded");
+                                            e.target.value = ""; // Reset file input selection
+                                            return;
+                                        }
+                                    }
+                                    setFile(selectedFile);
+                                }}
                                 className="hidden"
                             />
 
