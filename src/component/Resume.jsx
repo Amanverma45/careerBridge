@@ -8,6 +8,7 @@ function Resume() {
     const [loading, setLoading] = useState(false)
     const [deleteLoading, setDeleteLoading] = useState(false)
     const [isReplacing, setIsReplacing] = useState(false)
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
 
     const [user, setUser] = useState(() => {
         const storedUser = localStorage.getItem("user")
@@ -47,8 +48,8 @@ function Resume() {
         }
     }
 
-    const handleDelete = async () => {
-        if (!window.confirm("Are you sure you want to delete your resume? This will remove it from all job applications.")) return
+    const executeDelete = async () => {
+        setShowConfirmModal(false)
         try {
             setDeleteLoading(true)
             await axios.delete(
@@ -128,7 +129,7 @@ function Resume() {
                                 </button>
 
                                 <button
-                                    onClick={handleDelete}
+                                    onClick={() => setShowConfirmModal(true)}
                                     disabled={deleteLoading}
                                     className="px-4 py-3 bg-rose-50 dark:bg-rose-950/20 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl font-bold transition text-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                                 >
@@ -219,7 +220,7 @@ function Resume() {
                                         setFile(null);
                                         setIsReplacing(false);
                                     }}
-                                    className="w-full py-3 bg-slate-50 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold transition flex items-center justify-center gap-1.5 cursor-pointer text-sm"
+                                    className="w-full py-3 bg-slate-55/20 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-350 rounded-xl font-bold transition flex items-center justify-center gap-1.5 cursor-pointer text-sm"
                                 >
                                     <HiXCircle className="text-lg" /> Cancel
                                 </button>
@@ -228,6 +229,37 @@ function Resume() {
                     </form>
                 )}
             </div>
+
+            {/* Custom Confirmation Modal Overlay */}
+            {showConfirmModal && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 animate-fade-in">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl max-w-sm w-full text-center space-y-5">
+                        <div className="w-12 h-12 bg-rose-50 dark:bg-rose-950/20 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto border border-rose-200/20">
+                            <HiTrash />
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-black text-slate-850 dark:text-white">Delete Resume?</h3>
+                            <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+                                Are you sure you want to delete your resume? This action cannot be undone and will remove it from all job applications.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 pt-2">
+                            <button
+                                onClick={() => setShowConfirmModal(false)}
+                                className="px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold transition text-xs cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={executeDelete}
+                                className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition text-xs cursor-pointer shadow-md hover:shadow-lg active:scale-95"
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
