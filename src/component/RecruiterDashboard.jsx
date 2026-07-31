@@ -269,20 +269,22 @@ function RecruiterDashboard() {
                   ) : (
                     /* Normal Card Display */
                     <>
-                      <div className="flex flex-col sm:flex-row justify-between items-stretch gap-4 sm:gap-6">
-                        {/* Left Details Block */}
-                        <div className="flex-1 space-y-3.5">
-                          <div className="flex justify-between items-start gap-3">
-                            <h3 className="text-xl font-black text-slate-800 dark:text-white leading-tight">
-                              {job.title}
-                            </h3>
-                            {job.jobType && (
-                              <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0">
-                                {job.jobType}
-                              </span>
-                            )}
-                          </div>
+                      {/* Top Header Block (Full width) */}
+                      <div className="flex justify-between items-center gap-3 pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                        <h3 className="text-lg font-black text-slate-805 dark:text-white leading-tight truncate">
+                          {job.title}
+                        </h3>
+                        {job.jobType && (
+                          <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0">
+                            {job.jobType}
+                          </span>
+                        )}
+                      </div>
 
+                      {/* Bottom Details/Actions Split Block */}
+                      <div className="flex flex-col sm:flex-row justify-between items-stretch gap-4 sm:gap-6 pt-3.5">
+                        {/* Left Details Block */}
+                        <div className="flex-1 space-y-3">
                           <div className="space-y-2 text-sm text-slate-655 dark:text-slate-400">
                             <p className="flex items-center gap-2">
                               <HiOfficeBuilding className="text-slate-400 dark:text-slate-500 text-base" />
@@ -295,7 +297,7 @@ function RecruiterDashboard() {
                             </p>
 
                             {job.salary && (
-                              <p className="flex items-center gap-2 text-brand-secondary font-bold text-base pt-1">
+                              <p className="flex items-center gap-2 text-brand-secondary font-bold text-base pt-0.5">
                                 <HiCurrencyRupee className="text-lg" />
                                 <span>{job.salary}</span>
                               </p>
@@ -303,15 +305,15 @@ function RecruiterDashboard() {
                           </div>
 
                           {job.description && (
-                            <p className="text-xs text-slate-550 dark:text-slate-400 line-clamp-2 leading-relaxed italic border-t border-slate-100 dark:border-slate-800/40 pt-2.5 mt-2">
+                            <p className="text-xs text-slate-550 dark:text-slate-450 line-clamp-2 leading-relaxed italic border-t border-slate-100 dark:border-slate-800/40 pt-2.5 mt-2">
                               "{job.description}"
                             </p>
                           )}
                         </div>
 
                         {/* Right Vertical Button Stack Column */}
-                        <div className="flex sm:flex-col gap-2.5 justify-center sm:pl-5 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800/80 pt-3 sm:pt-0 shrink-0 sm:w-[130px]">
-                          {/* VIEW/APPLICANTS */}
+                        <div className="flex sm:flex-col gap-2.5 justify-center sm:pl-5 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800/80 pt-3.5 sm:pt-0 shrink-0 sm:w-[130px]">
+                          {/* VIEW/APPLICANTS (Primary) */}
                           <button
                             onClick={() => navigate(`/applicants/${job._id}`)}
                             className="w-full py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs cursor-pointer shadow-sm active:scale-95 shrink-0"
@@ -319,7 +321,7 @@ function RecruiterDashboard() {
                             <HiUserGroup className="text-sm" /> Applicants
                           </button>
 
-                          {/* EDIT */}
+                          {/* EDIT (Secondary) */}
                           <button
                             onClick={() => {
                               setEditJobId(job._id)
@@ -330,7 +332,7 @@ function RecruiterDashboard() {
                             <HiPencilAlt className="text-sm" /> Edit
                           </button>
 
-                          {/* DELETE */}
+                          {/* DELETE (Destructive) */}
                           <button
                             onClick={() => setDeleteJobConfirmId(job._id)}
                             disabled={deleteLoadingId === job._id}
