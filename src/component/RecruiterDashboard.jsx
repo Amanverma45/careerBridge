@@ -68,6 +68,16 @@ function RecruiterDashboard() {
   }
 
   const handleUpdate = async (id) => {
+    if (
+      !(editData.title || '').trim() ||
+      !(editData.company || '').trim() ||
+      !(editData.location || '').trim() ||
+      !(editData.salary || '').trim()
+    ) {
+      toast.error("Please fill in all fields")
+      return
+    }
+
     const originalJob = jobs.find(job => job._id === id)
     if (originalJob) {
       if (
