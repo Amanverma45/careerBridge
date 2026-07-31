@@ -301,12 +301,9 @@ function RecruiterDashboard() {
                         </div>
 
                         {job.description && (
-                          <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60">
-                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-wider mb-1">Description</p>
-                            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                              {job.description}
-                            </p>
-                          </div>
+                          <p className="text-xs text-slate-500 dark:text-slate-450 line-clamp-2 leading-relaxed italic">
+                            "{job.description}"
+                          </p>
                         )}
                       </div>
 
