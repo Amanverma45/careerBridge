@@ -256,16 +256,6 @@ function Applicants() {
                             </h2>
 
                             <div className="flex flex-wrap items-center gap-2">
-                                <a
-                                    href={selectedResume}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="bg-brand-primary hover:bg-brand-primary-hover text-white px-4 py-2 rounded-xl font-bold text-xs transition flex items-center gap-1"
-                                >
-                                    <HiDownload className="text-sm" /> Open in New Tab
-                                </a>
-
-                                <div className="h-6 w-[1px] bg-slate-250 dark:bg-slate-800 mx-1 hidden sm:block" />
 
                                 <button
                                     onClick={() => setZoom(prev => prev + 0.2)}
@@ -308,14 +298,7 @@ function Applicants() {
                         </div>
 
                          {/* Resume Content View */}
-                        <div className="w-full h-full overflow-auto flex flex-col items-center bg-slate-100 dark:bg-slate-950 p-6 relative">
-                            {/* Fallback Help Text */}
-                            <p className="text-xs text-slate-500 dark:text-slate-400 mb-4 text-center max-w-lg leading-relaxed bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2.5 rounded-xl shadow-sm">
-                                Preview not loading? It might be a document or secure file. 
-                                <a href={selectedResume} target="_blank" rel="noopener noreferrer" className="text-brand-primary hover:underline ml-1 font-bold inline-flex items-center gap-0.5">
-                                    Click here to open it directly <HiArrowLeft className="rotate-180 text-xs" />
-                                </a>
-                            </p>
+                        <div className="w-full h-full overflow-auto flex flex-col items-center bg-slate-100 dark:bg-slate-955 p-6 relative">
                             
                             {iframeLoading ? (
                                 <div className="flex flex-col items-center justify-center h-[50vh] gap-3">
