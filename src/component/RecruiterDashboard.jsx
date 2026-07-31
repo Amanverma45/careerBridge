@@ -72,7 +72,9 @@ function RecruiterDashboard() {
       !(editData.title || '').trim() ||
       !(editData.company || '').trim() ||
       !(editData.location || '').trim() ||
-      !(editData.salary || '').trim()
+      !(editData.salary || '').trim() ||
+      !(editData.jobType || '').trim() ||
+      !(editData.description || '').trim()
     ) {
       toast.error("Please fill in all fields")
       return
@@ -84,7 +86,9 @@ function RecruiterDashboard() {
         (editData.title || '').trim() === (originalJob.title || '').trim() &&
         (editData.company || '').trim() === (originalJob.company || '').trim() &&
         (editData.location || '').trim() === (originalJob.location || '').trim() &&
-        (editData.salary || '').trim() === (originalJob.salary || '').trim()
+        (editData.salary || '').trim() === (originalJob.salary || '').trim() &&
+        (editData.jobType || '').trim() === (originalJob.jobType || '').trim() &&
+        (editData.description || '').trim() === (originalJob.description || '').trim()
       ) {
         toast.error("No changes detected")
         setEditJobId(null)
@@ -191,7 +195,7 @@ function RecruiterDashboard() {
                           <input
                             value={editData.company}
                             onChange={(e) => setEditData({ ...editData, company: e.target.value })}
-                            className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-855 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
                           />
                         </div>
 
@@ -201,7 +205,7 @@ function RecruiterDashboard() {
                             <input
                               value={editData.location}
                               onChange={(e) => setEditData({ ...editData, location: e.target.value })}
-                              className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-855 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
                             />
                           </div>
 
@@ -210,7 +214,30 @@ function RecruiterDashboard() {
                             <input
                               value={editData.salary}
                               onChange={(e) => setEditData({ ...editData, salary: e.target.value })}
-                              className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-855 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-550 mb-1">Job Type</label>
+                            <input
+                              value={editData.jobType}
+                              onChange={(e) => setEditData({ ...editData, jobType: e.target.value })}
+                              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                              placeholder="e.g. Full-time, Remote"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-550 mb-1">Description</label>
+                            <textarea
+                              value={editData.description}
+                              onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                              rows="1"
+                              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary resize-none"
+                              placeholder="Describe the role..."
                             />
                           </div>
                         </div>
@@ -243,10 +270,15 @@ function RecruiterDashboard() {
                     /* Normal Card Display */
                     <>
                       <div className="space-y-4">
-                        <div className="flex justify-between items-start gap-2">
-                          <h3 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white leading-tight">
+                        <div className="flex justify-between items-start gap-3">
+                          <h3 className="text-xl font-black text-slate-800 dark:text-white leading-tight">
                             {job.title}
                           </h3>
+                          {job.jobType && (
+                            <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0">
+                              {job.jobType}
+                            </span>
+                          )}
                         </div>
 
                         <div className="space-y-2 text-sm text-slate-655 dark:text-slate-400">
@@ -267,6 +299,15 @@ function RecruiterDashboard() {
                             </p>
                           )}
                         </div>
+
+                        {job.description && (
+                          <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60">
+                            <p className="text-[10px] text-slate-400 dark:text-slate-500 font-black uppercase tracking-wider mb-1">Description</p>
+                            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                              {job.description}
+                            </p>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex flex-wrap gap-2.5 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
