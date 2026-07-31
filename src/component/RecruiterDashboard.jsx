@@ -269,81 +269,82 @@ function RecruiterDashboard() {
                   ) : (
                     /* Normal Card Display */
                     <>
-                      <div className="space-y-4">
-                        <div className="flex justify-between items-start gap-3">
-                          <h3 className="text-xl font-black text-slate-800 dark:text-white leading-tight">
-                            {job.title}
-                          </h3>
-                          {job.jobType && (
-                            <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0">
-                              {job.jobType}
-                            </span>
-                          )}
-                        </div>
+                      <div className="flex flex-col sm:flex-row justify-between items-stretch gap-4 sm:gap-6">
+                        {/* Left Details Block */}
+                        <div className="flex-1 space-y-3.5">
+                          <div className="flex justify-between items-start gap-3">
+                            <h3 className="text-xl font-black text-slate-800 dark:text-white leading-tight">
+                              {job.title}
+                            </h3>
+                            {job.jobType && (
+                              <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0">
+                                {job.jobType}
+                              </span>
+                            )}
+                          </div>
 
-                        <div className="space-y-2 text-sm text-slate-655 dark:text-slate-400">
-                          <p className="flex items-center gap-2">
-                            <HiOfficeBuilding className="text-slate-400 dark:text-slate-500 text-base" />
-                            <span className="font-semibold text-slate-700 dark:text-slate-300">{job.company}</span>
-                          </p>
+                          <div className="space-y-2 text-sm text-slate-655 dark:text-slate-400">
+                            <p className="flex items-center gap-2">
+                              <HiOfficeBuilding className="text-slate-400 dark:text-slate-500 text-base" />
+                              <span className="font-semibold text-slate-700 dark:text-slate-300">{job.company}</span>
+                            </p>
 
-                          <p className="flex items-center gap-2">
-                            <HiLocationMarker className="text-slate-400 dark:text-slate-500 text-base" />
-                            <span>{job.location}</span>
-                          </p>
+                            <p className="flex items-center gap-2">
+                              <HiLocationMarker className="text-slate-400 dark:text-slate-500 text-base" />
+                              <span>{job.location}</span>
+                            </p>
 
-                          {job.salary && (
-                            <p className="flex items-center gap-2 text-brand-secondary font-bold text-base pt-1">
-                              <HiCurrencyRupee className="text-lg" />
-                              <span>{job.salary}</span>
+                            {job.salary && (
+                              <p className="flex items-center gap-2 text-brand-secondary font-bold text-base pt-1">
+                                <HiCurrencyRupee className="text-lg" />
+                                <span>{job.salary}</span>
+                              </p>
+                            )}
+                          </div>
+
+                          {job.description && (
+                            <p className="text-xs text-slate-550 dark:text-slate-400 line-clamp-2 leading-relaxed italic border-t border-slate-100 dark:border-slate-800/40 pt-2.5 mt-2">
+                              "{job.description}"
                             </p>
                           )}
                         </div>
 
-                        {job.description && (
-                          <p className="text-xs text-slate-500 dark:text-slate-450 line-clamp-2 leading-relaxed italic">
-                            "{job.description}"
-                          </p>
-                        )}
-                      </div>
+                        {/* Right Vertical Button Stack Column */}
+                        <div className="flex sm:flex-col gap-2.5 justify-center sm:pl-5 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800/80 pt-3 sm:pt-0 shrink-0 sm:w-[130px]">
+                          {/* VIEW/APPLICANTS */}
+                          <button
+                            onClick={() => navigate(`/applicants/${job._id}`)}
+                            className="w-full py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs cursor-pointer shadow-sm active:scale-95 shrink-0"
+                          >
+                            <HiUserGroup className="text-sm" /> Applicants
+                          </button>
 
-                      <div className="flex flex-wrap gap-2.5 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
-                        {/* EDIT */}
-                        <button
-                          onClick={() => {
-                            setEditJobId(job._id)
-                            setEditData(job)
-                          }}
-                          className="px-3.5 py-2 border border-slate-300 dark:border-slate-800 text-slate-655 dark:text-slate-350 hover:border-brand-primary dark:hover:border-brand-primary hover:text-brand-primary rounded-xl font-bold transition text-xs cursor-pointer flex items-center gap-1"
-                        >
-                          <HiPencilAlt className="text-sm" /> Edit
-                        </button>
+                          {/* EDIT */}
+                          <button
+                            onClick={() => {
+                              setEditJobId(job._id)
+                              setEditData(job)
+                            }}
+                            className="w-full py-2 border border-slate-200 dark:border-slate-800 text-slate-655 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl font-bold transition text-xs cursor-pointer flex items-center justify-center gap-1 active:scale-95 shrink-0"
+                          >
+                            <HiPencilAlt className="text-sm" /> Edit
+                          </button>
 
-                        {/* DELETE */}
-                        <button
-                          onClick={() => setDeleteJobConfirmId(job._id)}
-                          disabled={deleteLoadingId === job._id}
-                          className="px-3.5 py-2 border border-rose-250/60 dark:border-rose-955/20 text-rose-500 hover:bg-rose-500 hover:text-white rounded-xl font-bold transition flex items-center gap-1 text-xs cursor-pointer disabled:opacity-50"
-                        >
-                          {deleteLoadingId === job._id ? (
-                            <>
+                          {/* DELETE */}
+                          <button
+                            onClick={() => setDeleteJobConfirmId(job._id)}
+                            disabled={deleteLoadingId === job._id}
+                            className="w-full py-2 border border-rose-200 dark:border-rose-955/20 text-rose-500 hover:bg-rose-600 hover:text-white rounded-xl font-bold transition flex items-center justify-center gap-1 text-xs cursor-pointer disabled:opacity-50 active:scale-95 shrink-0"
+                          >
+                            {deleteLoadingId === job._id ? (
                               <div className="w-3.5 h-3.5 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
-                              ...
-                            </>
-                          ) : (
-                            <>
-                              <HiTrash className="text-sm" /> Delete
-                            </>
-                          )}
-                        </button>
-
-                        {/* VIEW */}
-                        <button
-                          onClick={() => navigate(`/applicants/${job._id}`)}
-                          className="px-3.5 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition flex items-center gap-1.5 text-xs ml-auto cursor-pointer shadow-sm hover:shadow"
-                        >
-                          <HiUserGroup className="text-sm" /> Applicants
-                        </button>
+                            ) : (
+                              <>
+                                <HiTrash className="text-sm" /> Delete
+                              </>
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </>
                   )}
