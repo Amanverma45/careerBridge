@@ -2,5 +2,10 @@
   width: 100%;
   margin: 0;
   padding: 0;
-   background: #F8F7F4;
+  background: #F8FAFC;
+  transition: background-color 0.3s ease;
+}
+
+html.dark #root {
+  background: #0f172a;
 }

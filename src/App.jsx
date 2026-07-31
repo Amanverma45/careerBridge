@@ -3,6 +3,7 @@ import Navbar from "./component/Navbar.jsx"
 import Home from './component/Home.jsx'
 import Signup from './component/Signup.jsx'
 import Login from './component/Login.jsx'
+import About from './component/About.jsx'
 import Job from './component/Job.jsx'
 import Footer from './component/Footer.jsx'
 import Welcome from './component/Welcome.jsx'
@@ -16,8 +17,50 @@ import Applicants from './component/Applicants.jsx'
 import Resume from './component/Resume.jsx'
 import { Toaster } from 'react-hot-toast'
 import OTP from './component/OTP.jsx'
+import Privacy from './component/Privacy.jsx'
+import Terms from './component/Terms.jsx'
+
+import { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 function App() {
+  const [isLoginOpen, setIsLoginOpen] = useState(false)
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false)
+  const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const { pathname } = useLocation()
+
+  // Reset scroll on path change
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+  // Global listeners to open/close auth and profile modals
+  useEffect(() => {
+    const openLogin = () => {
+      setIsLoginOpen(true)
+      setIsRegisterOpen(false)
+      setIsProfileOpen(false)
+    }
+    const openRegister = () => {
+      setIsRegisterOpen(true)
+      setIsLoginOpen(false)
+      setIsProfileOpen(false)
+    }
+    const openProfile = () => {
+      setIsProfileOpen(true)
+      setIsLoginOpen(false)
+      setIsRegisterOpen(false)
+    }
+    window.addEventListener("open-login", openLogin)
+    window.addEventListener("open-register", openRegister)
+    window.addEventListener("open-profile", openProfile)
+    return () => {
+      window.removeEventListener("open-login", openLogin)
+      window.removeEventListener("open-register", openRegister)
+      window.removeEventListener("open-profile", openProfile)
+    }
+  }, [])
+
   return (
     <>
       <Navbar />
@@ -25,6 +68,7 @@ function App() {
       <div>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/jobs" element={<ProtectedRoute><Job /></ProtectedRoute>} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -36,9 +80,36 @@ function App() {
           <Route path="/applicants/:jobId" element={<ProtectedRoute><Applicants /></ProtectedRoute>} />
           <Route path="/resume" element={<ProtectedRoute><Resume /></ProtectedRoute>} />
           <Route path="/verify-otp" element={<OTP />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
         </Routes>
       </div>
       <Footer />
+
+      {/* Auth Modals Overlay */}
+      {isLoginOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <Login isModal={true} onClose={() => setIsLoginOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      {isRegisterOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <Signup isModal={true} onClose={() => setIsRegisterOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      {isProfileOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <Profile isModal={true} onClose={() => setIsProfileOpen(false)} />
+          </div>
+        </div>
+      )}
     </>
   )
 }
