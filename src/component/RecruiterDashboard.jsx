@@ -14,6 +14,7 @@ function RecruiterDashboard() {
 
   const [loading, setLoading] = useState(true)
   const [deleteLoadingId, setDeleteLoadingId] = useState(null)
+  const [deleteJobConfirmId, setDeleteJobConfirmId] = useState(null)
   const [updateLoadingId, setUpdateLoadingId] = useState(null)
 
   const jobsPerPage = 6
@@ -49,22 +50,15 @@ function RecruiterDashboard() {
     }
   }, [])
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "This action cannot be undone. Delete this job?"
-    )
-    if (!confirmDelete) return
-
+  const executeDelete = async (id) => {
+    setDeleteJobConfirmId(null)
     try {
       setDeleteLoadingId(id)
-
       await axios.delete(
         `https://careerbridge-b-1.onrender.com/job/deletejob/${id}`
       )
       toast.success("Job deleted successfully")
-
       setJobs(jobs.filter(job => job._id !== id))
-
     } catch (error) {
       toast.error("Failed to delete job")
       console.log(error.message)
@@ -279,7 +273,7 @@ function RecruiterDashboard() {
 
                         {/* DELETE */}
                         <button
-                          onClick={() => handleDelete(job._id)}
+                          onClick={() => setDeleteJobConfirmId(job._id)}
                           disabled={deleteLoadingId === job._id}
                           className="px-3.5 py-2 border border-rose-250/60 dark:border-rose-955/20 text-rose-500 hover:bg-rose-500 hover:text-white rounded-xl font-bold transition flex items-center gap-1 text-xs cursor-pointer disabled:opacity-50"
                         >
@@ -333,6 +327,37 @@ function RecruiterDashboard() {
             >
               Next
             </button>
+          </div>
+        )}
+
+        {/* Custom Delete Confirmation Modal */}
+        {deleteJobConfirmId && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 animate-fade-in">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl max-w-sm w-full text-center space-y-5">
+              <div className="w-12 h-12 bg-rose-50 dark:bg-rose-950/20 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto border border-rose-200/20">
+                <HiTrash />
+              </div>
+              <div>
+                <h3 className="text-lg font-black text-slate-850 dark:text-white">Delete Job Posting?</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+                  Are you sure you want to delete this job posting? This action cannot be undone and all associated applicants will be removed.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3 pt-2">
+                <button
+                   onClick={() => setDeleteJobConfirmId(null)}
+                   className="px-4 py-2.5 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-355 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl font-bold transition text-xs cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                   onClick={() => executeDelete(deleteJobConfirmId)}
+                   className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white rounded-xl font-bold transition text-xs cursor-pointer shadow-md hover:shadow-lg active:scale-95"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
           </div>
         )}
 
