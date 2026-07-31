@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { HiPlus, HiPencilAlt, HiTrash, HiUserGroup, HiLocationMarker, HiCurrencyRupee, HiOfficeBuilding } from 'react-icons/hi';
 
 function RecruiterDashboard() {
   const navigate = useNavigate()
@@ -73,6 +74,20 @@ function RecruiterDashboard() {
   }
 
   const handleUpdate = async (id) => {
+    const originalJob = jobs.find(job => job._id === id)
+    if (originalJob) {
+      if (
+        (editData.title || '').trim() === (originalJob.title || '').trim() &&
+        (editData.company || '').trim() === (originalJob.company || '').trim() &&
+        (editData.location || '').trim() === (originalJob.location || '').trim() &&
+        (editData.salary || '').trim() === (originalJob.salary || '').trim()
+      ) {
+        toast.error("No changes detected")
+        setEditJobId(null)
+        return
+      }
+    }
+
     try {
       setUpdateLoadingId(id)
 
@@ -80,6 +95,7 @@ function RecruiterDashboard() {
         `https://careerbridge-b-1.onrender.com/job/updatejob/${id}`,
         editData
       )
+      toast.success("Job updated successfully")
 
       setJobs(jobs.map(job =>
         job._id === id ? { ...job, ...editData } : job
@@ -88,207 +104,241 @@ function RecruiterDashboard() {
       setEditJobId(null)
 
     } catch (error) {
+      toast.error("Failed to update job")
       console.log(error.message)
     } finally {
       setUpdateLoadingId(null)
     }
   }
 
-return (
-  <div className="min-h-screen bg-[#F8F7F4] text-[#374151] p-6 md:p-10">
-
-    <div className="max-w-7xl mx-auto">
-
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
-
-        <div>
-          <h2 className="text-4xl font-bold text-[#374151]">
-            Recruiter Dashboard
-          </h2>
-
-          <p className="text-gray-500 mt-2">
-            Manage your jobs and track applicants easily.
-          </p>
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-6 md:p-10 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header Block */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
+          <div>
+            <h1 className="text-4xl font-black text-slate-800 dark:text-white">
+              Recruiter Dashboard
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">
+              Manage your jobs and track applicants easily.
+            </p>
+          </div>
+          
+          <button
+            onClick={() => navigate('/addJobs')}
+            className="px-5 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer text-sm shrink-0"
+          >
+            <HiPlus className="text-lg" /> Post New Job
+          </button>
         </div>
 
-        {/* <button
-          onClick={() => navigate('/addJobs')}
-          className="bg-[#2E7D32] hover:bg-[#256728] text-white px-6 py-3 rounded-2xl font-semibold transition shadow-md"
-        >
-          + Post New Job
-        </button> */}
-
-      </div>
-
-      {/* Page Loading */}
-      {loading ? (
-        <div className="flex justify-center items-center h-[50vh]">
-          <div className="w-10 h-10 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      ) : jobs.length === 0 ? (
-        <div className="bg-white border border-gray-200 p-10 rounded-3xl text-center shadow-sm">
-          <p className="text-gray-500 text-lg">
-            No jobs posted yet
-          </p>
-        </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          {currentJobs.map((job) => (
-
-            <div
-              key={job._id}
-              className="bg-white border border-gray-200 rounded-3xl p-6 shadow-sm hover:shadow-lg transition-all"
-            >
-
-              {editJobId === job._id ? (
-                <>
-                  <input
-                    value={editData.title}
-                    onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                    className="w-full border border-gray-300 p-3 mb-3 rounded-xl"
-                  />
-
-                  <input
-                    value={editData.company}
-                    onChange={(e) => setEditData({ ...editData, company: e.target.value })}
-                    className="w-full border border-gray-300 p-3 mb-3 rounded-xl"
-                  />
-
-                  <input
-                    value={editData.location}
-                    onChange={(e) => setEditData({ ...editData, location: e.target.value })}
-                    className="w-full border border-gray-300 p-3 mb-3 rounded-xl"
-                  />
-
-                  <input
-                    value={editData.salary}
-                    onChange={(e) => setEditData({ ...editData, salary: e.target.value })}
-                    className="w-full border border-gray-300 p-3 mb-3 rounded-xl"
-                  />
-
-                  {/* SAVE BUTTON */}
-                  <button
-                    onClick={() => handleUpdate(job._id)}
-                    disabled={updateLoadingId === job._id}
-                    className="mt-2 px-5 py-2 bg-[#2E7D32] text-white rounded-xl flex items-center gap-2"
-                  >
-                    {updateLoadingId === job._id ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Saving...
-                      </>
-                    ) : (
-                      "Save"
-                    )}
-                  </button>
-
-                  <button
-                    onClick={() => setEditJobId(null)}
-                    className="mt-2 ml-2 px-5 py-2 bg-gray-400 text-white rounded-xl"
-                  >
-                    Cancel
-                  </button>
-
-                </>
-              ) : (
-                <>
-                  <h3 className="text-2xl font-bold text-[#2E7D32] mb-3">
-                    {job.title}
-                  </h3>
-
-                  <p className="text-gray-700 mb-2">
-                    <span className="font-medium">Company:</span> {job.company}
-                  </p>
-
-                  <p className="text-gray-700 mb-2">
-                    <span className="font-medium">Location:</span> {job.location}
-                  </p>
-
-                  {job.salary && (
-                    <p className="text-[#F4A261] font-semibold mb-3">
-                      ₹ {job.salary}
-                    </p>
-                  )}
-
-                  <div className="flex flex-wrap gap-3 mt-4">
-
-                    {/* EDIT */}
-                    <button
-                      onClick={() => {
-                        setEditJobId(job._id)
-                        setEditData(job)
-                      }}
-                      className="px-4 py-2 bg-[#F4A261] text-white rounded-xl"
-                    >
-                      Edit
-                    </button>
-
-                    {/* DELETE */}
-                    <button
-                      onClick={() => handleDelete(job._id)}
-                      disabled={deleteLoadingId === job._id}
-                      className="px-4 py-2 bg-red-500 text-white rounded-xl flex items-center gap-2"
-                    >
-                      {deleteLoadingId === job._id ? (
-                        <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                          Deleting...
-                        </>
-                      ) : (
-                        "Delete"
-                      )}
-                    </button>
-
-                    {/* VIEW */}
-                    <button
-                      onClick={() => navigate(`/applicants/${job._id}`)}
-                      className="px-4 py-2 bg-[#2E7D32] text-white rounded-xl"
-                    >
-                      View Applicants
-                    </button>
-
-                  </div>
-                </>
-              )}
-
+        {/* Loading Spinner */}
+        {loading ? (
+          <div className="flex justify-center items-center h-[50vh]">
+            <div className="w-10 h-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 p-16 rounded-3xl text-center shadow-sm max-w-lg mx-auto">
+            <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-950 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto mb-4">
+              <HiOutlineBriefcase />
             </div>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1">No Jobs Posted Yet</h3>
+            <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Create a job post to start receiving job applications.</p>
+            <button
+              onClick={() => navigate('/addJobs')}
+              className="px-5 py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-md transition cursor-pointer text-sm"
+            >
+              Post a Job Opportunity
+            </button>
+          </div>
+        ) : (
+          /* Jobs Grid */
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {currentJobs.map((job, index) => {
+              const borderColors = [
+                "border-t-brand-primary",
+                "border-t-brand-secondary",
+                "border-t-brand-accent"
+              ];
+              const borderClass = borderColors[index % 3];
 
-          ))}
+              return (
+                <div
+                  key={job._id}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col`}
+                >
+                  {editJobId === job._id ? (
+                    /* Edit Form Mode */
+                    <div className="space-y-4">
+                      <div className="space-y-3">
+                        <div>
+                          <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-550 mb-1">Job Title</label>
+                          <input
+                            value={editData.title}
+                            onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                          />
+                        </div>
 
-        </div>
-      )}
+                        <div>
+                          <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-550 mb-1">Company</label>
+                          <input
+                            value={editData.company}
+                            onChange={(e) => setEditData({ ...editData, company: e.target.value })}
+                            className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-855 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                          />
+                        </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center items-center gap-4 mt-10">
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-550 mb-1">Location</label>
+                            <input
+                              value={editData.location}
+                              onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                              className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-855 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                            />
+                          </div>
 
-        <button
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage(currentPage - 1)}
-          className="px-5 py-2 bg-white border border-gray-300 text-gray-700 rounded-xl disabled:opacity-50"
-        >
-          Previous
-        </button>
+                          <div>
+                            <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-550 mb-1">Salary</label>
+                            <input
+                              value={editData.salary}
+                              onChange={(e) => setEditData({ ...editData, salary: e.target.value })}
+                              className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 p-2.5 rounded-xl text-sm text-slate-855 dark:text-slate-100 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                            />
+                          </div>
+                        </div>
+                      </div>
 
-        <span className="text-gray-700 font-medium">
-          Page {currentPage} of {totalPages}
-        </span>
+                      <div className="flex gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <button
+                          onClick={() => setEditJobId(null)}
+                          className="w-1/2 px-4 py-2 border border-slate-300 dark:border-slate-800 text-slate-655 dark:text-slate-350 hover:bg-slate-55/40 rounded-xl font-bold transition text-xs cursor-pointer"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => handleUpdate(job._id)}
+                          disabled={updateLoadingId === job._id}
+                          className="w-1/2 px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition flex items-center justify-center gap-1.5 text-xs cursor-pointer disabled:opacity-50"
+                        >
+                          {updateLoadingId === job._id ? (
+                            <>
+                              <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                              Saving...
+                            </>
+                          ) : (
+                            "Save"
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    /* Normal Card Display */
+                    <>
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-start gap-2">
+                          <h3 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white leading-tight">
+                            {job.title}
+                          </h3>
+                        </div>
 
-        <button
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage(currentPage + 1)}
-          className="px-5 py-2 bg-[#2E7D32] text-white rounded-xl disabled:opacity-50"
-        >
-          Next
-        </button>
+                        <div className="space-y-2 text-sm text-slate-655 dark:text-slate-400">
+                          <p className="flex items-center gap-2">
+                            <HiOfficeBuilding className="text-slate-400 dark:text-slate-500 text-base" />
+                            <span className="font-semibold text-slate-700 dark:text-slate-300">{job.company}</span>
+                          </p>
+
+                          <p className="flex items-center gap-2">
+                            <HiLocationMarker className="text-slate-400 dark:text-slate-500 text-base" />
+                            <span>{job.location}</span>
+                          </p>
+
+                          {job.salary && (
+                            <p className="flex items-center gap-2 text-brand-secondary font-bold text-base pt-1">
+                              <HiCurrencyRupee className="text-lg" />
+                              <span>{job.salary}</span>
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2.5 mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
+                        {/* EDIT */}
+                        <button
+                          onClick={() => {
+                            setEditJobId(job._id)
+                            setEditData(job)
+                          }}
+                          className="px-3.5 py-2 border border-slate-300 dark:border-slate-800 text-slate-655 dark:text-slate-350 hover:border-brand-primary dark:hover:border-brand-primary hover:text-brand-primary rounded-xl font-bold transition text-xs cursor-pointer flex items-center gap-1"
+                        >
+                          <HiPencilAlt className="text-sm" /> Edit
+                        </button>
+
+                        {/* DELETE */}
+                        <button
+                          onClick={() => handleDelete(job._id)}
+                          disabled={deleteLoadingId === job._id}
+                          className="px-3.5 py-2 border border-rose-250/60 dark:border-rose-955/20 text-rose-500 hover:bg-rose-500 hover:text-white rounded-xl font-bold transition flex items-center gap-1 text-xs cursor-pointer disabled:opacity-50"
+                        >
+                          {deleteLoadingId === job._id ? (
+                            <>
+                              <div className="w-3.5 h-3.5 border-2 border-rose-500 border-t-transparent rounded-full animate-spin"></div>
+                              ...
+                            </>
+                          ) : (
+                            <>
+                              <HiTrash className="text-sm" /> Delete
+                            </>
+                          )}
+                        </button>
+
+                        {/* VIEW */}
+                        <button
+                          onClick={() => navigate(`/applicants/${job._id}`)}
+                          className="px-3.5 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition flex items-center gap-1.5 text-xs ml-auto cursor-pointer shadow-sm hover:shadow"
+                        >
+                          <HiUserGroup className="text-sm" /> Applicants
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Pagination Bar */}
+        {jobs.length > jobsPerPage && (
+          <div className="flex justify-center items-center gap-4 mt-12 pb-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage(currentPage - 1)}
+              className="px-4 py-2 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-semibold disabled:opacity-50 cursor-pointer shadow-sm text-sm"
+            >
+              Previous
+            </button>
+
+            <span className="text-slate-500 dark:text-slate-400 text-sm font-semibold">
+              Page {currentPage} of {totalPages}
+            </span>
+
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage(currentPage + 1)}
+              className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold disabled:opacity-50 cursor-pointer shadow-sm text-sm"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
       </div>
-
     </div>
-
-  </div>
-)
-
+  )
 }
 
 export default RecruiterDashboard

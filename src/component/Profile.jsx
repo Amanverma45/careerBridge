@@ -25,6 +25,17 @@ function Profile({ isModal, onClose }) {
     }, [isEditMode])
 
     const handleUpdate = async () => {
+        if (
+            name.trim() === (user.name || '').trim() &&
+            skills.trim() === (user.skills || '').trim() &&
+            experience.trim() === (user.experience || '').trim() &&
+            bio.trim() === (user.bio || '').trim()
+        ) {
+            toast.error("No changes detected")
+            setIsEditMode(false)
+            return
+        }
+
         try {
             setLoading(true)
             const response = await axios.put(
