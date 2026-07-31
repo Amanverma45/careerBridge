@@ -147,12 +147,15 @@ function Resume() {
                                 </span>
 
                                 <div className="flex items-center gap-3 shrink-0">
-                                    <button
-                                        onClick={handleView}
+                                    <a
+                                        href={user.resume}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={() => console.log("Viewing resume at Cloudinary URL:", user.resume)}
                                         className="px-3 py-1.5 bg-brand-primary/10 hover:bg-brand-primary text-brand-primary hover:text-white rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer"
                                     >
                                         <HiEye className="text-sm" /> View
-                                    </button>
+                                    </a>
 
                                     <button
                                         onClick={handleDelete}
