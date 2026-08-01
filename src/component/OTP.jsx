@@ -92,8 +92,12 @@ function OTP() {
 
         try {
             setResending(true)
-            await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
-            toast.success("Verification code resent successfully!")
+            const response = await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
+            if (response.data?.otp) {
+                toast.success(`Development Fallback: OTP is ${response.data.otp}`, { duration: 15000 })
+            } else {
+                toast.success("Verification code resent successfully!")
+            }
             setTimer(30)
         } catch (err) {
             console.log(err)

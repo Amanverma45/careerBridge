@@ -36,7 +36,7 @@ function Signup({ isModal, onClose }) {
 
       setLoading(true)
 
-      await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
+      const response = await axios.post('https://careerbridge-b-1.onrender.com/api/sendOTP', { email })
       console.log("OTP API called")
       
       localStorage.setItem("otpData", JSON.stringify({
@@ -46,7 +46,11 @@ function Signup({ isModal, onClose }) {
         role
       }))
       
-      toast.success("OTP sent successfully")
+      if (response.data?.otp) {
+        toast.success(`Development Fallback: OTP is ${response.data.otp}`, { duration: 15000 })
+      } else {
+        toast.success("OTP sent successfully to your email")
+      }
       
       if (onClose) {
         onClose();
