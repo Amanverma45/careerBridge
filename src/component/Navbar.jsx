@@ -229,159 +229,117 @@ function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer Backdrop */}
-      {menuOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
-          onClick={() => setMenuOpen(false)}
-        />
-      )}
-
-      {/* Mobile Drawer */}
+      {/* Mobile Top Dropdown Menu */}
       <div
-        className={`fixed top-0 right-0 h-screen w-[280px] max-w-[80vw] bg-white/98 dark:bg-slate-950/98 border-l border-slate-200/85 dark:border-slate-850 backdrop-blur-xl z-50 transform transition-transform duration-300 ease-out md:hidden flex flex-col justify-between ${
-          menuOpen ? "translate-x-0" : "translate-x-full"
+        className={`absolute top-[calc(100%+2px)] left-0 right-0 md:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg border border-slate-200/60 dark:border-slate-800 shadow-xl rounded-2xl transition-all duration-300 ease-out origin-top z-50 overflow-hidden ${
+          menuOpen ? 'scale-y-100 opacity-100 visible h-auto' : 'scale-y-95 opacity-0 invisible h-0 pointer-events-none'
         }`}
       >
-        <div className="flex flex-col">
-          {/* Drawer Header */}
-          <div className="p-4 flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="inline-flex items-center shrink-0 select-none">
-              <svg width="170" height="42" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="cb-grad-drawer" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#2563EB" />
-                    <stop offset="100%" stopColor="#14B8A6" />
-                  </linearGradient>
-                </defs>
-                <g transform="translate(10, 10)">
-                  <path d="M 5 35 A 18 18 0 0 1 35 35" stroke="url(#cb-grad-drawer)" strokeWidth="5" strokeLinecap="round" fill="none" />
-                  <path d="M 0 37 L 40 37" stroke="#2563EB" strokeWidth="3" strokeLinecap="round" />
-                  <circle cx="20" cy="12" r="4.5" fill="#F59E0B" className="animate-logo-dot" />
-                </g>
-                <text x="60" y="40" fontFamily="'Inter', sans-serif" fontWeight="800" fontSize="22" fill="#2563EB">
-                  Career<tspan fill="#14B8A6">Bridge</tspan>
-                </text>
-              </svg>
-            </Link>
-            <button
-              className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white active:scale-90 transition-all"
-              onClick={() => setMenuOpen(false)}
-            >
-              <HiX />
-            </button>
+        {!token ? (
+          <div className="p-4 flex flex-col gap-4">
+            {/* 2x2 Grid of Links */}
+            <div className="grid grid-cols-2 gap-3">
+              <Link
+                to="/"
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center justify-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                  isActive('/')
+                    ? 'bg-brand-primary/10 text-brand-primary'
+                    : 'bg-slate-50 dark:bg-slate-800/40 text-slate-600 dark:text-slate-350 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+                to="/about"
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center justify-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                  isActive('/about')
+                    ? 'bg-brand-primary/10 text-brand-primary'
+                    : 'bg-slate-50 dark:bg-slate-800/40 text-slate-655 dark:text-slate-350 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                About
+              </Link>
+            </div>
+
+            {/* Login & Register Buttons Side-by-Side */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-login")); }}
+                className="py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold rounded-xl text-xs uppercase tracking-wider transition active:scale-95 cursor-pointer border-none"
+              >
+                Login
+              </button>
+              <button
+                onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-register")); }}
+                className="py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs uppercase tracking-wider transition shadow-sm active:scale-95 cursor-pointer border-none"
+              >
+                Register
+              </button>
+            </div>
           </div>
+        ) : (
+          <div className="p-4 flex flex-col gap-4">
+            {/* 2x2 Grid of Dashboard Options */}
+            <div className="grid grid-cols-2 gap-3">
+              <Link
+                to={user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard"}
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center justify-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                  isActive(user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard")
+                    ? 'bg-brand-primary/10 text-brand-primary'
+                    : 'bg-slate-50 dark:bg-slate-800/40 text-slate-655 dark:text-slate-350 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                Dashboard
+              </Link>
 
-          {/* Drawer Links */}
-          <div className="p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 text-slate-800 dark:text-slate-200">
-            {!token && (
-              <>
+              <button
+                onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-profile")); }}
+                className={`flex items-center justify-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 cursor-pointer border-none ${
+                  isActive('/profile')
+                    ? 'bg-brand-primary/10 text-brand-primary'
+                    : 'bg-slate-50 dark:bg-slate-800/40 text-slate-655 dark:text-slate-350 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
+                }`}
+              >
+                Profile
+              </button>
+
+              {user?.role === "recruiter" && (
                 <Link
-                  to="/"
+                  to="/addJobs"
                   onClick={() => setMenuOpen(false)}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                    isActive('/')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-650 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
+                  className={`col-span-2 flex items-center justify-center py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                    isActive('/addJobs')
+                      ? 'bg-brand-primary/10 text-brand-primary'
+                      : 'bg-slate-50 dark:bg-slate-800/40 text-slate-655 dark:text-slate-350 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
-                  Home
+                  Add Jobs
                 </Link>
+              )}
 
+              {user?.role === "user" && (
                 <Link
-                  to="/about"
+                  to="/jobs"
                   onClick={() => setMenuOpen(false)}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                    isActive('/about')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
+                  className="col-span-2 flex items-center justify-center py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all"
                 >
-                  About
+                  Jobs Explorer
                 </Link>
+              )}
+            </div>
 
-                <button
-                  onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-login")); }}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 text-left w-full cursor-pointer ${
-                    isActive('/login')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
-                >
-                  Login
-                </button>
-
-                <button
-                  onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-register")); }}
-                  className="mt-2 flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-xl font-bold text-sm sm:text-base bg-brand-primary hover:bg-brand-primary-hover text-white shadow-md active:scale-95 transition-all w-full cursor-pointer"
-                >
-                  Register
-                </button>
-              </>
-            )}
-
-            {token && (
-              <>
-                <Link
-                  to={user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard"}
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                    isActive(user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard")
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
-                >
-                  Dashboard
-                </Link>
-
-                {user?.role === "recruiter" && (
-                  <Link
-                    to="/addJobs"
-                    onClick={() => setMenuOpen(false)}
-                    className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                      isActive('/addJobs')
-                        ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                        : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                    }`}
-                  >
-                    Add Jobs
-                  </Link>
-                )}
-
-                <button
-                  onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-profile")); }}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 text-left w-full cursor-pointer ${
-                    isActive('/profile')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
-                >
-                  Profile
-                </button>
-
-                {user?.role === "user" && (
-                  <Link
-                    to="/jobs"
-                    onClick={() => setMenuOpen(false)}
-                    className="mt-2 flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-xl font-bold text-sm sm:text-base bg-brand-primary hover:bg-brand-primary-hover text-white shadow-md active:scale-95 transition-all"
-                  >
-                    Jobs
-                  </Link>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-
-        {/* Drawer Footer (Logout button if authenticated) */}
-        {token && (
-          <div className="p-4 sm:p-6 border-t border-slate-200/80 dark:border-slate-800/80">
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 sm:py-3 border border-rose-300 dark:border-rose-900/30 text-rose-600 dark:text-rose-455 bg-rose-50/50 dark:bg-rose-950/10 hover:bg-rose-600 hover:text-white rounded-xl font-semibold text-sm sm:text-base active:scale-95 transition-all duration-200"
-            >
-              Logout <HiOutlineLogout className="text-base sm:text-lg" />
-            </button>
+            {/* Logout Button */}
+            <div className="border-t border-slate-200/50 dark:border-slate-800/50 pt-3">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center justify-center gap-2 py-3 border border-rose-300 dark:border-rose-900/30 text-rose-600 dark:text-rose-455 bg-rose-50/50 dark:bg-rose-950/10 hover:bg-rose-600 hover:text-white rounded-xl font-bold text-xs uppercase tracking-wider active:scale-95 transition-all duration-200 cursor-pointer"
+              >
+                Logout <HiOutlineLogout className="text-base" />
+              </button>
+            </div>
           </div>
         )}
       </div>
