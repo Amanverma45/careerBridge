@@ -140,14 +140,20 @@ function Footer() {
 
           <ul className="space-y-4 text-sm font-medium">
             <li>
-              <Link to="/privacy" className="text-slate-550 dark:text-slate-400 hover:text-brand-secondary transition-colors duration-200 cursor-pointer">
+              <button 
+                onClick={(e) => { e.preventDefault(); window.dispatchEvent(new Event("open-privacy")); }} 
+                className="text-slate-550 dark:text-slate-400 hover:text-brand-secondary transition-colors duration-200 cursor-pointer bg-transparent border-none p-0 font-medium text-sm text-left"
+              >
                 Privacy Policy
-              </Link>
+              </button>
             </li>
             <li>
-              <Link to="/terms" className="text-slate-550 dark:text-slate-400 hover:text-brand-secondary transition-colors duration-200 cursor-pointer">
+              <button 
+                onClick={(e) => { e.preventDefault(); window.dispatchEvent(new Event("open-terms")); }} 
+                className="text-slate-550 dark:text-slate-400 hover:text-brand-secondary transition-colors duration-200 cursor-pointer bg-transparent border-none p-0 font-medium text-sm text-left"
+              >
                 Terms of Service
-              </Link>
+              </button>
             </li>
           </ul>
         </div>

@@ -20,6 +20,7 @@ import OTP from './component/OTP.jsx'
 import Privacy from './component/Privacy.jsx'
 import Terms from './component/Terms.jsx'
 
+import { HiX } from 'react-icons/hi'
 import { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
@@ -27,6 +28,8 @@ function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false)
   const [isRegisterOpen, setIsRegisterOpen] = useState(false)
   const [isProfileOpen, setIsProfileOpen] = useState(false)
+  const [isTermsOpen, setIsTermsOpen] = useState(false)
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
   const { pathname } = useLocation()
 
   // Reset scroll on path change
@@ -51,13 +54,23 @@ function App() {
       setIsLoginOpen(false)
       setIsRegisterOpen(false)
     }
+    const openTerms = () => {
+      setIsTermsOpen(true)
+    }
+    const openPrivacy = () => {
+      setIsPrivacyOpen(true)
+    }
     window.addEventListener("open-login", openLogin)
     window.addEventListener("open-register", openRegister)
     window.addEventListener("open-profile", openProfile)
+    window.addEventListener("open-terms", openTerms)
+    window.addEventListener("open-privacy", openPrivacy)
     return () => {
       window.removeEventListener("open-login", openLogin)
       window.removeEventListener("open-register", openRegister)
       window.removeEventListener("open-profile", openProfile)
+      window.removeEventListener("open-terms", openTerms)
+      window.removeEventListener("open-privacy", openPrivacy)
     }
   }, [])
 
@@ -108,6 +121,36 @@ function App() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <Profile isModal={true} onClose={() => setIsProfileOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* Terms Modals Overlay */}
+      {isTermsOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+          <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button
+              onClick={() => setIsTermsOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer"
+            >
+              <HiX className="text-xl" />
+            </button>
+            <Terms isModal={true} />
+          </div>
+        </div>
+      )}
+
+      {/* Privacy Modals Overlay */}
+      {isPrivacyOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
+          <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto">
+            <button
+              onClick={() => setIsPrivacyOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer"
+            >
+              <HiX className="text-xl" />
+            </button>
+            <Privacy isModal={true} />
           </div>
         </div>
       )}

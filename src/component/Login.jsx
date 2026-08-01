@@ -358,7 +358,20 @@ function Login({ isModal, onClose }) {
       )}
 
       <p className="mt-8 text-center text-xs text-slate-405 dark:text-slate-500">
-        By signing in, you agree to our <Link to="/terms" onClick={onClose} className="hover:underline text-slate-500 dark:text-slate-400 font-semibold">Terms of Service</Link> and <Link to="/privacy" onClick={onClose} className="hover:underline text-slate-500 dark:text-slate-400 font-semibold">Privacy Policy</Link>.
+        By signing in, you agree to our{" "}
+        <button 
+          onClick={(e) => { e.preventDefault(); if (onClose) onClose(); window.dispatchEvent(new Event("open-terms")); }} 
+          className="hover:underline text-slate-500 dark:text-slate-400 font-semibold bg-transparent border-none p-0 cursor-pointer text-xs"
+        >
+          Terms of Service
+        </button>{" "}
+        and{" "}
+        <button 
+          onClick={(e) => { e.preventDefault(); if (onClose) onClose(); window.dispatchEvent(new Event("open-privacy")); }} 
+          className="hover:underline text-slate-500 dark:text-slate-400 font-semibold bg-transparent border-none p-0 cursor-pointer text-xs"
+        >
+          Privacy Policy
+        </button>.
       </p>
     </div>
   );

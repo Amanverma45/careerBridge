@@ -69,7 +69,10 @@ function OTP() {
 
             localStorage.removeItem("otpData")
             toast.success("Registration successful! Please log in.")
-            navigate("/login")
+            navigate("/")
+            setTimeout(() => {
+                window.dispatchEvent(new Event("open-login"));
+            }, 100);
 
         } catch (err) {
             console.log(err)
@@ -116,7 +119,7 @@ function OTP() {
                         <span className="text-2xl select-none">🔐</span>
                     </div>
 
-                    <h1 className="text-3xl font-black text-slate-805 dark:text-white">
+                    <h1 className="text-xl font-bold text-slate-805 dark:text-white">
                         Verify OTP
                     </h1>
 
@@ -142,7 +145,7 @@ function OTP() {
                                 e.target.value.replace(/\D/g, "")
                             )
                         }
-                        className="w-full text-center text-2xl tracking-[8px] bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-2xl py-4 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary text-slate-800 dark:text-slate-100 font-bold"
+                        className="w-full max-w-[240px] mx-auto block text-center text-lg tracking-[6px] bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl py-2 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary text-slate-800 dark:text-slate-100 font-bold"
                     />
 
                     <Button
