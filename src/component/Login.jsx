@@ -9,7 +9,12 @@ function Login({ isModal, onClose }) {
   const [email, setemail] = useState('');
   const [password, setpassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate()
+
+  const handleForgotPassword = () => {
+    toast.error("Contact admin at support@careerbridge.com to reset your credentials.", { duration: 6000 });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -109,15 +114,34 @@ function Login({ isModal, onClose }) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-650 dark:text-slate-300 ml-1">
+          <label className="text-sm font-medium text-slate-655 dark:text-slate-300 ml-1">
             Password
           </label>
           <input
             onChange={(e) => setpassword(e.target.value)}
-            type="password"
+            type={showPassword ? "text" : "password"}
+            value={password}
             placeholder="••••••••"
             className="w-full bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
           />
+          <div className="flex items-center justify-between pt-1 px-1">
+            <label className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 select-none cursor-pointer">
+              <input 
+                type="checkbox" 
+                checked={showPassword} 
+                onChange={(e) => setShowPassword(e.target.checked)} 
+                className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary border-slate-300 dark:border-slate-805 dark:bg-slate-955"
+              />
+              Show Password
+            </label>
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-xs font-semibold text-brand-primary hover:underline cursor-pointer focus:outline-none border-none bg-transparent"
+            >
+              Forgot Password?
+            </button>
+          </div>
         </div>
 
         <Button
