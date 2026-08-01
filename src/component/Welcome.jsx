@@ -183,7 +183,7 @@ function Welcome() {
                 onClick={() => navigate('/resume')}
                 className="px-5 py-2.5 bg-brand-primary-hover text-white font-bold rounded-xl shadow-md hover:bg-brand-primary transition border border-white/20 active:scale-95 text-sm cursor-pointer border-none"
               >
-                Optimize Resume
+                Build & Optimize Resume
               </button>
             </div>
           </div>
@@ -389,11 +389,13 @@ function Welcome() {
             className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-accent p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-accent hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
           >
             <div>
-              <h3 className="text-xl font-bold mb-2">Optimize Resume</h3>
-              <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[200px]">Scan your resume structure and check formatting optimization.</p>
+              <h3 className="text-xl font-bold mb-2">AI Resume Builder & Optimizer</h3>
+              <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[240px]">
+                Build a professional ATS-friendly resume from scratch with AI assistance, or upload & optimize your existing files.
+              </p>
             </div>
             <div className="flex items-center gap-2 font-bold text-xs text-[#F59E0B] group-hover:gap-4 transition-all">
-              Improve Score <FaArrowRight />
+              Build & Optimize <FaArrowRight />
             </div>
             <FaFileAlt className="absolute -bottom-4 -right-4 text-[7rem] text-slate-100 dark:text-slate-800/20 -rotate-12 pointer-events-none" />
           </div>
