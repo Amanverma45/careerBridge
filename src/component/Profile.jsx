@@ -18,18 +18,29 @@ function Profile({ isModal, onClose }) {
     useEffect(() => {
         if (user) {
             setName(user.name || '')
-            setSkills(user.skills || '')
-            setExperience(user.experience || '')
-            setBio(user.bio || '')
+            if (isRecruiter) {
+                setSkills(user.companyName || '')
+                setExperience(user.companyWebsite || '')
+                setBio(user.companyDescription || '')
+            } else {
+                setSkills(user.skills || '')
+                setExperience(user.experience || '')
+                setBio(user.bio || '')
+            }
         }
     }, [isEditMode])
 
     const handleUpdate = async () => {
+        const currentName = (user.name || '').trim();
+        const currentSkills = (isRecruiter ? user.companyName : user.skills || '').trim();
+        const currentExperience = (isRecruiter ? user.companyWebsite : user.experience || '').trim();
+        const currentBio = (isRecruiter ? user.companyDescription : user.bio || '').trim();
+
         if (
-            name.trim() === (user.name || '').trim() &&
-            skills.trim() === (user.skills || '').trim() &&
-            experience.trim() === (user.experience || '').trim() &&
-            bio.trim() === (user.bio || '').trim()
+            name.trim() === currentName &&
+            skills.trim() === currentSkills &&
+            experience.trim() === currentExperience &&
+            bio.trim() === currentBio
         ) {
             toast.error("No changes detected")
             setIsEditMode(false)
@@ -38,14 +49,19 @@ function Profile({ isModal, onClose }) {
 
         try {
             setLoading(true)
+            const payload = {
+                name,
+                skills: isRecruiter ? undefined : skills,
+                experience: isRecruiter ? undefined : experience,
+                bio: isRecruiter ? undefined : bio,
+                companyName: isRecruiter ? skills : undefined,
+                companyWebsite: isRecruiter ? experience : undefined,
+                companyDescription: isRecruiter ? bio : undefined
+            }
+
             const response = await axios.put(
                 `https://careerbridge-b-1.onrender.com/api/updateUser/${user._id}`,
-                {
-                    name,
-                    skills,
-                    experience,
-                    bio
-                }
+                payload
             )
             localStorage.setItem(
                 "user",
