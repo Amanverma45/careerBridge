@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FiSearch } from "react-icons/fi";
+import { 
+  FaArrowLeft, 
+  FaMapMarkerAlt, 
+  FaBriefcase, 
+  FaRupeeSign, 
+  FaSearch, 
+  FaSpinner, 
+  FaCheckCircle 
+} from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import Button from "./Button";
 
@@ -21,20 +29,19 @@ function Job() {
   const user = storedUser ? JSON.parse(storedUser) : null
 
   const navigate = useNavigate()
-  // const token = localStorage.getItem("token")
 
   const filteredJobs = jobs.filter(job => {
     const matchSearch =
-      job.title.toLowerCase().includes(search.toLowerCase()) ||
-      job.company.toLowerCase().includes(search.toLowerCase())
+      (job.title || '').toLowerCase().includes(search.toLowerCase()) ||
+      (job.company || '').toLowerCase().includes(search.toLowerCase())
 
     const matchLocation =
       location === "" ||
-      job.location.toLowerCase().includes(location.toLowerCase())
+      (job.location || '').toLowerCase().includes(location.toLowerCase())
 
     const matchType =
       jobType === "" ||
-      job.jobType?.toLowerCase().includes(jobType.toLowerCase())
+      (job.jobType || '').toLowerCase().includes(jobType.toLowerCase())
 
     let matchSalary = true
 
@@ -57,35 +64,32 @@ function Job() {
   } else if (sort === "high") {
     sortedJobs.sort((a, b) => b.salary - a.salary)
   }
+
   const handleClearFilters = () => {
     setSearch("")
     setLocation("")
     setJobType("")
     setSalary("")
+    setSort("")
   }
 
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-
         const response = await axios.get(
           "https://careerbridge-b-1.onrender.com/job/getJob"
         )
-
         setJobs(response.data.jobs)
+        
         if (user) {
           const appliedRes = await axios.get(
             `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
           )
-
-          const ids = appliedRes.data.map(app => app.jobId._id)
-
+          const ids = appliedRes.data.map(app => app.jobId?._id).filter(id => id != null)
           setAppliedIds(ids)
-
         }
-
       } catch (error) {
-        console.log(error)
+        console.error("Fetch Jobs Error:", error)
       } finally {
         setLoading(false)
       }
@@ -94,7 +98,6 @@ function Job() {
   }, [])
 
   const handleApply = async (jobId) => {
-
     if (!user) {
       navigate('/login')
       return
@@ -102,7 +105,6 @@ function Job() {
 
     try {
       setApplyLoadingId(jobId)
-
       const response = await axios.post(
         "https://careerbridge-b-1.onrender.com/application/applyJob",
         {
@@ -110,52 +112,57 @@ function Job() {
           jobId
         }
       )
-
       setAppliedIds(prev => [...prev, jobId])
-
-      toast.success(response.data.message);
-
+      toast.success(response.data.message || "Applied successfully!");
     } catch (error) {
       toast.error(error.response?.data?.message || "Application failed")
     } finally {
       setApplyLoadingId(null)
     }
   }
+
   return (
-    <div className="min-h-screen bg-[#F8F7F4] text-[#374151] p-6 md:p-10">
-
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
+        
+        {/* Back navigation */}
+        <button 
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary dark:text-slate-400 dark:hover:text-white transition mb-6 cursor-pointer group"
+        >
+          <FaArrowLeft className="group-hover:-translate-x-1 transition" /> Back to Dashboard
+        </button>
 
+        {/* Header Title */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#374151]">
+          <h1 className="text-4xl font-black text-slate-850 dark:text-white">
             Available Jobs
           </h1>
-
-          <p className="text-gray-500 mt-2">
-            Discover opportunities that match your skills and career goals.
+          <p className="text-slate-400 dark:text-slate-500 mt-2 text-sm">
+            Discover opportunities that match your skills, preferences, and career goals.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
-          {/* Search */}
+        {/* Filters Row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+          
+          {/* Search box */}
           <div className="relative">
-
-            <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg" />
-
+            <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
             <input
               type="text"
-              placeholder="Search jobs or companies..."
+              placeholder="Search title, company..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+              className="w-full pl-11 pr-4 py-3 rounded-2xl border border-slate-350 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition text-sm"
             />
-
           </div>
+
           {/* Location */}
           <select
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            className="w-full p-3 rounded-2xl border border-slate-355 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition text-sm"
           >
             <option value="">All Locations</option>
             <option value="indore">Indore</option>
@@ -164,11 +171,11 @@ function Job() {
             <option value="hyderabad">Hyderabad</option>
           </select>
 
-          {/* jobtype */}
+          {/* Job Type */}
           <select
             value={jobType}
             onChange={(e) => setJobType(e.target.value)}
-            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            className="w-full p-3 rounded-2xl border border-slate-355 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition text-sm"
           >
             <option value="">All Types</option>
             <option value="full-time">Full Time</option>
@@ -176,10 +183,11 @@ function Job() {
             <option value="internship">Internship</option>
           </select>
 
+          {/* Salary Filter */}
           <select
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
-            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            className="w-full p-3 rounded-2xl border border-slate-355 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition text-sm"
           >
             <option value="">All Salaries</option>
             <option value="0-30000">0 - 30K</option>
@@ -188,101 +196,132 @@ function Job() {
             <option value="100000+">1L+</option>
           </select>
 
+          {/* Sort Filter */}
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value)}
-            className="w-full p-3 rounded-2xl border border-gray-300 bg-white shadow-sm focus:outline-none focus:border-[#2E7D32] focus:ring-2 focus:ring-[#2E7D32]/20 transition"
+            className="w-full p-3 rounded-2xl border border-slate-355 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition text-sm"
           >
             <option value="">Sort By</option>
             <option value="low">Salary: Low to High</option>
             <option value="high">Salary: High to Low</option>
           </select>
-          </div>
 
-          {/* clr filter  */}
-          <div className="flex justify-end mb-6">
-            <button
-              onClick={handleClearFilters}
-              className="px-5 py-2.5 bg-red-500 text-white rounded-xl hover:bg-red-600 transition font-medium shadow-sm"
-            >
-              Clear Filters
-            </button>
-          </div>
+        </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+        {/* Clear Filter Button */}
+        <div className="flex justify-end mb-8">
+          <button
+            onClick={handleClearFilters}
+            className="px-5 py-2.5 bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl transition text-xs shadow-sm cursor-pointer active:scale-95"
+          >
+            Clear Filters
+          </button>
+        </div>
 
-            {loading ? (
-
-              <div className="flex justify-center items-center h-[50vh] col-span-full">
-                <div className="w-10 h-10 border-4 border-[#2E7D32] border-t-transparent rounded-full animate-spin"></div>
+        {/* Job Listings Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {loading ? (
+            <div className="flex flex-col justify-center items-center h-[40vh] col-span-full gap-3">
+              <FaSpinner className="animate-spin text-4xl text-brand-primary" />
+              <span className="text-sm font-bold text-slate-400">Fetching jobs list...</span>
+            </div>
+          ) : sortedJobs.length === 0 ? (
+            <div className="col-span-full bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 p-16 rounded-[2rem] text-center shadow-sm max-w-lg mx-auto space-y-4">
+              <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-950 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto">
+                <FaBriefcase />
               </div>
-
-            ) : sortedJobs.length === 0 ? (
-
-              <div className="col-span-full bg-white border border-gray-200 rounded-3xl p-10 text-center shadow-sm">
-                <p className="text-xl font-semibold text-[#374151]">
-                  No Jobs Found
-                </p>
-
-                <p className="text-gray-500 mt-2">
-                  Try changing filters or search keywords.
+              <div>
+                <h2 className="text-lg font-black text-slate-850 dark:text-white">No Jobs Found</h2>
+                <p className="text-slate-400 dark:text-slate-500 text-xs mt-1 leading-relaxed">
+                  We couldn't find any job opportunities matching your criteria. Try adjusting the search keywords or filters.
                 </p>
               </div>
-
-            ) : (
-
-              sortedJobs.map((job) => (
-
+              <button 
+                onClick={handleClearFilters} 
+                className="px-5 py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs transition"
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            sortedJobs.map((job) => {
+              const isApplied = appliedIds.includes(job._id)
+              return (
                 <div
                   key={job._id}
-                  className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${
+                    isApplied ? 'border-t-emerald-500' : 'border-t-brand-primary'
+                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
                 >
+                  <div className="space-y-4">
+                    {/* Card Title & Type */}
+                    <div className="flex justify-between items-start gap-3">
+                      <div>
+                        <h2 className="text-lg font-black text-slate-805 dark:text-white leading-snug line-clamp-1">
+                          {job.title}
+                        </h2>
+                        <p className="text-xs font-semibold text-brand-primary">
+                          {job.company}
+                        </p>
+                      </div>
+                      {job.jobType && (
+                        <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0 select-none">
+                          {job.jobType}
+                        </span>
+                      )}
+                    </div>
 
-                  <h2 className="text-2xl font-bold text-[#374151] mb-2">
-                    {job.title}
-                  </h2>
+                    {/* Details: Location & Salary */}
+                    <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                      {job.location && (
+                        <p className="flex items-center gap-1.5">
+                          <FaMapMarkerAlt className="text-slate-400" /> {job.location}
+                        </p>
+                      )}
+                      {job.salary && (
+                        <p className="flex items-center gap-1 text-brand-secondary font-bold text-sm pt-1">
+                          <FaRupeeSign className="text-xs" /> {job.salary}
+                        </p>
+                      )}
+                    </div>
 
-                  <p className="text-gray-500">
-                    {job.company}
-                  </p>
+                    {/* Description */}
+                    {job.description && (
+                      <p className="text-xs text-slate-550 dark:text-slate-450 line-clamp-3 leading-relaxed border-t border-slate-100 dark:border-slate-800/40 pt-3">
+                        {job.description}
+                      </p>
+                    )}
+                  </div>
 
-                  <p className="text-gray-500">
-                    {job.location}
-                  </p>
-
-                  <p className="text-[#F4A261] font-semibold mt-3 text-lg">
-                    ₹ {job.salary}
-                  </p>
-
-                  <p className="text-sm text-gray-500 mt-3 line-clamp-3">
-                    {job.description}
-                  </p>
-
-                  <div className="mt-5">
-
+                  {/* Apply Action Button */}
+                  <div className="mt-6 pt-2">
                     <Button
                       loading={applyLoadingId === job._id}
-                      disabled={appliedIds.includes(job._id)}
+                      disabled={isApplied}
                       onClick={() => handleApply(job._id)}
                       className={
-                        appliedIds.includes(job._id)
-                          ? "bg-green-600 text-white w-full"
-                          : "bg-[#2E7D32] hover:bg-[#256728] text-white w-full"
+                        isApplied
+                          ? "bg-emerald-500 text-white w-full border-none"
+                          : "bg-brand-primary hover:bg-brand-primary-hover text-white w-full border-none"
                       }
                     >
-                      {applyLoadingId === job._id
-                        ? "Applying..."
-                        : appliedIds.includes(job._id)
-                          ? "Applied"
-                          : "Apply Now"}
+                      {isApplied ? (
+                        <span className="flex items-center gap-1.5 justify-center">
+                          <FaCheckCircle className="text-xs" /> Applied
+                        </span>
+                      ) : (
+                        "Apply Now"
+                      )}
                     </Button>
                   </div>
                 </div>
-              ))
-            )}
-                   </div>
+              )
+            })
+          )}
         </div>
       </div>
+    </div>
   )
 }
 

@@ -139,63 +139,43 @@ function Navbar() {
             </>
           )}
 
-          {token && user?.role === "user" && (
+          {token && (
             <>
               <Link
-                to="/dashboard"
+                to={user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard"}
                 className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group ${
-                  isActive('/dashboard') ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
+                  isActive(user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard") ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
                 }`}
               >
                 Dashboard
                 <span className={`absolute bottom-0 left-0 h-[2px] bg-brand-secondary transition-all duration-300 ${
-                  isActive('/dashboard') ? 'w-full' : 'w-0 group-hover:w-full'
+                  isActive(user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard") ? 'w-full' : 'w-0 group-hover:w-full'
                 }`} />
               </Link>
-              <button
-                onClick={(e) => { e.preventDefault(); window.dispatchEvent(new Event("open-profile")); }}
-                className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group cursor-pointer ${
-                  isActive('/profile') ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
-                }`}
-              >
-                Profile
-                <span className={`absolute bottom-0 left-0 h-[2px] bg-brand-secondary transition-all duration-300 ${
-                  isActive('/profile') ? 'w-full' : 'w-0 group-hover:w-full'
-                }`} />
-              </button>
-              <Link
-                to="/jobs"
-                className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-primary hover:bg-brand-primary-hover text-white shadow-[0_4px_12px_rgba(37,99,235,0.15)] hover:shadow-[0_4px_20px_rgba(37,99,235,0.3)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
-              >
-                Jobs
-              </Link>
-            </>
-          )}
 
-          {token && user?.role === "recruiter" && (
-            <>
-              <Link
-                to="/recruiterdashboard"
-                className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group ${
-                  isActive('/recruiterdashboard') ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
-                }`}
-              >
-                Dashboard
-                <span className={`absolute bottom-0 left-0 h-[2px] bg-brand-secondary transition-all duration-300 ${
-                  isActive('/recruiterdashboard') ? 'w-full' : 'w-0 group-hover:w-full'
-                }`} />
-              </Link>
-              <Link
-                to="/addJobs"
-                className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group ${
-                  isActive('/addJobs') ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
-                }`}
-              >
-                Add Jobs
-                <span className={`absolute bottom-0 left-0 h-[2px] bg-brand-secondary transition-all duration-300 ${
-                  isActive('/addJobs') ? 'w-full' : 'w-0 group-hover:w-full'
-                }`} />
-              </Link>
+              {user?.role === "user" && (
+                <Link
+                  to="/jobs"
+                  className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-primary hover:bg-brand-primary-hover text-white shadow-[0_4px_12px_rgba(37,99,235,0.15)] hover:shadow-[0_4px_20px_rgba(37,99,235,0.3)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                >
+                  Jobs
+                </Link>
+              )}
+
+              {user?.role === "recruiter" && (
+                <Link
+                  to="/addJobs"
+                  className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group ${
+                    isActive('/addJobs') ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
+                  }`}
+                >
+                  Add Jobs
+                  <span className={`absolute bottom-0 left-0 h-[2px] bg-brand-secondary transition-all duration-300 ${
+                    isActive('/addJobs') ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`} />
+                </Link>
+              )}
+
               <button
                 onClick={(e) => { e.preventDefault(); window.dispatchEvent(new Event("open-profile")); }}
                 className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group cursor-pointer ${
@@ -340,63 +320,34 @@ function Navbar() {
               </>
             )}
 
-            {token && user?.role === "user" && (
+            {token && (
               <>
                 <Link
-                  to="/dashboard"
+                  to={user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard"}
                   onClick={() => setMenuOpen(false)}
                   className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                    isActive('/dashboard')
+                    isActive(user?.role === "recruiter" ? "/recruiterdashboard" : "/dashboard")
                       ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
                       : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
                   }`}
                 >
                   Dashboard
                 </Link>
-                <button
-                  onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-profile")); }}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 text-left w-full cursor-pointer ${
-                    isActive('/profile')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-355 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
-                >
-                  Profile
-                </button>
-                <Link
-                  to="/jobs"
-                  onClick={() => setMenuOpen(false)}
-                  className="mt-2 flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-xl font-bold text-sm sm:text-base bg-brand-primary hover:bg-brand-primary-hover text-white shadow-md active:scale-95 transition-all"
-                >
-                  Jobs
-                </Link>
-              </>
-            )}
 
-            {token && user?.role === "recruiter" && (
-              <>
-                <Link
-                  to="/recruiterdashboard"
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                    isActive('/recruiterdashboard')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/addJobs"
-                  onClick={() => setMenuOpen(false)}
-                  className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
-                    isActive('/addJobs')
-                      ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
-                      : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
-                  }`}
-                >
-                  Add Jobs
-                </Link>
+                {user?.role === "recruiter" && (
+                  <Link
+                    to="/addJobs"
+                    onClick={() => setMenuOpen(false)}
+                    className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 ${
+                      isActive('/addJobs')
+                        ? 'bg-brand-secondary/10 text-brand-secondary border-l-4 border-brand-secondary'
+                        : 'text-slate-655 dark:text-slate-350 hover:text-brand-secondary dark:hover:text-brand-secondary hover:bg-slate-50 dark:hover:bg-slate-900/40'
+                    }`}
+                  >
+                    Add Jobs
+                  </Link>
+                )}
+
                 <button
                   onClick={() => { setMenuOpen(false); window.dispatchEvent(new Event("open-profile")); }}
                   className={`flex items-center px-4 py-2.5 sm:py-3 rounded-xl font-semibold text-sm sm:text-base transition-all duration-200 text-left w-full cursor-pointer ${
@@ -407,6 +358,16 @@ function Navbar() {
                 >
                   Profile
                 </button>
+
+                {user?.role === "user" && (
+                  <Link
+                    to="/jobs"
+                    onClick={() => setMenuOpen(false)}
+                    className="mt-2 flex items-center justify-center px-4 py-2.5 sm:py-3 rounded-xl font-bold text-sm sm:text-base bg-brand-primary hover:bg-brand-primary-hover text-white shadow-md active:scale-95 transition-all"
+                  >
+                    Jobs
+                  </Link>
+                )}
               </>
             )}
           </div>

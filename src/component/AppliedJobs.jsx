@@ -1,130 +1,204 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { 
+  FaArrowLeft, 
+  FaCalendarAlt, 
+  FaMapMarkerAlt, 
+  FaRupeeSign, 
+  FaCheckCircle, 
+  FaTimesCircle, 
+  FaHourglassHalf, 
+  FaBriefcase, 
+  FaSpinner 
+} from 'react-icons/fa'
+
 function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([])
-
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  
+  const navigate = useNavigate()
   const storedUser = localStorage.getItem('user')
   const user = storedUser ? JSON.parse(storedUser) : null
 
   useEffect(() => {
+    if (!user?._id) {
+      setLoading(false)
+      return
+    }
+
     const fetchApplied = async () => {
       try {
+        setLoading(true)
         const response = await axios.get(
           `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
         )
         setAppliedJobs(response.data)
-      } catch (error) {
-        console.log("FETCH APPLIED ERROR:", error)
+      } catch (err) {
+        console.error("FETCH APPLIED ERROR:", err)
+        setError("Could not load your job applications. Please try again.")
+      } finally {
+        setLoading(false)
       }
     }
 
-    if (user) {
-      fetchApplied()
-    }
+    fetchApplied()
   }, [])
 
- return (
-  <div className="min-h-screen bg-[#F8F7F4] p-6 md:p-10">
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "N/A"
+    const date = new Date(dateStr)
+    return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
+  }
 
-    <div className="max-w-7xl mx-auto">
+  const getStatusBadge = (status) => {
+    const s = (status || 'pending').toLowerCase()
+    if (s === 'shortlisted' || s === 'accepted') {
+      return (
+        <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30 rounded-full text-xs font-black capitalize select-none">
+          <FaCheckCircle className="text-[10px]" /> {s}
+        </span>
+      )
+    }
+    if (s === 'rejected') {
+      return (
+        <span className="flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-600 dark:bg-rose-955/20 dark:text-rose-400 border border-rose-200 dark:border-rose-900/30 rounded-full text-xs font-black capitalize select-none">
+          <FaTimesCircle className="text-[10px]" /> {s}
+        </span>
+      )
+    }
+    return (
+      <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 dark:bg-amber-955/20 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 rounded-full text-xs font-black capitalize select-none">
+        <FaHourglassHalf className="text-[10px]" /> under review
+      </span>
+    )
+  }
 
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold text-[#374151]">
-          Applied Jobs
-        </h1>
+  const getCardBorder = (status) => {
+    const s = (status || 'pending').toLowerCase()
+    if (s === 'shortlisted' || s === 'accepted') return 'border-t-emerald-500'
+    if (s === 'rejected') return 'border-t-rose-500'
+    return 'border-t-amber-500'
+  }
 
-        <p className="text-gray-500 mt-2">
-          Track the status of your job applications.
-        </p>
-      </div>
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Back navigation */}
+        <button 
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary dark:text-slate-400 dark:hover:text-white transition mb-6 cursor-pointer group"
+        >
+          <FaArrowLeft className="group-hover:-translate-x-1 transition" /> Back to Dashboard
+        </button>
 
-      {appliedJobs.length === 0 ? (
-
-        <div className="bg-white border border-gray-200 rounded-3xl p-10 text-center shadow-sm">
-          <h2 className="text-xl font-semibold text-[#374151]">
-            No Applications Yet
-          </h2>
-
-          <p className="text-gray-500 mt-2">
-            Start applying for jobs to see them here.
+        {/* Header section */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-black text-slate-850 dark:text-white">
+            Applied Jobs
+          </h1>
+          <p className="text-slate-400 dark:text-slate-500 mt-2 text-sm">
+            Track and monitor the status of all your submitted job applications.
           </p>
         </div>
 
-      ) : (
-
-        <div className="grid md:grid-cols-2 gap-6">
-
-          {appliedJobs.map((app) => (
-
-            <div
-              key={app._id}
-              className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm hover:shadow-lg transition-all duration-300"
+        {/* List Content */}
+        {loading ? (
+          <div className="flex flex-col justify-center items-center h-[50vh] gap-3">
+            <FaSpinner className="animate-spin text-4xl text-brand-primary" />
+            <span className="text-sm font-bold text-slate-400">Loading your applications...</span>
+          </div>
+        ) : error ? (
+          <div className="bg-rose-50 dark:bg-rose-955/10 border border-rose-100 dark:border-rose-950/20 p-8 rounded-3xl text-center shadow-sm max-w-lg mx-auto">
+            <p className="text-sm font-bold text-rose-550 dark:text-rose-400">{error}</p>
+            <button 
+              onClick={() => window.location.reload()} 
+              className="mt-4 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition"
             >
-
-              <div className="flex justify-between items-start mb-4">
-
-                <div>
-                  <h2 className="text-2xl font-bold text-[#374151]">
-                    {app.jobId.title}
-                  </h2>
-
-                  <p className="text-gray-500 mt-1">
-                    {app.jobId.company}
-                  </p>
-                </div>
-
-                <div
-                  className={`px-3 py-1 rounded-full text-xs font-semibold
-                  ${
-                    app.status === "shortlisted"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {app.status === "shortlisted"
-                    ? "Shortlisted"
-                    : "Pending"}
-                </div>
-
-              </div>
-
-              <p className="text-[#F4A261] font-bold text-lg">
-                ₹ {app.jobId.salary}
-              </p>
-
-              <div className="mt-5 border-t border-gray-100 pt-4">
-
-                <p className="text-sm text-gray-500">
-                  Application Status
-                </p>
-
-                <p
-                  className={`font-semibold mt-1
-                  ${
-                    app.status === "shortlisted"
-                      ? "text-green-600"
-                      : "text-yellow-600"
-                  }`}
-                >
-                  {app.status === "shortlisted"
-                    ? "✅ Shortlisted"
-                    : "⏳ Under Review"}
-                </p>
-
-              </div>
-
+              Retry Connection
+            </button>
+          </div>
+        ) : appliedJobs.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 p-16 rounded-[2rem] text-center shadow-sm max-w-lg mx-auto space-y-5">
+            <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-950 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto">
+              <FaBriefcase />
             </div>
+            <div>
+              <h2 className="text-lg font-black text-slate-850 dark:text-white">No Applications Yet</h2>
+              <p className="text-slate-400 dark:text-slate-500 text-xs mt-1 leading-relaxed">
+                You haven't submitted any job applications. Browse through available listings and apply to get started.
+              </p>
+            </div>
+            <button 
+              onClick={() => navigate('/jobs')}
+              className="px-6 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-md transition text-xs cursor-pointer active:scale-95"
+            >
+              Explore Open Jobs
+            </button>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {appliedJobs.map((app) => {
+              const job = app.jobId || {}
+              return (
+                <div
+                  key={app._id}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
+                >
+                  <div className="space-y-4">
+                    {/* Card Header */}
+                    <div className="flex justify-between items-start gap-3">
+                      <div className="space-y-1">
+                        <h2 className="text-lg font-black text-slate-800 dark:text-white leading-snug line-clamp-1">
+                          {job.title || "Unknown Position"}
+                        </h2>
+                        <p className="text-xs font-semibold text-brand-primary">
+                          {job.company || "Unknown Company"}
+                        </p>
+                      </div>
+                      {getStatusBadge(app.status)}
+                    </div>
 
-          ))}
+                    {/* Salary & Details */}
+                    <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                      {job.location && (
+                        <p className="flex items-center gap-1.5">
+                          <FaMapMarkerAlt className="text-slate-400" /> {job.location}
+                        </p>
+                      )}
+                      {job.jobType && (
+                        <p className="flex items-center gap-1.5">
+                          <FaBriefcase className="text-slate-400" /> {job.jobType}
+                        </p>
+                      )}
+                      {job.salary && (
+                        <p className="flex items-center gap-1 text-brand-secondary font-bold text-sm pt-1">
+                          <FaRupeeSign className="text-xs" /> {job.salary}
+                        </p>
+                      )}
+                    </div>
+                  </div>
 
-        </div>
+                  {/* Card Footer */}
+                  <div className="mt-6 border-t border-slate-100 dark:border-slate-800/60 pt-4 flex justify-between items-center text-[11px] text-slate-400 dark:text-slate-500">
+                    <span className="flex items-center gap-1">
+                      <FaCalendarAlt /> Applied on:
+                    </span>
+                    <span className="font-semibold text-slate-655 dark:text-slate-400">
+                      {formatDate(app.appliedAt)}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
 
-      )}
-
+      </div>
     </div>
-
-  </div>
-)
+  )
 }
 
 export default AppliedJobs
