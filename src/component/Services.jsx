@@ -1,7 +1,11 @@
 import React from 'react';
 import { FaRocket, FaRobot, FaBriefcase, FaUserTie, FaSearchDollar, FaChartBar } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const Services = () => {
+  const navigate = useNavigate();
+
   const servicesList = [
     {
       icon: FaSearchDollar,
@@ -34,6 +38,38 @@ const Services = () => {
       description: "Practice with our AI mock interview tool and get real-time feedback on your performance."
     },
   ];
+
+  const handleServiceClick = (index) => {
+    const token = localStorage.getItem("token");
+
+    // Force authentication popup if not logged in for profile-based features
+    if (!token && [0, 1, 3, 4].includes(index)) {
+      window.dispatchEvent(new Event("open-login"));
+      toast.error("Please login to access this service.");
+      return;
+    }
+
+    switch (index) {
+      case 0: // Smart Job Matching
+      case 3: // Premium Listings
+        navigate('/jobs');
+        break;
+      case 1: // AI Resume Builder
+        navigate('/resume');
+        break;
+      case 4: // Skill Gap Analysis
+        navigate('/dashboard');
+        break;
+      case 2: // Expert Career Coaching
+        toast.success("Coaching: Submit a Reach Support ticket to get matched with a 1-on-1 industry mentor!");
+        break;
+      case 5: // Interview Prep
+        toast.success("AI Interview Prep guides are active in your Career Resource Hub under Interview Excellence!");
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <div className="bg-[#F8FAFC] dark:bg-[#0f172a] py-24 px-6 relative overflow-hidden transition-colors duration-300">
@@ -76,7 +112,8 @@ const Services = () => {
             return (
               <div
                 key={index}
-                className={`group p-3.5 xs:p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/30 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} hover:border-brand-primary/40 dark:hover:border-brand-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden`}
+                onClick={() => handleServiceClick(index)}
+                className={`group p-3.5 xs:p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/30 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} hover:border-brand-primary/40 dark:hover:border-brand-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
