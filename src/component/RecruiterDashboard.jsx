@@ -150,7 +150,7 @@ function RecruiterDashboard() {
         ) : jobs.length === 0 ? (
           <div className="bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 p-16 rounded-3xl text-center shadow-sm max-w-lg mx-auto">
             <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-950 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto mb-4">
-              <HiOutlineBriefcase />
+              <HiOfficeBuilding />
             </div>
             <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1">No Jobs Posted Yet</h3>
             <p className="text-slate-500 dark:text-slate-400 text-sm mb-6">Create a job post to start receiving job applications.</p>
