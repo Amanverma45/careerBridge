@@ -24,8 +24,17 @@ function Welcome() {
   const [error, setError] = useState(null)
 
   const navigate = useNavigate()
-  const storedUser = localStorage.getItem("user")
-  const user = storedUser ? JSON.parse(storedUser) : null
+  
+  // Safe Parse localStorage user object
+  const user = (() => {
+    try {
+      const stored = localStorage.getItem("user")
+      return stored ? JSON.parse(stored) : null
+    } catch (e) {
+      console.error("Localstorage user parse error:", e)
+      return null
+    }
+  })()
 
   useEffect(() => {
     if (!user?._id) {
@@ -39,9 +48,13 @@ function Welcome() {
         const response = await axios.get(
           `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
         )
-        setApplications(response.data)
+        if (response.data && Array.isArray(response.data)) {
+          setApplications(response.data)
+        } else {
+          setApplications([])
+        }
       } catch (err) {
-        console.error(err)
+        console.error("Fetch dashboard data error:", err)
         setError("Unable to retrieve job applications. Please try again later.")
       } finally {
         setLoading(false)
@@ -59,22 +72,28 @@ function Welcome() {
     { key: "experience", label: "Experience Details", value: user?.experience, desc: "Add your work or project history" },
     { key: "bio", label: "Professional Bio", value: user?.bio, desc: "Write a short summary about yourself" }
   ]
+  
   checklist.forEach(item => {
-    if (item.value && item.value.trim() !== "") {
-      strength += 25
+    if (item.value) {
+      if (typeof item.value === 'string') {
+        if (item.value.trim() !== "") strength += 25
+      } else {
+        strength += 25
+      }
     }
   })
 
-  // Filter application statuses
-  const pendingCount = applications.filter(app => (app.status || '').toLowerCase() === 'pending').length
-  const shortlistedCount = applications.filter(app => 
-    (app.status || '').toLowerCase() === 'shortlisted' || (app.status || '').toLowerCase() === 'accepted'
+  // Safe checks for applications array
+  const appsArray = Array.isArray(applications) ? applications : []
+  const pendingCount = appsArray.filter(app => (app?.status || '').toLowerCase() === 'pending').length
+  const shortlistedCount = appsArray.filter(app => 
+    (app?.status || '').toLowerCase() === 'shortlisted' || (app?.status || '').toLowerCase() === 'accepted'
   ).length
-  const rejectedCount = applications.filter(app => (app.status || '').toLowerCase() === 'rejected').length
+  const rejectedCount = appsArray.filter(app => (app?.status || '').toLowerCase() === 'rejected').length
 
   const stats = [
     { label: "Profile Strength", value: `${strength}%`, icon: <FaChartLine />, color: "text-brand-primary bg-brand-primary/10", borderClass: "border-t-brand-primary" },
-    { label: "Applied Jobs", value: applications.length, icon: <FaBriefcase />, color: "text-violet-500 bg-violet-500/10", borderClass: "border-t-violet-500" },
+    { label: "Applied Jobs", value: appsArray.length, icon: <FaBriefcase />, color: "text-violet-500 bg-violet-500/10", borderClass: "border-t-violet-500" },
     { label: "Shortlisted", value: shortlistedCount, icon: <FaCheckCircle />, color: "text-emerald-500 bg-emerald-500/10", borderClass: "border-t-emerald-500" },
     { label: "Pending Reviews", value: pendingCount, icon: <FaHourglassHalf />, color: "text-amber-500 bg-amber-500/10", borderClass: "border-t-amber-500" }
   ]
@@ -96,13 +115,13 @@ function Welcome() {
     }
     if (s === 'rejected') {
       return (
-        <span className="flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400 border border-rose-250 dark:border-rose-900/30 rounded-full text-xs font-bold capitalize select-none shrink-0">
+        <span className="flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-600 dark:bg-rose-955/20 dark:text-rose-400 border border-rose-250 dark:border-rose-900/30 rounded-full text-xs font-bold capitalize select-none shrink-0">
           <FaTimesCircle className="text-[10px]" /> {s}
         </span>
       )
     }
     return (
-      <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border border-amber-250 dark:border-amber-900/30 rounded-full text-xs font-bold capitalize select-none shrink-0">
+      <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 dark:bg-amber-955/20 dark:text-amber-400 border border-amber-250 dark:border-amber-900/30 rounded-full text-xs font-bold capitalize select-none shrink-0">
         <FaHourglassHalf className="text-[10px]" /> {s}
       </span>
     )
@@ -156,13 +175,13 @@ function Welcome() {
             <div className="pt-2 flex flex-wrap gap-3">
               <button
                 onClick={() => navigate('/jobs')}
-                className="px-5 py-2.5 bg-white text-brand-primary font-bold rounded-xl shadow-md hover:bg-slate-50 transition active:scale-95 text-sm cursor-pointer"
+                className="px-5 py-2.5 bg-white text-brand-primary font-bold rounded-xl shadow-md hover:bg-slate-50 transition active:scale-95 text-sm cursor-pointer border-none"
               >
                 Browse Jobs
               </button>
               <button
                 onClick={() => navigate('/resume')}
-                className="px-5 py-2.5 bg-brand-primary-hover text-white font-bold rounded-xl shadow-md hover:bg-brand-primary transition border border-white/20 active:scale-95 text-sm cursor-pointer"
+                className="px-5 py-2.5 bg-brand-primary-hover text-white font-bold rounded-xl shadow-md hover:bg-brand-primary transition border border-white/20 active:scale-95 text-sm cursor-pointer border-none"
               >
                 Optimize Resume
               </button>
@@ -178,7 +197,7 @@ function Welcome() {
               className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${stat.borderClass} p-5 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex items-center justify-between gap-4`}
             >
               <div className="space-y-1">
-                <p className="text-slate-400 dark:text-slate-500 text-xs font-black uppercase tracking-wider">
+                <p className="text-slate-400 dark:text-slate-505 text-xs font-black uppercase tracking-wider">
                   {stat.label}
                 </p>
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white">
@@ -199,13 +218,13 @@ function Welcome() {
           <div className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-primary p-6 rounded-[2rem] shadow-sm flex flex-col justify-between">
             <div>
               <h2 className="text-xl font-black mb-1 text-slate-800 dark:text-white">Profile Strength</h2>
-              <p className="text-slate-400 dark:text-slate-500 text-xs mb-5">Complete your profile details to rank higher in recruiter searches.</p>
+              <p className="text-slate-400 dark:text-slate-505 text-xs mb-5">Complete your profile details to rank higher in recruiter searches.</p>
               
               {/* Strength Progress Bar */}
               <div className="mb-6 space-y-2">
                 <div className="flex justify-between text-sm font-bold">
                   <span className="text-brand-primary">{strength}% Setup Complete</span>
-                  <span className="text-slate-400 dark:text-slate-500">{strength === 100 ? "Ready to Apply! 🚀" : `${100 - strength}% left`}</span>
+                  <span className="text-slate-400 dark:text-slate-505">{strength === 100 ? "Ready to Apply! 🚀" : `${100 - strength}% left`}</span>
                 </div>
                 <div className="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                   <div 
@@ -218,14 +237,14 @@ function Welcome() {
               {/* Checklist details */}
               <div className="space-y-4">
                 {checklist.map((item, idx) => {
-                  const isDone = item.value && item.value.trim() !== ""
+                  const isDone = item.value && String(item.value).trim() !== ""
                   return (
                     <div 
                       key={idx} 
                       onClick={() => navigate('/profile')} 
                       className={`flex items-start gap-3 p-2.5 rounded-2xl border transition duration-200 cursor-pointer ${
                         isDone 
-                          ? 'border-emerald-100/50 dark:border-emerald-950/20 bg-emerald-50/10 dark:bg-emerald-950/5 hover:bg-emerald-50/20 dark:hover:bg-emerald-950/10' 
+                          ? 'border-emerald-100/50 dark:border-emerald-950/20 bg-emerald-50/10 dark:bg-emerald-955/5 hover:bg-emerald-50/20 dark:hover:bg-emerald-955/10' 
                           : 'border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-950/10 hover:border-brand-primary/20 dark:hover:border-brand-primary/20 hover:bg-slate-50 dark:hover:bg-slate-950/30'
                       }`}
                     >
@@ -235,7 +254,7 @@ function Welcome() {
                         <div className="w-4.5 h-4.5 rounded-full border-2 border-slate-355 dark:border-slate-700 mt-0.5 shrink-0" />
                       )}
                       <div>
-                        <h4 className={`text-sm font-bold ${isDone ? 'text-slate-750 dark:text-slate-300' : 'text-slate-500 dark:text-slate-400'}`}>
+                        <h4 className={`text-sm font-bold ${isDone ? 'text-slate-750 dark:text-slate-300' : 'text-slate-505 dark:text-slate-400'}`}>
                           {item.label}
                         </h4>
                         {!isDone && (
@@ -262,16 +281,16 @@ function Welcome() {
             <div>
               <div className="flex justify-between items-center mb-1">
                 <h2 className="text-xl font-black text-slate-850 dark:text-white">Applications Status Tracker</h2>
-                {applications.length > 0 && (
+                {appsArray.length > 0 && (
                   <button 
                     onClick={() => navigate('/appliedJobs')} 
-                    className="text-xs font-black text-brand-primary hover:underline hover:text-brand-primary-hover flex items-center gap-1 cursor-pointer"
+                    className="text-xs font-black text-brand-primary hover:underline hover:text-brand-primary-hover flex items-center gap-1 cursor-pointer border-none bg-transparent"
                   >
                     View All
                   </button>
                 )}
               </div>
-              <p className="text-slate-400 dark:text-slate-500 text-xs mb-5">Updates on the jobs you've applied to recently.</p>
+              <p className="text-slate-400 dark:text-slate-505 text-xs mb-5">Updates on the jobs you've applied to recently.</p>
 
               {loading ? (
                 <div className="flex flex-col justify-center items-center h-48 gap-3">
@@ -279,39 +298,40 @@ function Welcome() {
                   <span className="text-xs font-bold text-slate-400">Fetching applications...</span>
                 </div>
               ) : error ? (
-                <div className="p-6 text-center text-xs font-bold text-rose-500 bg-rose-50/50 dark:bg-rose-950/10 rounded-2xl border border-rose-100 dark:border-rose-955/20">
+                <div className="p-6 text-center text-xs font-bold text-rose-500 bg-rose-50/50 dark:bg-rose-955/10 rounded-2xl border border-rose-100 dark:border-rose-950/20">
                   {error}
                 </div>
-              ) : applications.length === 0 ? (
+              ) : appsArray.length === 0 ? (
                 <div className="p-8 text-center space-y-4">
-                  <div className="w-14 h-14 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-2xl mx-auto">
+                  <div className="w-14 h-14 bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-900 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-505 text-2xl mx-auto">
                     <FaBriefcase />
                   </div>
                   <div className="space-y-1">
                     <h4 className="text-sm font-bold text-slate-800 dark:text-white">No Active Applications</h4>
-                    <p className="text-slate-400 dark:text-slate-500 text-xs max-w-xs mx-auto">Browse through our open vacancies and find the best fit for your skills.</p>
+                    <p className="text-slate-400 dark:text-slate-550 text-xs max-w-xs mx-auto">Browse through our open vacancies and find the best fit for your skills.</p>
                   </div>
                   <button
                     onClick={() => navigate('/jobs')}
-                    className="px-5 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-bold rounded-xl shadow-md transition active:scale-95 cursor-pointer"
+                    className="px-5 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-bold rounded-xl shadow-md transition active:scale-95 cursor-pointer border-none"
                   >
                     Explore Job Vacancies
                   </button>
                 </div>
               ) : (
                 <div className="space-y-3 max-h-[320px] overflow-y-auto pr-1">
-                  {applications.slice(0, 5).map((app) => {
+                  {appsArray.slice(0, 5).map((app) => {
+                    if (!app) return null
                     const job = app.jobId || {}
                     return (
                       <div 
                         key={app._id}
                         className="p-4 bg-slate-50/50 dark:bg-slate-950/20 border border-slate-100 dark:border-slate-800/80 rounded-2xl hover:border-slate-200/60 dark:hover:border-slate-700/60 hover:bg-white dark:hover:bg-slate-900/60 transition duration-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"
                       >
-                        <div className="space-y-1">
+                        <div className="space-y-1 text-left">
                           <h4 className="text-sm font-black text-slate-800 dark:text-white truncate max-w-[200px] sm:max-w-[300px]">
                             {job.title || "Unknown Job Position"}
                           </h4>
-                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400 dark:text-slate-500">
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-400 dark:text-slate-505">
                             <span className="font-semibold text-slate-700 dark:text-slate-350">{job.company || "N/A"}</span>
                             {job.location && (
                               <span className="flex items-center gap-1">
@@ -327,7 +347,7 @@ function Welcome() {
                         </div>
                         <div className="flex sm:flex-col items-start sm:items-end gap-2 w-full sm:w-auto justify-between sm:justify-start">
                           {getStatusBadge(app.status)}
-                          <span className="text-[10px] text-slate-400 dark:text-slate-500 flex items-center gap-1">
+                          <span className="text-[10px] text-slate-400 dark:text-slate-505 flex items-center gap-1">
                             <FaCalendarAlt className="text-[9px]" /> {formatDate(app.appliedAt)}
                           </span>
                         </div>
@@ -338,10 +358,10 @@ function Welcome() {
               )}
             </div>
             
-            {applications.length > 5 && (
+            {appsArray.length > 5 && (
               <div className="text-center pt-4 border-t border-slate-100 dark:border-slate-800/50 mt-4">
-                <span className="text-xs text-slate-400 dark:text-slate-500 font-semibold">
-                  Showing top 5 of {applications.length} applications
+                <span className="text-xs text-slate-400 dark:text-slate-550 font-semibold">
+                  Showing top 5 of {appsArray.length} applications
                 </span>
               </div>
             )}
@@ -352,7 +372,7 @@ function Welcome() {
         <div className="grid md:grid-cols-3 gap-6">
           <div
             onClick={() => navigate('/jobs')}
-            className="group relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-700 p-6 rounded-[2rem] text-white shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px]"
+            className="group relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-700 p-6 rounded-[2rem] text-white shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
           >
             <div>
               <h3 className="text-xl font-bold mb-2">Browse Job Openings</h3>
@@ -366,11 +386,11 @@ function Welcome() {
 
           <div
             onClick={() => navigate('/resume')}
-            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-accent p-6 rounded-[2rem] text-slate-850 dark:text-white shadow-sm hover:shadow-md hover:border-brand-accent hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px]"
+            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-accent p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-accent hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
           >
             <div>
               <h3 className="text-xl font-bold mb-2">Optimize Resume</h3>
-              <p className="text-slate-400 dark:text-slate-500 text-xs leading-relaxed max-w-[200px]">Scan your resume structure and check formatting optimization.</p>
+              <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[200px]">Scan your resume structure and check formatting optimization.</p>
             </div>
             <div className="flex items-center gap-2 font-bold text-xs text-[#F59E0B] group-hover:gap-4 transition-all">
               Improve Score <FaArrowRight />
@@ -380,11 +400,11 @@ function Welcome() {
 
           <div
             onClick={() => navigate('/profile')}
-            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] text-slate-850 dark:text-white shadow-sm hover:shadow-md hover:border-brand-secondary hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px]"
+            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-secondary hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
           >
             <div>
               <h3 className="text-xl font-bold mb-2">Edit Account Profile</h3>
-              <p className="text-slate-400 dark:text-slate-500 text-xs leading-relaxed max-w-[200px]">Add experience, bio, details, skills and download profiles.</p>
+              <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[200px]">Add experience, bio, details, skills and download profiles.</p>
             </div>
             <div className="flex items-center gap-2 font-bold text-xs text-brand-secondary group-hover:gap-4 transition-all">
               Update Profile <FaArrowRight />
@@ -395,7 +415,7 @@ function Welcome() {
 
         {/* Footer Support Info */}
         <div className="p-5 bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary rounded-2xl shadow-sm text-center">
-          <p className="text-xs text-slate-400 dark:text-slate-500">
+          <p className="text-xs text-slate-400 dark:text-slate-550">
             Need additional assistance? Access our{" "}
             <span 
               onClick={handleResourceHubClick}
@@ -438,7 +458,7 @@ function Welcome() {
                   type="email" 
                   value={user?.email || ""} 
                   disabled 
-                  className="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800/80 p-2.5 rounded-xl text-xs text-slate-450 cursor-not-allowed"
+                  className="w-full bg-slate-50 dark:bg-slate-950/50 border border-slate-200 dark:border-slate-800/80 p-2.5 rounded-xl text-xs text-slate-455 cursor-not-allowed"
                 />
               </div>
 
@@ -449,7 +469,7 @@ function Welcome() {
                   placeholder="e.g. Resume tool help" 
                   value={supportForm.subject}
                   onChange={(e) => setSupportForm({ ...supportForm, subject: e.target.value })}
-                  className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-805 p-2.5 rounded-xl text-xs focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
+                  className="w-full bg-white dark:bg-slate-950 border border-slate-305 dark:border-slate-805 p-2.5 rounded-xl text-xs focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary"
                   required
                 />
               </div>
@@ -461,7 +481,7 @@ function Welcome() {
                   placeholder="Describe your issue or query..." 
                   value={supportForm.message}
                   onChange={(e) => setSupportForm({ ...supportForm, message: e.target.value })}
-                  className="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-805 p-2.5 rounded-xl text-xs focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary resize-none"
+                  className="w-full bg-white dark:bg-slate-950 border border-slate-305 dark:border-slate-805 p-2.5 rounded-xl text-xs focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary resize-none"
                   required
                 />
               </div>
