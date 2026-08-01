@@ -10,11 +10,16 @@ function Login({ isModal, onClose }) {
   const [password, setpassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate()
 
-  const handleForgotPassword = () => {
-    toast.error("Contact admin at support@careerbridge.com to reset your credentials.", { duration: 6000 });
-  }
+  // Forgot Password Views: "login", "forgot", "reset"
+  const [view, setView] = useState("login");
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetOtp, setResetOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [resetLoading, setResetLoading] = useState(false);
+
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -71,89 +76,288 @@ function Login({ isModal, onClose }) {
     }
   }
 
+  const handleForgotPasswordRequest = async (e) => {
+    e.preventDefault();
+    if (!resetEmail) {
+      toast.error("Please enter your email");
+      return;
+    }
+    try {
+      setResetLoading(true);
+      const response = await axios.post("https://careerbridge-b-1.onrender.com/api/forgotPassword", { email: resetEmail });
+      toast.success("Verification reset code sent to your email!");
+      
+      if (response.data?.otp) {
+        toast.success(`Development Fallback: Reset OTP is ${response.data.otp}`, { duration: 15000 });
+      }
+      setView("reset");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Failed to request password reset");
+    } finally {
+      setResetLoading(false);
+    }
+  }
+
+  const handleResetPasswordSubmit = async (e) => {
+    e.preventDefault();
+    if (!resetOtp || !newPassword || !confirmPassword) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (newPassword.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      setResetLoading(true);
+      await axios.post("https://careerbridge-b-1.onrender.com/api/resetPassword", {
+        email: resetEmail,
+        otp: resetOtp,
+        newPassword
+      });
+      toast.success("Password reset successfully! Please log in.");
+      setView("login");
+      setpassword(""); 
+      setNewPassword("");
+      setConfirmPassword("");
+      setResetOtp("");
+    } catch (err) {
+      console.log(err);
+      toast.error(err.response?.data?.message || "Failed to reset password");
+    } finally {
+      setResetLoading(false);
+    }
+  }
+
   const cardContent = (
     <div className={`w-full relative ${isModal ? "" : "max-w-md bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-8 md:p-10 shadow-xl relative z-10"}`}>
       {isModal && (
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          className="absolute top-2 right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
           aria-label="Close modal"
         >
           <HiX className="text-xl" />
         </button>
       )}
 
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-black text-slate-800 dark:text-white mb-2">
-          Welcome Back
-        </h1>
-
-        <p className="text-slate-500 dark:text-slate-400">
-          Don't have an account?{" "}
-          <Link
-            to="/signup"
-            onClick={handleRegisterClick}
-            className="text-brand-secondary hover:underline transition font-semibold"
-          >
-            Register
-          </Link>
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-650 dark:text-slate-300 ml-1">
-            Email Address
-          </label>
-          <input
-            onChange={(e) => setemail(e.target.value)}
-            type="email"
-            placeholder="you@example.com"
-            className="w-full bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-slate-655 dark:text-slate-300 ml-1">
-            Password
-          </label>
-          <input
-            onChange={(e) => setpassword(e.target.value)}
-            type={showPassword ? "text" : "password"}
-            value={password}
-            placeholder="••••••••"
-            className="w-full bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
-          />
-          <div className="flex items-center justify-between pt-1 px-1">
-            <label className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 select-none cursor-pointer">
-              <input 
-                type="checkbox" 
-                checked={showPassword} 
-                onChange={(e) => setShowPassword(e.target.checked)} 
-                className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary border-slate-300 dark:border-slate-805 dark:bg-slate-955"
-              />
-              Show Password
-            </label>
-            <button
-              type="button"
-              onClick={handleForgotPassword}
-              className="text-xs font-semibold text-brand-primary hover:underline cursor-pointer focus:outline-none border-none bg-transparent"
-            >
-              Forgot Password?
-            </button>
+      {view === "login" && (
+        <>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-black text-slate-800 dark:text-white mb-2">
+              Welcome Back
+            </h1>
+            <p className="text-slate-505 dark:text-slate-400">
+              Don't have an account?{" "}
+              <Link
+                to="/signup"
+                onClick={handleRegisterClick}
+                className="text-brand-secondary hover:underline transition font-semibold"
+              >
+                Register
+              </Link>
+            </p>
           </div>
-        </div>
 
-        <Button
-          type="submit"
-          loading={loading}
-          className="bg-brand-primary hover:bg-brand-primary-hover text-white w-full py-3.5"
-        >
-          {loading ? "Signing in..." : "Sign In"}
-        </Button>
-      </form>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-650 dark:text-slate-300 ml-1">
+                Email Address
+              </label>
+              <input
+                onChange={(e) => setemail(e.target.value)}
+                type="email"
+                value={email}
+                placeholder="you@example.com"
+                className="w-full bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
+                required
+              />
+            </div>
 
-      <p className="mt-8 text-center text-xs text-slate-400 dark:text-slate-500">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-655 dark:text-slate-300 ml-1">
+                Password
+              </label>
+              <input
+                onChange={(e) => setpassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="••••••••"
+                className="w-full bg-slate-550/5 dark:bg-slate-955 border border-slate-250 dark:border-slate-805 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
+                required
+              />
+              <div className="flex items-center justify-between pt-1 px-1">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 select-none cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={showPassword} 
+                    onChange={(e) => setShowPassword(e.target.checked)} 
+                    className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary border-slate-300 dark:border-slate-805 dark:bg-slate-955"
+                  />
+                  Show Password
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setView("forgot")}
+                  className="text-xs font-semibold text-brand-primary hover:underline cursor-pointer focus:outline-none border-none bg-transparent"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              loading={loading}
+              className="bg-brand-primary hover:bg-brand-primary-hover text-white w-full py-3.5"
+            >
+              {loading ? "Signing in..." : "Sign In"}
+            </Button>
+          </form>
+        </>
+      )}
+
+      {view === "forgot" && (
+        <>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-black text-slate-800 dark:text-white mb-2">
+              Forgot Password
+            </h1>
+            <p className="text-slate-505 dark:text-slate-450 text-xs">
+              Enter your registered email below to receive a verification OTP code.
+            </p>
+          </div>
+
+          <form onSubmit={handleForgotPasswordRequest} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-650 dark:text-slate-300 ml-1">
+                Email Address
+              </label>
+              <input
+                onChange={(e) => setResetEmail(e.target.value)}
+                type="email"
+                value={resetEmail}
+                placeholder="you@example.com"
+                className="w-full bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
+                required
+              />
+            </div>
+
+            <Button
+              type="submit"
+              loading={resetLoading}
+              className="bg-brand-primary hover:bg-brand-primary-hover text-white w-full py-3.5"
+            >
+              Send Reset Code
+            </Button>
+
+            <div className="text-center pt-2">
+              <button
+                type="button"
+                onClick={() => setView("login")}
+                className="text-xs font-bold text-slate-505 hover:text-slate-800 dark:hover:text-white transition cursor-pointer bg-transparent border-none focus:outline-none"
+              >
+                Back to Login
+              </button>
+            </div>
+          </form>
+        </>
+      )}
+
+      {view === "reset" && (
+        <>
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-black text-slate-800 dark:text-white mb-2">
+              Reset Password
+            </h1>
+            <p className="text-slate-505 dark:text-slate-450 text-xs break-all">
+              Verification reset code sent to: <span className="font-semibold text-brand-secondary">{resetEmail}</span>
+            </p>
+          </div>
+
+          <form onSubmit={handleResetPasswordSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-650 dark:text-slate-300 ml-1">
+                Reset OTP Code
+              </label>
+              <input
+                onChange={(e) => setResetOtp(e.target.value.replace(/\D/g, ""))}
+                type="text"
+                maxLength="6"
+                value={resetOtp}
+                placeholder="Enter 6-digit OTP"
+                className="w-full text-center text-xl tracking-wider bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100 font-bold"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-650 dark:text-slate-300 ml-1">
+                New Password
+              </label>
+              <input
+                onChange={(e) => setNewPassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                value={newPassword}
+                placeholder="Minimum 6 characters"
+                className="w-full bg-slate-550/5 dark:bg-slate-950 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-655 dark:text-slate-300 ml-1">
+                Confirm Password
+              </label>
+              <input
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                type={showPassword ? "text" : "password"}
+                value={confirmPassword}
+                placeholder="••••••••"
+                className="w-full bg-slate-550/5 dark:bg-slate-955 border border-slate-250 dark:border-slate-800 rounded-xl px-4 py-3.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-800 dark:text-slate-100"
+                required
+              />
+              <div className="flex items-center justify-between pt-1 px-1">
+                <label className="flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400 select-none cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={showPassword} 
+                    onChange={(e) => setShowPassword(e.target.checked)} 
+                    className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary border-slate-300 dark:border-slate-805 dark:bg-slate-955"
+                  />
+                  Show Password
+                </label>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              loading={resetLoading}
+              className="bg-brand-primary hover:bg-brand-primary-hover text-white w-full py-3.5"
+            >
+              Reset Password
+            </Button>
+
+            <div className="text-center pt-2">
+              <button
+                type="button"
+                onClick={() => setView("login")}
+                className="text-xs font-bold text-slate-550 hover:text-slate-800 dark:hover:text-white transition cursor-pointer bg-transparent border-none focus:outline-none"
+              >
+                Cancel and Back
+              </button>
+            </div>
+          </form>
+        </>
+      )}
+
+      <p className="mt-8 text-center text-xs text-slate-405 dark:text-slate-500">
         By signing in, you agree to our <Link to="/terms" onClick={onClose} className="hover:underline text-slate-500 dark:text-slate-400 font-semibold">Terms of Service</Link> and <Link to="/privacy" onClick={onClose} className="hover:underline text-slate-500 dark:text-slate-400 font-semibold">Privacy Policy</Link>.
       </p>
     </div>
