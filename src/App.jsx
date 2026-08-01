@@ -7,7 +7,7 @@ import About from './component/About.jsx'
 import Job from './component/Job.jsx'
 import Footer from './component/Footer.jsx'
 import Welcome from './component/Welcome.jsx'
-import { Route, Routes } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import ProtectedRoute from './component/ProtectedRoute.jsx'
 import Profile from './component/Profile.jsx'
 import AppliedJobs from './component/AppliedJobs.jsx'
@@ -73,6 +73,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<ProtectedRoute role="user"><Welcome /></ProtectedRoute>} />
+          <Route path="/welcome" element={<Navigate to="/dashboard" replace />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/appliedJobs" element={<ProtectedRoute role="user"><AppliedJobs /></ProtectedRoute>} />
           <Route path="/addJobs" element={<ProtectedRoute role="recruiter"><AddJob /></ProtectedRoute>} />
