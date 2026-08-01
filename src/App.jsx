@@ -69,16 +69,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/jobs" element={<ProtectedRoute><Job /></ProtectedRoute>} />
+          <Route path="/jobs" element={<ProtectedRoute role="user"><Job /></ProtectedRoute>} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
+          <Route path="/dashboard" element={<ProtectedRoute role="user"><Welcome /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-          <Route path="/appliedJobs" element={<ProtectedRoute><AppliedJobs /></ProtectedRoute>} />
+          <Route path="/appliedJobs" element={<ProtectedRoute role="user"><AppliedJobs /></ProtectedRoute>} />
           <Route path="/addJobs" element={<ProtectedRoute role="recruiter"><AddJob /></ProtectedRoute>} />
-          <Route path="/recruiterdashboard" element={<ProtectedRoute><RecruiterDashboard /></ProtectedRoute>} />
-          <Route path="/applicants/:jobId" element={<ProtectedRoute><Applicants /></ProtectedRoute>} />
-          <Route path="/resume" element={<ProtectedRoute><Resume /></ProtectedRoute>} />
+          <Route path="/recruiterdashboard" element={<ProtectedRoute role="recruiter"><RecruiterDashboard /></ProtectedRoute>} />
+          <Route path="/applicants/:jobId" element={<ProtectedRoute role="recruiter"><Applicants /></ProtectedRoute>} />
+          <Route path="/resume" element={<ProtectedRoute role="user"><Resume /></ProtectedRoute>} />
           <Route path="/verify-otp" element={<OTP />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
