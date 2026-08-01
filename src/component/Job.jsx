@@ -188,10 +188,10 @@ function Job() {
         </div>
 
         {/* Filters Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
           
           {/* Search box */}
-          <div className="relative">
+          <div className="relative col-span-2 md:col-span-1">
             <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base" />
             <input
               type="text"
