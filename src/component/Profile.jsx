@@ -19,9 +19,9 @@ function Profile({ isModal, onClose }) {
         if (user) {
             setName(user.name || '')
             if (isRecruiter) {
-                setSkills(user.companyName || '')
-                setExperience(user.companyWebsite || '')
-                setBio(user.companyDescription || '')
+                setSkills(user.companyName || user.skills || '')
+                setExperience(user.companyWebsite || user.experience || '')
+                setBio(user.companyDescription || user.bio || '')
             } else {
                 setSkills(user.skills || '')
                 setExperience(user.experience || '')
@@ -32,9 +32,9 @@ function Profile({ isModal, onClose }) {
 
     const handleUpdate = async () => {
         const currentName = (user.name || '').trim();
-        const currentSkills = (isRecruiter ? user.companyName : user.skills || '').trim();
-        const currentExperience = (isRecruiter ? user.companyWebsite : user.experience || '').trim();
-        const currentBio = (isRecruiter ? user.companyDescription : user.bio || '').trim();
+        const currentSkills = (isRecruiter ? (user.companyName || user.skills || '') : (user.skills || '')).trim();
+        const currentExperience = (isRecruiter ? (user.companyWebsite || user.experience || '') : (user.experience || '')).trim();
+        const currentBio = (isRecruiter ? (user.companyDescription || user.bio || '') : (user.bio || '')).trim();
 
         if (
             name.trim() === currentName &&
