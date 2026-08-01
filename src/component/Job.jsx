@@ -21,7 +21,7 @@ function Job() {
   const [location, setLocation] = useState("")
   const [jobType, setJobType] = useState("")
   const [salary, setSalary] = useState("")
-  const [sort, setSort] = useState("")
+  const [sort, setSort] = useState("match")
   const [loading, setLoading] = useState(true)
   const [applyLoadingId, setApplyLoadingId] = useState(null);
 
@@ -58,11 +58,55 @@ function Job() {
     return matchSearch && matchLocation && matchType && matchSalary
   })
 
-  let sortedJobs = [...filteredJobs]
+  const getMatchScore = (job) => {
+    if (!user) return 0;
+    
+    const userSkills = (user.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+    if (userSkills.length === 0) return 15;
+    
+    let jobSkills = [];
+    if (job.skills) {
+      jobSkills = job.skills.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+    }
+    
+    const matchedSkills = userSkills.filter(skill => jobSkills.includes(skill));
+    const jobText = `${job.title} ${job.description} ${job.skills || ""}`.toLowerCase();
+    const textMatchedSkills = userSkills.filter(skill => jobText.includes(skill));
+    
+    const titleKeywords = (job.title || "").toLowerCase().split(' ').map(w => w.trim()).filter(w => w.length > 2);
+    const targetJobKeywords = (user.targetJob || "").toLowerCase().split(' ').map(w => w.trim()).filter(w => w.length > 2);
+    const titleMatch = targetJobKeywords.some(keyword => titleKeywords.includes(keyword));
+    
+    let score = 0;
+    if (jobSkills.length > 0) {
+      const directRatio = matchedSkills.length / jobSkills.length;
+      const indirectRatio = textMatchedSkills.length / userSkills.length;
+      score = (directRatio * 0.75 + indirectRatio * 0.25) * 100;
+    } else {
+      score = (textMatchedSkills.length / userSkills.length) * 80;
+    }
+    
+    if (titleMatch) {
+      score += 20;
+    }
+    
+    const finalScore = Math.min(Math.round(score), 99);
+    return finalScore < 15 ? 15 + (finalScore % 10) : finalScore;
+  }
+
+  // Map match scores
+  let mappedJobs = filteredJobs.map(job => ({
+    ...job,
+    matchScore: getMatchScore(job)
+  }))
+
+  let sortedJobs = [...mappedJobs]
   if (sort === "low") {
     sortedJobs.sort((a, b) => a.salary - b.salary)
   } else if (sort === "high") {
     sortedJobs.sort((a, b) => b.salary - a.salary)
+  } else if (sort === "match") {
+    sortedJobs.sort((a, b) => b.matchScore - a.matchScore)
   }
 
   const handleClearFilters = () => {
@@ -202,7 +246,7 @@ function Job() {
             onChange={(e) => setSort(e.target.value)}
             className="w-full p-3 rounded-2xl border border-slate-355 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition text-sm"
           >
-            <option value="">Sort By</option>
+            <option value="match">Match Score (AI)</option>
             <option value="low">Salary: Low to High</option>
             <option value="high">Salary: High to Low</option>
           </select>
@@ -265,11 +309,24 @@ function Job() {
                           {job.company}
                         </p>
                       </div>
-                      {job.jobType && (
-                        <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0 select-none">
-                          {job.jobType}
-                        </span>
-                      )}
+                      <div className="text-right flex flex-col items-end gap-1.5">
+                        {job.jobType && (
+                          <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0 select-none">
+                            {job.jobType}
+                          </span>
+                        )}
+                        {user && (
+                          <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider select-none shrink-0 ${
+                            job.matchScore >= 80 
+                              ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400' 
+                              : job.matchScore >= 50
+                              ? 'bg-amber-100 text-amber-700 dark:bg-amber-955/40 dark:text-amber-400'
+                              : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
+                          }`}>
+                            {job.matchScore}% Match
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     {/* Details: Location & Salary */}
@@ -291,6 +348,39 @@ function Job() {
                       <p className="text-xs text-slate-550 dark:text-slate-450 line-clamp-3 leading-relaxed border-t border-slate-100 dark:border-slate-800/40 pt-3">
                         {job.description}
                       </p>
+                    )}
+
+                    {/* Skills Overlap Badges */}
+                    {user && (
+                      <div className="border-t border-slate-100 dark:border-slate-800/40 pt-3 space-y-1.5">
+                        <p className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider">AI Skill Match</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(() => {
+                            const uSkills = (user.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+                            const jSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+                            const matched = uSkills.filter(s => jSkills.includes(s));
+                            const missing = jSkills.filter(s => !uSkills.includes(s));
+
+                            return (
+                              <>
+                                {matched.length === 0 && missing.length === 0 && (
+                                  <span className="text-[10px] text-slate-400 italic">No skills overlap info available</span>
+                                )}
+                                {matched.map((skill, idx) => (
+                                  <span key={`m-${idx}`} className="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                                    ✓ {skill}
+                                  </span>
+                                ))}
+                                {missing.slice(0, 3).map((skill, idx) => (
+                                  <span key={`ms-${idx}`} className="bg-slate-100 text-slate-500 dark:bg-slate-850 dark:text-slate-500 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider">
+                                    {skill}
+                                  </span>
+                                ))}
+                              </>
+                            );
+                          })()}
+                        </div>
+                      </div>
                     )}
                   </div>
 
