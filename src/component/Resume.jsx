@@ -1,9 +1,23 @@
 import React, { useState } from "react"
 import axios from "axios"
 import toast from "react-hot-toast"
-import { HiOutlineDocumentText, HiOutlineCloudUpload, HiEye, HiTrash, HiCheckCircle, HiSwitchHorizontal, HiXCircle } from 'react-icons/hi'
+import { 
+    HiOutlineDocumentText, 
+    HiOutlineCloudUpload, 
+    HiEye, 
+    HiTrash, 
+    HiCheckCircle, 
+    HiSwitchHorizontal, 
+    HiXCircle,
+    HiSparkles,
+    HiPrinter,
+    HiArrowLeft
+} from 'react-icons/hi'
+import { useNavigate } from 'react-router-dom'
 
 function Resume() {
+    const navigate = useNavigate()
+    const [activeTab, setActiveTab] = useState("manager") // "manager" or "builder"
     const [file, setFile] = useState(null)
     const [loading, setLoading] = useState(false)
     const [deleteLoading, setDeleteLoading] = useState(false)
@@ -14,6 +28,81 @@ function Resume() {
         const storedUser = localStorage.getItem("user")
         return storedUser ? JSON.parse(storedUser) : null
     })
+
+    // AI Resume Builder state
+    const [resumeData, setResumeData] = useState({
+        name: user?.name || "",
+        email: user?.email || "",
+        phone: "",
+        website: user?.companyWebsite || "",
+        targetJob: "Software Engineer",
+        summary: user?.bio || "Detail-oriented professional seeking to leverage technical expertise to build scalable applications and solve business challenges.",
+        skills: user?.skills || "JavaScript, React, Node.js, HTML, CSS, MongoDB",
+        experience: "Worked on frontend user interfaces.\nBuilt backend REST API endpoints and connected database.",
+        education: "Bachelor of Science in Computer Science"
+    })
+
+    const [aiProcessing, setAiProcessing] = useState(false)
+
+    // AI Polish Handlers (Local template assistants)
+    const handleAIPolishSummary = () => {
+        setAiProcessing(true)
+        setTimeout(() => {
+            const formattedSkills = resumeData.skills.split(",").slice(0, 4).join(", ")
+            const newSummary = `Results-driven ${resumeData.targetJob || "Professional"} with hands-on expertise in ${formattedSkills || "modern technologies"}. Proven track record of collaborating in agile teams, optimizing code performance, and translating complex technical requirements into user-centric software solutions. Adept at rapid problem-solving and clean system architecture.`
+            setResumeData(prev => ({ ...prev, summary: newSummary }))
+            setAiProcessing(false)
+            toast.success("AI polished professional summary!")
+        }, 800)
+    }
+
+    const handleAIOptimizeExperience = () => {
+        setAiProcessing(true)
+        setTimeout(() => {
+            let exp = resumeData.experience
+            // Replace basic words with strong active engineering verbs
+            exp = exp.replace(/worked on/gi, "Engineered high-performance")
+                     .replace(/built/gi, "Architected secure and performant")
+                     .replace(/created/gi, "Developed responsive")
+                     .replace(/did/gi, "Spearheaded scalable")
+                     .replace(/helped/gi, "Collaborated on")
+            
+            setResumeData(prev => ({ ...prev, experience: exp }))
+            setAiProcessing(false)
+            toast.success("AI optimized experience with action verbs!")
+        }, 800)
+    }
+
+    const handleAIEnhanceSkills = () => {
+        setAiProcessing(true)
+        setTimeout(() => {
+            // Clean up duplicates and add relevant keywords based on target job
+            const job = (resumeData.targetJob || "").toLowerCase()
+            let skillsArr = resumeData.skills.split(",").map(s => s.trim()).filter(Boolean)
+            
+            // Add job specific keywords
+            if (job.includes("react") || job.includes("frontend") || job.includes("web")) {
+                if (!skillsArr.includes("TailwindCSS")) skillsArr.push("TailwindCSS")
+                if (!skillsArr.includes("TypeScript")) skillsArr.push("TypeScript")
+                if (!skillsArr.includes("REST APIs")) skillsArr.push("REST APIs")
+            }
+            if (job.includes("backend") || job.includes("node") || job.includes("engineer")) {
+                if (!skillsArr.includes("Express.js")) skillsArr.push("Express.js")
+                if (!skillsArr.includes("System Design")) skillsArr.push("System Design")
+                if (!skillsArr.includes("Git & Version Control")) skillsArr.push("Git & Version Control")
+            }
+
+            // Remove duplicates
+            const uniqueSkills = [...new Set(skillsArr)].join(", ")
+            setResumeData(prev => ({ ...prev, skills: uniqueSkills }))
+            setAiProcessing(false)
+            toast.success("AI tailored skills tags for target role!")
+        }, 600)
+    }
+
+    const handlePrint = () => {
+        window.print()
+    }
 
     const handleUpload = async (e) => {
         e.preventDefault()
@@ -79,167 +168,465 @@ function Resume() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[#F8FAFC] dark:bg-[#0f172a] p-4 transition-colors duration-300">
-            <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 p-8 rounded-3xl shadow-sm w-full max-w-md relative overflow-hidden">
-                {/* Decorative top bar */}
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-6 md:p-10 transition-colors duration-300">
+            {/* Hidden Print Area Stylesheet Injection */}
+            <style dangerouslySetInnerHTML={{__html: `
+                @media print {
+                    body * {
+                        visibility: hidden;
+                    }
+                    #resume-preview-card, #resume-preview-card * {
+                        visibility: visible;
+                    }
+                    #resume-preview-card {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        width: 100%;
+                        box-shadow: none;
+                        border: none;
+                        padding: 0;
+                        margin: 0;
+                        background: white !important;
+                        color: #0f172a !important;
+                    }
+                }
+            `}} />
 
-                {/* Header Block */}
-                <div className="text-center mb-8">
-                    <div className="w-14 h-14 bg-brand-primary/10 text-brand-primary rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-brand-primary/20">
-                        <HiOutlineDocumentText />
+            <div className="max-w-7xl mx-auto">
+                {/* Back to Dashboard & Title Block */}
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => navigate('/dashboard')}
+                            className="p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 hover:-translate-x-0.5 active:scale-95 transition cursor-pointer text-slate-505 hover:text-slate-800 dark:hover:text-white"
+                        >
+                            <HiArrowLeft className="text-xl" />
+                        </button>
+                        <div>
+                            <h1 className="text-4xl font-black text-slate-800 dark:text-white">
+                                ATS Resume Suite
+                            </h1>
+                            <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
+                                Create an ATS-optimized resume or manage your uploads.
+                            </p>
+                        </div>
                     </div>
-                    <h2 className="text-3xl font-black text-slate-800 dark:text-white">
-                        Resume Manager
-                    </h2>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
-                        Upload and manage your latest resume
-                    </p>
+
+                    {/* Tab Navigation */}
+                    <div className="flex bg-slate-100 dark:bg-slate-900 p-1.5 rounded-2xl border border-slate-200/40 dark:border-slate-800/60 self-stretch sm:self-auto">
+                        <button
+                            onClick={() => setActiveTab("manager")}
+                            className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                                activeTab === "manager"
+                                    ? "bg-white dark:bg-slate-800 text-brand-primary shadow-sm"
+                                    : "text-slate-500 hover:text-slate-805 dark:hover:text-white"
+                            }`}
+                        >
+                            <HiOutlineDocumentText className="text-lg" /> Upload Manager
+                        </button>
+                        <button
+                            onClick={() => setActiveTab("builder")}
+                            className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
+                                activeTab === "builder"
+                                    ? "bg-white dark:bg-slate-800 text-brand-primary shadow-sm"
+                                    : "text-slate-500 hover:text-slate-805 dark:hover:text-white"
+                            }`}
+                        >
+                            <HiSparkles className="text-lg animate-pulse text-amber-500" /> AI Resume Builder
+                        </button>
+                    </div>
                 </div>
 
-                {/* Main Content Area */}
-                {user?.resume && !isReplacing ? (
-                    /* Active Resume Display View */
-                    <div className="space-y-6">
-                        <div className="bg-teal-50/50 dark:bg-teal-950/20 border border-teal-200/50 dark:border-teal-900/30 rounded-2xl p-5 text-center flex flex-col items-center gap-3">
-                            <HiCheckCircle className="text-4xl text-teal-500" />
-                            <div>
-                                <h3 className="font-bold text-slate-850 dark:text-white text-base">Your Resume is Active</h3>
-                                <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">You can view, delete, or replace it below.</p>
+                {/* TAB 1: UPLOAD MANAGER */}
+                {activeTab === "manager" && (
+                    <div className="flex items-center justify-center py-10">
+                        <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 p-8 rounded-3xl shadow-sm w-full max-w-md relative overflow-hidden">
+                            {/* Decorative top bar */}
+                            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
+
+                            <div className="text-center mb-8">
+                                <div className="w-14 h-14 bg-brand-primary/10 text-brand-primary rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-brand-primary/20">
+                                    <HiOutlineDocumentText />
+                                </div>
+                                <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
+                                    Resume Manager
+                                </h2>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
+                                    Upload and manage your active PDF/DOC resume
+                                </p>
                             </div>
-                        </div>
 
-                        <div className="space-y-3">
-                            <button
-                                onClick={handleView}
-                                className="w-full py-3 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-sm"
-                            >
-                                <HiEye className="text-lg" /> View Current Resume
-                            </button>
+                            {user?.resume && !isReplacing ? (
+                                <div className="space-y-6">
+                                    <div className="bg-teal-50/50 dark:bg-teal-950/20 border border-teal-200/50 dark:border-teal-900/30 rounded-2xl p-5 text-center flex flex-col items-center gap-3">
+                                        <HiCheckCircle className="text-4xl text-teal-500" />
+                                        <div>
+                                            <h3 className="font-bold text-slate-850 dark:text-white text-base">Your Resume is Active</h3>
+                                            <p className="text-slate-505 dark:text-slate-400 text-xs mt-1">You can view, delete, or replace it below.</p>
+                                        </div>
+                                    </div>
 
-                            <div className="grid grid-cols-2 gap-3">
-                                <button
-                                    onClick={() => {
-                                        setFile(null);
-                                        setIsReplacing(true);
-                                    }}
-                                    className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/40 rounded-xl font-bold transition text-xs flex items-center justify-center gap-1.5 cursor-pointer"
-                                >
-                                    <HiSwitchHorizontal className="text-base" /> Replace
-                                </button>
+                                    <div className="space-y-3">
+                                        <button
+                                            onClick={handleView}
+                                            className="w-full py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl font-bold transition shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-sm"
+                                        >
+                                            <HiEye className="text-lg" /> View Current Resume
+                                        </button>
 
-                                <button
-                                    onClick={() => setShowConfirmModal(true)}
-                                    disabled={deleteLoading}
-                                    className="px-4 py-3 bg-rose-50 dark:bg-rose-950/20 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl font-bold transition text-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-                                >
-                                    {deleteLoading ? (
-                                        <div className="w-3.5 h-3.5 border-2 border-rose-600 border-t-transparent rounded-full animate-spin"></div>
-                                    ) : (
-                                        <>
-                                            <HiTrash className="text-base" /> Delete
-                                        </>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <button
+                                                onClick={() => {
+                                                    setFile(null);
+                                                    setIsReplacing(true);
+                                                }}
+                                                className="px-4 py-3 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/40 rounded-xl font-bold transition text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                                            >
+                                                <HiSwitchHorizontal className="text-base" /> Replace
+                                            </button>
+
+                                            <button
+                                                onClick={() => setShowConfirmModal(true)}
+                                                disabled={deleteLoading}
+                                                className="px-4 py-3 bg-rose-50 dark:bg-rose-950/20 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl font-bold transition text-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                                            >
+                                                {deleteLoading ? (
+                                                    <div className="w-3.5 h-3.5 border-2 border-rose-600 border-t-transparent rounded-full animate-spin"></div>
+                                                ) : (
+                                                    <>
+                                                        <HiTrash className="text-base" /> Delete
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <form onSubmit={handleUpload} className="space-y-6">
+                                    <div className="relative group">
+                                        <input
+                                            type="file"
+                                            id="resume-upload"
+                                            accept=".pdf,.doc,.docx"
+                                            onChange={(e) => {
+                                                const selectedFile = e.target.files[0];
+                                                if (!selectedFile) return;
+
+                                                if (user?.resume) {
+                                                    const parts = user.resume.split('/');
+                                                    const lastPart = parts[parts.length - 1];
+                                                    const currentName = lastPart.replace(/_\d+\.[^.]+$/, '').toLowerCase();
+                                                    const selectedName = selectedFile.name.split('.')[0].toLowerCase();
+
+                                                    if (selectedName === currentName) {
+                                                        toast.error("This resume is already uploaded");
+                                                        e.target.value = "";
+                                                        return;
+                                                    }
+                                                }
+                                                setFile(selectedFile);
+                                            }}
+                                            className="hidden"
+                                        />
+
+                                        <label
+                                            htmlFor="resume-upload"
+                                            className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-brand-primary dark:hover:border-brand-primary/70 rounded-2xl cursor-pointer bg-slate-50 dark:bg-slate-950 hover:bg-brand-primary/5 transition-all group"
+                                        >
+                                            <div className="flex flex-col items-center justify-center text-center p-4">
+                                                <HiOutlineCloudUpload className="text-3xl text-slate-400 group-hover:text-brand-primary transition mb-2" />
+                                                <p className="text-xs sm:text-sm font-semibold text-slate-655 dark:text-slate-350 px-2 leading-snug">
+                                                    Choose File to Upload
+                                                </p>
+                                                <p className="text-[10px] text-slate-400 mt-1">PDF, DOC, DOCX up to 5MB</p>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    {file && (
+                                        <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-805 rounded-2xl p-4 flex items-start gap-3">
+                                            <HiOutlineDocumentText className="text-2xl text-brand-primary shrink-0 mt-0.5" />
+                                            <div className="min-w-0 flex-1">
+                                                <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider">Selected File</p>
+                                                <p className="text-sm font-bold text-slate-800 dark:text-white truncate mt-0.5">{file.name}</p>
+                                                <p className="text-[10px] text-slate-400 mt-0.5">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                                            </div>
+                                        </div>
                                     )}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    /* Resume Upload View (If no resume, or if replacing) */
-                    <form onSubmit={handleUpload} className="space-y-6">
-                        <div className="relative group">
-                            <input
-                                type="file"
-                                id="resume-upload"
-                                accept=".pdf,.doc,.docx"
-                                onChange={(e) => {
-                                    const selectedFile = e.target.files[0];
-                                    if (!selectedFile) return;
 
-                                    if (user?.resume) {
-                                        const parts = user.resume.split('/');
-                                        const lastPart = parts[parts.length - 1];
-                                        const currentName = lastPart.replace(/_\d+\.[^.]+$/, '').toLowerCase();
-                                        const selectedName = selectedFile.name.split('.')[0].toLowerCase();
+                                    <div className="space-y-3">
+                                        <button
+                                            type="submit"
+                                            disabled={loading || !file}
+                                            className={`w-full py-3.5 rounded-xl font-bold transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer ${
+                                                loading || !file
+                                                    ? "bg-slate-100 dark:bg-slate-805 text-slate-400 dark:text-slate-500 cursor-not-allowed shadow-none"
+                                                    : "bg-brand-primary hover:bg-brand-primary-hover text-white"
+                                            }`}
+                                        >
+                                            {loading ? "Uploading..." : (isReplacing ? "Upload & Replace Resume" : "Upload Resume")}
+                                        </button>
 
-                                        if (selectedName === currentName) {
-                                            toast.error("This resume is already uploaded");
-                                            e.target.value = ""; // Reset file input selection
-                                            return;
-                                        }
-                                    }
-                                    setFile(selectedFile);
-                                }}
-                                className="hidden"
-                            />
-
-                            <label
-                                htmlFor="resume-upload"
-                                className="flex flex-col items-center justify-center w-full h-36 border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-brand-primary dark:hover:border-brand-primary/70 rounded-2xl cursor-pointer bg-slate-50 dark:bg-slate-950 hover:bg-brand-primary/5 transition-all group"
-                            >
-                                <div className="flex flex-col items-center justify-center text-center p-4">
-                                    <HiOutlineCloudUpload className="text-3xl text-slate-400 group-hover:text-brand-primary transition mb-2" />
-                                    <p className="text-xs sm:text-sm font-semibold text-slate-655 dark:text-slate-350 px-2 leading-snug">
-                                        Choose File to Upload
-                                    </p>
-                                    <p className="text-[10px] text-slate-400 mt-1">PDF, DOC, DOCX up to 5MB</p>
-                                </div>
-                            </label>
-                        </div>
-
-                        {/* Selected File Display Block BELOW the upload zone */}
-                        {file && (
-                            <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-805 rounded-2xl p-4 flex items-start gap-3 animate-fade-in">
-                                <HiOutlineDocumentText className="text-2xl text-brand-primary shrink-0 mt-0.5" />
-                                <div className="min-w-0 flex-1">
-                                    <p className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-wider">Selected File</p>
-                                    <p className="text-sm font-bold text-slate-800 dark:text-white truncate mt-0.5">{file.name}</p>
-                                    <p className="text-[10px] text-slate-400 mt-0.5">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="space-y-3">
-                            <button
-                                type="submit"
-                                disabled={loading || !file}
-                                className={`w-full py-3.5 rounded-xl font-bold transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center gap-2 cursor-pointer ${
-                                    loading || !file
-                                        ? "bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 cursor-not-allowed shadow-none"
-                                        : "bg-brand-primary hover:bg-brand-primary-hover text-white"
-                                }`}
-                            >
-                                {loading ? "Uploading..." : (isReplacing ? "Upload & Replace Resume" : "Upload Resume")}
-                            </button>
-
-                            {/* Cancel Replace Button */}
-                            {isReplacing && (
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setFile(null);
-                                        setIsReplacing(false);
-                                    }}
-                                    className="w-full py-3 bg-slate-55/20 hover:bg-slate-100 dark:bg-slate-950 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-350 rounded-xl font-bold transition flex items-center justify-center gap-1.5 cursor-pointer text-sm"
-                                >
-                                    <HiXCircle className="text-lg" /> Cancel
-                                </button>
+                                        {isReplacing && (
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setFile(null);
+                                                    setIsReplacing(false);
+                                                }}
+                                                className="w-full py-3 bg-slate-55/20 hover:bg-slate-100 dark:bg-slate-955 dark:hover:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-705 dark:text-slate-350 rounded-xl font-bold transition flex items-center justify-center gap-1.5 cursor-pointer text-sm"
+                                            >
+                                                <HiXCircle className="text-lg" /> Cancel
+                                            </button>
+                                        )}
+                                    </div>
+                                </form>
                             )}
                         </div>
-                    </form>
+                    </div>
+                )}
+
+                {/* TAB 2: AI RESUME BUILDER & OPTIMIZER */}
+                {activeTab === "builder" && (
+                    <div className="grid lg:grid-cols-12 gap-8 items-start">
+                        
+                        {/* Left Side: Form Controls */}
+                        <div className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 p-6 rounded-3xl shadow-sm space-y-6">
+                            <div>
+                                <h3 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                                    <HiSparkles className="text-amber-500 text-xl" /> AI Resume Fields
+                                </h3>
+                                <p className="text-xs text-slate-405 mt-1">Fill details and use AI assists to optimize summaries and skills.</p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-1">Full Name</label>
+                                        <input
+                                            value={resumeData.name}
+                                            onChange={(e) => setResumeData({ ...resumeData, name: e.target.value })}
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-1">Target Job Title</label>
+                                        <input
+                                            value={resumeData.targetJob}
+                                            onChange={(e) => setResumeData({ ...resumeData, targetJob: e.target.value })}
+                                            placeholder="e.g. React Developer"
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-1">Email</label>
+                                        <input
+                                            value={resumeData.email}
+                                            onChange={(e) => setResumeData({ ...resumeData, email: e.target.value })}
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-1">Phone Number</label>
+                                        <input
+                                            value={resumeData.phone}
+                                            onChange={(e) => setResumeData({ ...resumeData, phone: e.target.value })}
+                                            placeholder="e.g. +91 9876543210"
+                                            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-1">Portfolio/Website</label>
+                                    <input
+                                        value={resumeData.website}
+                                        onChange={(e) => setResumeData({ ...resumeData, website: e.target.value })}
+                                        placeholder="e.g. github.com/username"
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                    />
+                                </div>
+
+                                {/* Summary + AI Button */}
+                                <div className="space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500">Professional Summary</label>
+                                        <button
+                                            type="button"
+                                            onClick={handleAIPolishSummary}
+                                            disabled={aiProcessing}
+                                            className="text-[9px] font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1 hover:underline cursor-pointer"
+                                        >
+                                            <HiSparkles /> AI Polish
+                                        </button>
+                                    </div>
+                                    <textarea
+                                        rows="4"
+                                        value={resumeData.summary}
+                                        onChange={(e) => setResumeData({ ...resumeData, summary: e.target.value })}
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary resize-none leading-relaxed"
+                                    />
+                                </div>
+
+                                {/* Skills + AI Button */}
+                                <div className="space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500">Skills Tags (Comma-separated)</label>
+                                        <button
+                                            type="button"
+                                            onClick={handleAIEnhanceSkills}
+                                            disabled={aiProcessing}
+                                            className="text-[9px] font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1 hover:underline cursor-pointer"
+                                        >
+                                            <HiSparkles /> AI Tailor Tags
+                                        </button>
+                                    </div>
+                                    <input
+                                        value={resumeData.skills}
+                                        onChange={(e) => setResumeData({ ...resumeData, skills: e.target.value })}
+                                        placeholder="React, Node.js, Express, Tailwind"
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                    />
+                                </div>
+
+                                {/* Experience + AI Button */}
+                                <div className="space-y-1.5">
+                                    <div className="flex justify-between items-center">
+                                        <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500">Work Experience Summary</label>
+                                        <button
+                                            type="button"
+                                            onClick={handleAIOptimizeExperience}
+                                            disabled={aiProcessing}
+                                            className="text-[9px] font-extrabold text-amber-600 dark:text-amber-400 uppercase tracking-wider flex items-center gap-1 hover:underline cursor-pointer"
+                                        >
+                                            <HiSparkles /> AI Active Verbs
+                                        </button>
+                                    </div>
+                                    <textarea
+                                        rows="4"
+                                        value={resumeData.experience}
+                                        onChange={(e) => setResumeData({ ...resumeData, experience: e.target.value })}
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary resize-none leading-relaxed font-mono"
+                                    />
+                                </div>
+
+                                {/* Education */}
+                                <div>
+                                    <label className="block text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 mb-1">Education Details</label>
+                                    <input
+                                        value={resumeData.education}
+                                        onChange={(e) => setResumeData({ ...resumeData, education: e.target.value })}
+                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 p-2.5 rounded-xl text-xs text-slate-800 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Side: Live Premium A4 Preview Card */}
+                        <div className="lg:col-span-7 space-y-4">
+                            
+                            {/* Action Row */}
+                            <div className="flex justify-between items-center bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 px-6 py-4 rounded-2xl shadow-sm">
+                                <div>
+                                    <h4 className="text-xs font-bold text-slate-800 dark:text-white">Live Resume Sheet</h4>
+                                    <p className="text-[10px] text-slate-405 mt-0.5">Previews updates live in clean printable styling</p>
+                                </div>
+                                <button
+                                    onClick={handlePrint}
+                                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-2 cursor-pointer text-xs"
+                                >
+                                    <HiPrinter className="text-base" /> Print & Save PDF
+                                </button>
+                            </div>
+
+                            {/* The Simulated Sheet itself */}
+                            <div 
+                                id="resume-preview-card"
+                                className="bg-white text-slate-900 p-10 sm:p-12 shadow-md rounded-2xl border border-slate-200/80 min-h-[750px] relative font-sans leading-relaxed text-sm select-text"
+                            >
+                                {/* Sheet Header */}
+                                <div className="border-b-2 border-slate-800 pb-5 text-center">
+                                    <h2 className="text-2xl sm:text-3xl font-extrabold tracking-wide uppercase text-slate-900">{resumeData.name || "YOUR NAME"}</h2>
+                                    <p className="text-sm font-bold text-brand-primary uppercase tracking-wider mt-1">{resumeData.targetJob || "TARGET JOB TITLE"}</p>
+                                    
+                                    <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-500 mt-3 font-medium">
+                                        {resumeData.email && <span>{resumeData.email}</span>}
+                                        {resumeData.phone && <span>• {resumeData.phone}</span>}
+                                        {resumeData.website && <span>• {resumeData.website}</span>}
+                                    </div>
+                                </div>
+
+                                {/* Sheet Body */}
+                                <div className="space-y-6 mt-6">
+                                    {/* Summary section */}
+                                    {resumeData.summary && (
+                                        <div className="space-y-1.5">
+                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-0.5">Professional Summary</h3>
+                                            <p className="text-slate-700 text-xs sm:text-sm text-justify leading-relaxed">{resumeData.summary}</p>
+                                        </div>
+                                    )}
+
+                                    {/* Skills Section */}
+                                    {resumeData.skills && (
+                                        <div className="space-y-1.5">
+                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-0.5">Technical Expertise</h3>
+                                            <div className="flex flex-wrap gap-1.5 pt-1">
+                                                {resumeData.skills.split(",").map((skill, idx) => (
+                                                    <span key={idx} className="bg-slate-100 text-slate-800 px-2 py-0.5 rounded text-xs font-semibold">
+                                                        {skill.trim()}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Experience Section */}
+                                    {resumeData.experience && (
+                                        <div className="space-y-1.5">
+                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-0.5">Work History & Accomplishments</h3>
+                                            <div className="space-y-2 pt-1 font-sans">
+                                                {resumeData.experience.split("\n").map((line, idx) => {
+                                                    if (!line.trim()) return null;
+                                                    return (
+                                                        <div key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-slate-700">
+                                                            <span className="text-brand-primary font-bold mt-1">•</span>
+                                                            <p className="leading-relaxed">{line.trim()}</p>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Education Section */}
+                                    {resumeData.education && (
+                                        <div className="space-y-1.5">
+                                            <h3 className="text-xs font-black uppercase tracking-widest text-slate-900 border-b border-slate-200 pb-0.5">Education & Credentials</h3>
+                                            <p className="text-slate-700 text-xs sm:text-sm pt-1">{resumeData.education}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 )}
             </div>
 
             {/* Custom Confirmation Modal Overlay */}
             {showConfirmModal && (
-                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 animate-fade-in">
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4">
                     <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl max-w-sm w-full text-center space-y-5">
                         <div className="w-12 h-12 bg-rose-50 dark:bg-rose-950/20 text-rose-500 rounded-full flex items-center justify-center text-2xl mx-auto border border-rose-200/20">
                             <HiTrash />
                         </div>
                         <div>
-                            <h3 className="text-lg font-black text-slate-850 dark:text-white">Delete Resume?</h3>
-                            <p className="text-slate-500 dark:text-slate-400 text-xs mt-2 leading-relaxed">
+                            <h3 className="text-lg font-black text-slate-855 dark:text-white">Delete Resume?</h3>
+                            <p className="text-slate-550 dark:text-slate-400 text-xs mt-2 leading-relaxed">
                                 Are you sure you want to delete your resume? This action cannot be undone and will remove it from all job applications.
                             </p>
                         </div>
