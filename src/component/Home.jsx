@@ -35,7 +35,7 @@ function Home() {
           Your next career move starts here
         </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold text-center mb-6 tracking-tight text-slate-800 dark:text-white leading-tight">
+        <h1 className="text-4xl md:text-7xl font-extrabold text-center mb-6 tracking-tight text-slate-800 dark:text-white leading-tight">
           Bridge the Gap to <br />
           <span className="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-transparent">
             Your Dream Career
