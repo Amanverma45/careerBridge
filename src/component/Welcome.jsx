@@ -280,12 +280,14 @@ function Welcome() {
           {/* Applications List Tracker (2 Columns) */}
           <div className="lg:col-span-2 bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] shadow-sm flex flex-col justify-between">
             <div>
-              <div className="flex justify-between items-center mb-1">
-                <h2 className="text-xl font-black text-slate-850 dark:text-white">Applications Status Tracker</h2>
+              <div className="flex justify-between items-center gap-2 mb-1">
+                <h2 className="text-base sm:text-xl font-black text-slate-850 dark:text-white truncate whitespace-nowrap">
+                  Applications Status Tracker
+                </h2>
                 {appsArray.length > 0 && (
                   <button 
                     onClick={() => navigate('/appliedJobs')} 
-                    className="text-xs font-black text-brand-primary hover:underline hover:text-brand-primary-hover flex items-center gap-1 cursor-pointer border-none bg-transparent"
+                    className="text-xs font-black text-brand-primary hover:underline hover:text-brand-primary-hover flex items-center gap-1 cursor-pointer border-none bg-transparent whitespace-nowrap shrink-0"
                   >
                     View All
                   </button>
