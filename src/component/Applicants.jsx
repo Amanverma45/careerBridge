@@ -133,7 +133,7 @@ function Applicants() {
                         <p className="text-slate-500 dark:text-slate-400 text-sm">Applications will show up here once candidates apply.</p>
                     </div>
                 ) : (
-                    <div className={`grid gap-6 ${applicants.length === 1 ? "grid-cols-1 max-w-2xl mx-auto w-full" : "grid-cols-1 md:grid-cols-2"}`}>
+                    <div className={`grid gap-3.5 sm:gap-6 ${applicants.length === 1 ? "grid-cols-1 max-w-2xl mx-auto w-full" : "grid-cols-2"}`}>
                         {applicants.map((app, index) => {
                           const isShortlisted = app.status === "shortlisted"
                           const borderColors = [
@@ -146,30 +146,30 @@ function Applicants() {
                           return (
                             <div
                                 key={app._id}
-                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between`}
+                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between`}
                             >
                                 <div>
                                     {/* Candidate Row Header */}
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <div className="w-12 h-12 bg-brand-primary/10 text-brand-primary rounded-2xl flex items-center justify-center text-lg font-black border border-brand-primary/20 shrink-0">
+                                    <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
+                                        <div className="w-9 h-9 sm:w-12 sm:h-12 bg-brand-primary/10 text-brand-primary rounded-xl sm:rounded-2xl flex items-center justify-center text-sm sm:text-lg font-black border border-brand-primary/20 shrink-0">
                                             {app.userId?.name?.charAt(0).toUpperCase() || "?"}
                                         </div>
 
                                         <div className="min-w-0 flex-1">
-                                            <h3 className="text-base font-extrabold text-slate-800 dark:text-white truncate">
+                                            <h3 className="text-xs sm:text-base font-extrabold text-slate-800 dark:text-white truncate leading-tight">
                                                 {app.userId?.name || "Anonymous Candidate"}
                                             </h3>
-                                            <p className="text-slate-500 dark:text-slate-400 text-xs truncate flex items-center gap-1">
-                                                <HiOutlineMail className="shrink-0" /> {app.userId?.email || "No email"}
+                                            <p className="text-[10px] sm:text-xs text-slate-550 dark:text-slate-400 truncate flex items-center gap-1">
+                                                <HiOutlineMail className="shrink-0 text-xs" /> {app.userId?.email || "No email"}
                                             </p>
                                         </div>
                                     </div>
 
                                     {/* Application Information */}
-                                    <div className="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80">
-                                        <div className="flex justify-between items-center text-xs">
-                                            <span className="text-slate-400 dark:text-slate-500">Applied Date:</span>
-                                            <span className="font-semibold text-slate-600 dark:text-slate-350">
+                                    <div className="space-y-1.5 mt-3 pt-2.5 sm:mt-4 sm:pt-3 border-t border-slate-100 dark:border-slate-800/80">
+                                        <div className="flex justify-between items-center text-[10px] sm:text-xs">
+                                            <span className="text-slate-450 dark:text-slate-505">Applied Date:</span>
+                                            <span className="font-semibold text-slate-600 dark:text-slate-355">
                                                 {new Date(app.appliedAt).toLocaleDateString("en-GB", {
                                                     day: "2-digit",
                                                     month: "short",
@@ -178,9 +178,9 @@ function Applicants() {
                                             </span>
                                         </div>
 
-                                        <div className="flex justify-between items-center text-xs">
-                                            <span className="text-slate-400 dark:text-slate-500">Status:</span>
-                                            <span className={`px-2 py-0.5 rounded-lg font-bold text-[10px] uppercase border ${
+                                        <div className="flex justify-between items-center text-[10px] sm:text-xs">
+                                            <span className="text-slate-450 dark:text-slate-505">Status:</span>
+                                            <span className={`px-2 py-0.5 rounded-lg font-bold text-[9px] sm:text-[10px] uppercase border ${
                                                 isShortlisted 
                                                     ? "bg-teal-50 dark:bg-teal-950/20 text-teal-650 dark:text-teal-400 border-teal-200/50 dark:border-teal-900/30"
                                                     : "bg-amber-50 dark:bg-amber-950/20 text-amber-655 dark:text-amber-400 border-amber-200/50 dark:border-amber-900/30"
@@ -192,28 +192,28 @@ function Applicants() {
                                 </div>
 
                                 {/* Actions Block */}
-                                <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between gap-2.5">
-                                    <div className="flex gap-2">
+                                <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 w-full">
+                                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                         {app.userId?.resume ? (
                                             <>
                                                 <button
                                                     onClick={() => setSelectedResume(app.userId.resume)}
-                                                    className="px-3 py-2 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary rounded-xl font-bold transition text-xs flex items-center gap-1 cursor-pointer"
+                                                    className="px-2 py-1.5 sm:px-3 sm:py-2 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer w-full sm:w-auto"
                                                 >
-                                                    <HiEye className="text-sm" /> View
+                                                    <HiEye className="text-sm shrink-0" /> View
                                                 </button>
 
                                                 <a
                                                     href={app.userId.resume}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="px-3 py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl font-bold transition text-xs flex items-center gap-1"
+                                                    className="px-2 py-1.5 sm:px-3 sm:py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 w-full sm:w-auto"
                                                 >
-                                                    <HiDownload className="text-sm" /> Get
+                                                    <HiDownload className="text-sm shrink-0" /> Get
                                                 </a>
                                             </>
                                         ) : (
-                                            <span className="text-xs text-slate-400 dark:text-slate-500 italic py-2">
+                                            <span className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 italic py-1 text-center sm:text-left">
                                                 No resume uploaded
                                             </span>
                                         )}
@@ -223,13 +223,13 @@ function Applicants() {
                                         <button
                                             onClick={() => handleShortlist(app._id)}
                                             disabled={statusLoadingId === app._id}
-                                            className="px-3.5 py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white rounded-xl font-bold transition text-xs flex items-center gap-1 cursor-pointer disabled:opacity-50"
+                                            className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50 w-full sm:w-auto"
                                         >
                                             {statusLoadingId === app._id ? (
                                                 <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                                             ) : (
                                                 <>
-                                                    <HiCheck className="text-sm" /> Shortlist
+                                                    <HiCheck className="text-sm shrink-0" /> Shortlist
                                                 </>
                                             )}
                                         </button>
