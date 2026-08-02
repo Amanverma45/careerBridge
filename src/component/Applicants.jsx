@@ -192,38 +192,40 @@ function Applicants() {
                                 </div>
 
                                 {/* Actions Block */}
-                                <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 w-full">
-                                    <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex flex-col gap-2 w-full">
+                                    {/* View / Get inline row */}
+                                    <div className="grid grid-cols-2 gap-2 w-full">
                                         {app.userId?.resume ? (
                                             <>
                                                 <button
                                                     onClick={() => setSelectedResume(app.userId.resume)}
-                                                    className="px-2 py-1.5 sm:px-3 sm:py-2 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer w-full sm:w-auto"
+                                                    className="px-2 py-1.5 sm:px-3 sm:py-2 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer w-full"
                                                 >
-                                                    <HiEye className="text-sm shrink-0" /> View
+                                                    <HiEye className="text-xs sm:text-sm shrink-0" /> View
                                                 </button>
 
                                                 <a
                                                     href={app.userId.resume}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="px-2 py-1.5 sm:px-3 sm:py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 w-full sm:w-auto"
+                                                    className="px-2 py-1.5 sm:px-3 sm:py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 w-full"
                                                 >
-                                                    <HiDownload className="text-sm shrink-0" /> Get
+                                                    <HiDownload className="text-xs sm:text-sm shrink-0" /> Get
                                                 </a>
                                             </>
                                         ) : (
-                                            <span className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 italic py-1 text-center sm:text-left">
+                                            <span className="col-span-2 text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 italic py-1 text-center">
                                                 No resume uploaded
                                             </span>
                                         )}
                                     </div>
 
+                                    {/* Shortlist button below them taking full width */}
                                     {!isShortlisted && (
                                         <button
                                             onClick={() => handleShortlist(app._id)}
                                             disabled={statusLoadingId === app._id}
-                                            className="px-2.5 py-1.5 sm:px-3.5 sm:py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50 w-full sm:w-auto"
+                                            className="w-full py-1.5 sm:py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50"
                                         >
                                             {statusLoadingId === app._id ? (
                                                 <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -286,15 +288,15 @@ function Applicants() {
                                 >
                                     {isFullScreen ? "Exit Full" : "Full Screen"}
                                 </button>
-
-                                <button
-                                    onClick={() => setSelectedResume(null)}
-                                    className="p-2 text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 rounded-xl transition text-xs font-black cursor-pointer sm:ml-2 flex items-center justify-center border border-rose-200/30"
-                                    aria-label="Close preview"
-                                >
-                                    <HiX className="text-base" />
-                                </button>
                             </div>
+
+                            <button
+                                onClick={() => setSelectedResume(null)}
+                                className="absolute top-3.5 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer shrink-0"
+                                aria-label="Close preview"
+                            >
+                                <HiX className="text-xl stroke-[3px]" />
+                            </button>
                         </div>
 
                          {/* Resume Content View */}
