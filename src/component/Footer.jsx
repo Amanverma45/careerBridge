@@ -61,7 +61,7 @@ function Footer() {
             Platform
           </h3>
 
-          <ul className="space-y-4 text-sm font-medium">
+          <ul className="space-y-2 text-sm font-medium">
             {token ? (
               user?.role === "recruiter" ? (
                 <>
@@ -137,7 +137,7 @@ function Footer() {
             Legal
           </h3>
 
-          <ul className="space-y-4 text-sm font-medium">
+          <ul className="space-y-2 text-sm font-medium">
             <li>
               <button 
                 onClick={(e) => { e.preventDefault(); window.dispatchEvent(new Event("open-privacy")); }} 
@@ -163,7 +163,7 @@ function Footer() {
             Contact Us
           </h3>
 
-          <div className="space-y-2 text-sm text-slate-550 dark:text-slate-400">
+          <div className="space-y-1.5 text-sm text-slate-550 dark:text-slate-400">
             <a href="tel:+918435856067" className="block hover:text-brand-secondary transition-colors duration-200">
               <span className="font-bold text-xs uppercase tracking-wider text-slate-450 dark:text-slate-500 mr-1.5">Phone:</span> +91 84358 56067
             </a>
