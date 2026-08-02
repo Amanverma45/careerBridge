@@ -156,7 +156,7 @@ function AppliedJobs() {
                   <div className="space-y-3.5 sm:space-y-4">
                     {/* Card Header Stacked */}
                     <div className="space-y-2">
-                      <h2 className="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-snug break-words">
+                      <h2 className="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-snug truncate whitespace-nowrap">
                         {job.title || "Unknown Position"}
                       </h2>
                       <div className="flex">
