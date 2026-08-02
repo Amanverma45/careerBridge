@@ -105,15 +105,6 @@ function Profile({ isModal, onClose }) {
                                 <HiPencilAlt className="text-sm" /> Edit
                             </button>
                         </div>
-                        {isModal && (
-                            <button
-                                onClick={onClose}
-                                className="text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer -mt-1.5 -mr-1.5 shrink-0"
-                                aria-label="Close modal"
-                            >
-                                <HiX className="text-xl stroke-[3px]" />
-                            </button>
-                        )}
                     </div>
 
                     {/* Profile Details Block */}

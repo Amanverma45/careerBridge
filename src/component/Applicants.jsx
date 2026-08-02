@@ -301,7 +301,7 @@ function Applicants() {
 
                             <button
                                 onClick={() => setSelectedResume(null)}
-                                className="absolute top-3.5 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer shrink-0"
+                                className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shrink-0 z-50"
                                 aria-label="Close preview"
                             >
                                 <HiX className="text-xl stroke-[3px]" />

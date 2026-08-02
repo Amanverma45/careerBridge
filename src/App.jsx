@@ -106,10 +106,10 @@ function App() {
           <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
             <button
               onClick={() => setIsLoginOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer z-50"
               aria-label="Close modal"
             >
-              <HiX className="text-xl" />
+              <HiX className="text-xl stroke-[3px]" />
             </button>
             <Login isModal={true} onClose={() => setIsLoginOpen(false)} />
           </div>
@@ -121,10 +121,10 @@ function App() {
           <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
             <button
               onClick={() => setIsRegisterOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer z-50"
               aria-label="Close modal"
             >
-              <HiX className="text-xl" />
+              <HiX className="text-xl stroke-[3px]" />
             </button>
             <Signup isModal={true} onClose={() => setIsRegisterOpen(false)} />
           </div>
@@ -134,6 +134,13 @@ function App() {
       {isProfileOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button
+              onClick={() => setIsProfileOpen(false)}
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              aria-label="Close modal"
+            >
+              <HiX className="text-xl stroke-[3px]" />
+            </button>
             <Profile isModal={true} onClose={() => setIsProfileOpen(false)} />
           </div>
         </div>
@@ -145,9 +152,9 @@ function App() {
           <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto">
             <button
               onClick={() => setIsTermsOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
             >
-              <HiX className="text-xl" />
+              <HiX className="text-xl stroke-[3px]" />
             </button>
             <Terms isModal={true} />
           </div>
@@ -160,9 +167,9 @@ function App() {
           <div className="w-full max-w-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto">
             <button
               onClick={() => setIsPrivacyOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
             >
-              <HiX className="text-xl" />
+              <HiX className="text-xl stroke-[3px]" />
             </button>
             <Privacy isModal={true} />
           </div>
