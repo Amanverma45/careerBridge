@@ -60,22 +60,25 @@ function AddJob() {
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
 
         <div className="p-8 sm:p-10">
-          <div className="flex items-start gap-3.5 mb-6">
+          {/* Back Navigation Button */}
+          <div className="mb-4">
             <button
               onClick={() => navigate('/recruiterdashboard')}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white active:scale-95 transition cursor-pointer mt-0.5 shrink-0"
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white active:scale-95 transition cursor-pointer shrink-0"
               aria-label="Go back"
             >
               <HiArrowLeft className="text-base" />
             </button>
-            <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight">
-                Create New Job
-              </h1>
-              <p className="text-slate-500 dark:text-slate-400 mt-1 text-xs sm:text-sm">
-                Fill in the details to post a new opportunity.
-              </p>
-            </div>
+          </div>
+
+          {/* Header Title & Description */}
+          <div className="mb-6">
+            <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap">
+              Create New Job
+            </h1>
+            <p className="text-slate-500 dark:text-slate-400 mt-2 text-xs sm:text-sm whitespace-nowrap">
+              Fill in the details to post a new opportunity.
+            </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
