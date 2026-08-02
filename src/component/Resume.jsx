@@ -432,7 +432,7 @@ function Resume() {
                                     <div className="w-12 h-12 sm:w-14 sm:h-14 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-4 border border-amber-500/20">
                                         <HiSparkles className="animate-pulse" />
                                     </div>
-                                    <h2 className="text-xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight">
+                                    <h2 className="text-base xs:text-lg sm:text-3xl font-black text-slate-800 dark:text-white leading-tight whitespace-nowrap truncate">
                                         Build Your Resume with AI
                                     </h2>
                                     <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 max-w-md mx-auto">
