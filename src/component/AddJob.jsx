@@ -59,9 +59,9 @@ function AddJob() {
         {/* Decorative gradient top bar */}
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
 
-        <div className="p-8 sm:p-10">
-          {/* Back Navigation Button */}
-          <div className="mb-4">
+        <div className="p-5 sm:p-8 md:p-10">
+          {/* Back Navigation & Header Title in one line */}
+          <div className="flex items-center gap-3 mb-6 pr-4">
             <button
               onClick={() => navigate('/recruiterdashboard')}
               className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white active:scale-95 transition cursor-pointer shrink-0"
@@ -69,16 +69,14 @@ function AddJob() {
             >
               <HiArrowLeft className="text-base" />
             </button>
-          </div>
-
-          {/* Header Title & Description */}
-          <div className="mb-6">
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap">
-              Create New Job
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-2 text-xs sm:text-sm whitespace-nowrap">
-              Fill in the details to post a new opportunity.
-            </p>
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis">
+                Create New Job
+              </h1>
+              <p className="text-slate-550 dark:text-slate-400 mt-1.5 text-[11px] sm:text-xs md:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                Fill in the details to post a new opportunity.
+              </p>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
