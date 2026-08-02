@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useParams, useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
-import { HiArrowLeft, HiOutlineMail, HiOutlineCalendar, HiEye, HiDownload, HiCheck, HiX, HiMinus, HiPlus, HiRefresh } from 'react-icons/hi'
+import { HiArrowLeft, HiOutlineMail, HiOutlineCalendar, HiEye, HiDownload, HiCheck, HiX, HiMinus, HiPlus, HiRefresh, HiExternalLink } from 'react-icons/hi'
 
 function Applicants() {
     const { jobId } = useParams()
@@ -288,6 +288,15 @@ function Applicants() {
                                 >
                                     {isFullScreen ? "Exit Full" : "Full Screen"}
                                 </button>
+
+                                <a
+                                    href={selectedResume}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="px-3 py-2 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary rounded-xl transition text-xs font-bold flex items-center gap-1 cursor-pointer"
+                                >
+                                    <HiExternalLink className="text-sm" /> Open in New Tab
+                                </a>
                             </div>
 
                             <button
@@ -309,21 +318,16 @@ function Applicants() {
                                 </div>
                             ) : (
                                 iframeUrl && (
-                                    <div
+                                    <iframe
+                                        src={iframeUrl}
+                                        title="Candidate Resume"
                                         style={{
-                                            transform: `scale(${zoom})`,
-                                            transformOrigin: "top center"
+                                            width: '100%',
+                                            maxWidth: `${800 * zoom}px`,
+                                            height: `${1000 * zoom}px`
                                         }}
-                                        className="transition-transform duration-200"
-                                    >
-                                        <iframe
-                                            src={iframeUrl}
-                                            title="Candidate Resume"
-                                            width="800px"
-                                            height="1000px"
-                                            className="rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg bg-white"
-                                        />
-                                    </div>
+                                        className="rounded-2xl border border-slate-200 dark:border-slate-800 shadow-lg bg-white transition-all duration-200"
+                                    />
                                 )
                             )}
                         </div>
