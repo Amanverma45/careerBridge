@@ -282,7 +282,7 @@ function RecruiterDashboard() {
                       </div>
 
                       {/* Bottom Details/Actions Split Block */}
-                      <div className="flex flex-col sm:flex-row justify-between items-stretch gap-4 sm:gap-6 pt-3.5">
+                      <div className="flex flex-row justify-between items-stretch gap-3 sm:gap-6 pt-3.5">
                         {/* Left Details Block */}
                         <div className="flex-1 space-y-3">
                           <div className="space-y-2 text-sm text-slate-655 dark:text-slate-400">
@@ -312,7 +312,7 @@ function RecruiterDashboard() {
                         </div>
 
                         {/* Right Vertical Button Stack Column */}
-                        <div className="flex sm:flex-col gap-2.5 justify-center sm:pl-5 border-t sm:border-t-0 sm:border-l border-slate-100 dark:border-slate-800/80 pt-3.5 sm:pt-0 shrink-0 sm:w-[130px]">
+                        <div className="flex flex-col gap-2.5 justify-center pl-3 sm:pl-5 border-l border-slate-100 dark:border-slate-800/80 shrink-0 w-[115px] sm:w-[130px]">
                           {/* VIEW/APPLICANTS (Primary) */}
                           <button
                             onClick={() => navigate(`/applicants/${job._id}`)}
