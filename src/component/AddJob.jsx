@@ -60,19 +60,19 @@ function AddJob() {
         <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
 
         <div className="p-8 sm:p-10">
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-start gap-3.5 mb-6">
             <button
               onClick={() => navigate('/recruiterdashboard')}
-              className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-650 dark:text-slate-350 hover:text-slate-900 dark:hover:text-white active:scale-95 transition cursor-pointer"
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-650 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white active:scale-95 transition cursor-pointer mt-0.5 shrink-0"
               aria-label="Go back"
             >
-              <HiArrowLeft className="text-lg" />
+              <HiArrowLeft className="text-base" />
             </button>
             <div>
-              <h1 className="text-3xl font-black text-slate-800 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight">
                 Create New Job
               </h1>
-              <p className="text-slate-500 dark:text-slate-400 mt-0.5 text-sm">
+              <p className="text-slate-500 dark:text-slate-400 mt-1 text-xs sm:text-sm">
                 Fill in the details to post a new opportunity.
               </p>
             </div>
