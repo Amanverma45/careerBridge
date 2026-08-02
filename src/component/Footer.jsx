@@ -56,9 +56,8 @@ function Footer() {
           </div>
         </div>
 
-        {/* Platform Links */}
         <div className="col-span-1">
-          <h3 className="text-slate-900 dark:text-white font-bold mb-6 tracking-wider uppercase text-[10px]">
+          <h3 className="text-brand-primary dark:text-brand-secondary font-black tracking-wider uppercase text-[11px] pb-1 border-b-2 border-brand-secondary/30 dark:border-brand-secondary/50 w-fit mb-4 select-none">
             Platform
           </h3>
 
@@ -134,7 +133,7 @@ function Footer() {
 
         {/* Legal Links */}
         <div className="col-span-1">
-          <h3 className="text-slate-900 dark:text-white font-bold mb-6 tracking-wider uppercase text-[10px]">
+          <h3 className="text-brand-primary dark:text-brand-secondary font-black tracking-wider uppercase text-[11px] pb-1 border-b-2 border-brand-secondary/30 dark:border-brand-secondary/50 w-fit mb-4 select-none">
             Legal
           </h3>
 
@@ -160,7 +159,7 @@ function Footer() {
 
         {/* Contact Info */}
         <div className="col-span-2 md:col-span-1">
-          <h3 className="text-slate-900 dark:text-white font-bold mb-3 tracking-wider uppercase text-[10px]">
+          <h3 className="text-brand-primary dark:text-brand-secondary font-black tracking-wider uppercase text-[11px] pb-1 border-b-2 border-brand-secondary/30 dark:border-brand-secondary/50 w-fit mb-4 select-none">
             Contact Us
           </h3>
 
