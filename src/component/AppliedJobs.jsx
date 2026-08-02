@@ -154,17 +154,17 @@ function AppliedJobs() {
                   className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
                 >
                   <div className="space-y-3.5 sm:space-y-4">
-                    {/* Card Header */}
-                    <div className="flex justify-between items-start gap-1.5 sm:gap-3">
-                      <div className="space-y-0.5 sm:space-y-1 min-w-0">
-                        <h2 className="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-snug truncate">
-                          {job.title || "Unknown Position"}
-                        </h2>
-                        <p className="text-[10px] sm:text-xs font-semibold text-brand-primary truncate">
-                          {job.company || "Unknown Company"}
-                        </p>
+                    {/* Card Header Stacked */}
+                    <div className="space-y-2">
+                      <h2 className="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-snug break-words">
+                        {job.title || "Unknown Position"}
+                      </h2>
+                      <div className="flex">
+                        {getStatusBadge(app.status)}
                       </div>
-                      {getStatusBadge(app.status)}
+                      <p className="text-[10.5px] sm:text-xs font-semibold text-brand-primary break-words">
+                        {job.company || "Unknown Company"}
+                      </p>
                     </div>
 
                     {/* Salary & Details */}
