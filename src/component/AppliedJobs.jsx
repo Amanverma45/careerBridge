@@ -57,21 +57,21 @@ function AppliedJobs() {
     const s = (status || 'pending').toLowerCase()
     if (s === 'shortlisted' || s === 'accepted') {
       return (
-        <span className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30 rounded-full text-xs font-black capitalize select-none">
-          <FaCheckCircle className="text-[10px]" /> {s}
+        <span className="flex items-center gap-1 px-1.5 py-0.5 sm:px-3 sm:py-1 bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30 rounded-full text-[9px] sm:text-xs font-black capitalize select-none shrink-0">
+          <FaCheckCircle className="text-[8px] sm:text-[10px]" /> {s}
         </span>
       )
     }
     if (s === 'rejected') {
       return (
-        <span className="flex items-center gap-1.5 px-3 py-1 bg-rose-50 text-rose-600 dark:bg-rose-955/20 dark:text-rose-400 border border-rose-200 dark:border-rose-900/30 rounded-full text-xs font-black capitalize select-none">
-          <FaTimesCircle className="text-[10px]" /> {s}
+        <span className="flex items-center gap-1 px-1.5 py-0.5 sm:px-3 sm:py-1 bg-rose-50 text-rose-600 dark:bg-rose-955/20 dark:text-rose-400 border border-rose-200 dark:border-rose-900/30 rounded-full text-[9px] sm:text-xs font-black capitalize select-none shrink-0">
+          <FaTimesCircle className="text-[8px] sm:text-[10px]" /> {s}
         </span>
       )
     }
     return (
-      <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-50 text-amber-600 dark:bg-amber-955/20 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 rounded-full text-xs font-black capitalize select-none">
-        <FaHourglassHalf className="text-[10px]" /> under review
+      <span className="flex items-center gap-1 px-1.5 py-0.5 sm:px-3 sm:py-1 bg-amber-50 text-amber-600 dark:bg-amber-955/20 dark:text-amber-400 border border-amber-200 dark:border-amber-900/30 rounded-full text-[9px] sm:text-xs font-black capitalize select-none shrink-0">
+        <FaHourglassHalf className="text-[8px] sm:text-[10px]" /> under review
       </span>
     )
   }
@@ -141,22 +141,26 @@ function AppliedJobs() {
             </button>
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={`grid gap-4 sm:gap-6 ${
+            appliedJobs.length > 1 
+              ? 'grid-cols-2 lg:grid-cols-3' 
+              : 'grid-cols-1 max-w-2xl mx-auto'
+          }`}>
             {appliedJobs.map((app) => {
               const job = app.jobId || {}
               return (
                 <div
                   key={app._id}
-                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-3.5 sm:space-y-4">
                     {/* Card Header */}
-                    <div className="flex justify-between items-start gap-3">
-                      <div className="space-y-1">
-                        <h2 className="text-lg font-black text-slate-800 dark:text-white leading-snug line-clamp-1">
+                    <div className="flex justify-between items-start gap-1.5 sm:gap-3">
+                      <div className="space-y-0.5 sm:space-y-1 min-w-0">
+                        <h2 className="text-sm sm:text-lg font-black text-slate-800 dark:text-white leading-snug truncate">
                           {job.title || "Unknown Position"}
                         </h2>
-                        <p className="text-xs font-semibold text-brand-primary">
+                        <p className="text-[10px] sm:text-xs font-semibold text-brand-primary truncate">
                           {job.company || "Unknown Company"}
                         </p>
                       </div>
@@ -164,31 +168,31 @@ function AppliedJobs() {
                     </div>
 
                     {/* Salary & Details */}
-                    <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
+                    <div className="space-y-1.5 sm:space-y-2 text-[10px] sm:text-xs text-slate-500 dark:text-slate-400">
                       {job.location && (
-                        <p className="flex items-center gap-1.5">
-                          <FaMapMarkerAlt className="text-slate-400" /> {job.location}
+                        <p className="flex items-center gap-1.5 truncate">
+                          <FaMapMarkerAlt className="text-slate-400 shrink-0" /> {job.location}
                         </p>
                       )}
                       {job.jobType && (
-                        <p className="flex items-center gap-1.5">
-                          <FaBriefcase className="text-slate-400" /> {job.jobType}
+                        <p className="flex items-center gap-1.5 truncate">
+                          <FaBriefcase className="text-slate-400 shrink-0" /> {job.jobType}
                         </p>
                       )}
                       {job.salary && (
-                        <p className="flex items-center gap-1 text-brand-secondary font-bold text-sm pt-1">
-                          <FaRupeeSign className="text-xs" /> {job.salary}
+                        <p className="flex items-center gap-0.5 text-brand-secondary font-bold text-xs sm:text-sm pt-1 truncate">
+                          <FaRupeeSign className="text-[10px] sm:text-xs shrink-0" /> {job.salary}
                         </p>
                       )}
                     </div>
                   </div>
 
                   {/* Card Footer */}
-                  <div className="mt-6 border-t border-slate-100 dark:border-slate-800/60 pt-4 flex justify-between items-center text-[11px] text-slate-400 dark:text-slate-500">
-                    <span className="flex items-center gap-1">
-                      <FaCalendarAlt /> Applied on:
+                  <div className="mt-4 sm:mt-6 border-t border-slate-100 dark:border-slate-800/60 pt-3 sm:pt-4 flex justify-between items-center text-[9px] sm:text-[11px] text-slate-400 dark:text-slate-500">
+                    <span className="flex items-center gap-0.5 sm:gap-1">
+                      <FaCalendarAlt className="shrink-0" /> Applied:
                     </span>
-                    <span className="font-semibold text-slate-655 dark:text-slate-400">
+                    <span className="font-semibold text-slate-655 dark:text-slate-400 truncate">
                       {formatDate(app.appliedAt)}
                     </span>
                   </div>
