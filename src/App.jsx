@@ -104,6 +104,13 @@ function App() {
       {isLoginOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <button
+              onClick={() => setIsLoginOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              aria-label="Close modal"
+            >
+              <HiX className="text-xl" />
+            </button>
             <Login isModal={true} onClose={() => setIsLoginOpen(false)} />
           </div>
         </div>
@@ -112,6 +119,13 @@ function App() {
       {isRegisterOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative">
+            <button
+              onClick={() => setIsRegisterOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-250 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              aria-label="Close modal"
+            >
+              <HiX className="text-xl" />
+            </button>
             <Signup isModal={true} onClose={() => setIsRegisterOpen(false)} />
           </div>
         </div>

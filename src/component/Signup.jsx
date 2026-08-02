@@ -74,15 +74,6 @@ function Signup({ isModal, onClose }) {
 
   const cardContent = (
     <div className={`w-full relative ${isModal ? "" : "max-w-md bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-8 md:p-10 shadow-xl"}`}>
-      {isModal && (
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition"
-          aria-label="Close modal"
-        >
-          <HiX className="text-xl" />
-        </button>
-      )}
 
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-black text-slate-800 dark:text-white mb-2">
