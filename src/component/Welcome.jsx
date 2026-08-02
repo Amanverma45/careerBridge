@@ -190,21 +190,21 @@ function Welcome() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
           {stats.map((stat, i) => (
             <div
               key={i}
-              className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${stat.borderClass} p-5 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex items-center justify-between gap-4`}
+              className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${stat.borderClass} p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex items-center justify-between gap-2.5 sm:gap-4`}
             >
-              <div className="space-y-1">
-                <p className="text-slate-400 dark:text-slate-505 text-xs font-black uppercase tracking-wider">
+              <div className="space-y-0.5 sm:space-y-1 min-w-0">
+                <p className="text-slate-405 dark:text-slate-505 text-[10px] sm:text-xs font-black uppercase tracking-wider truncate">
                   {stat.label}
                 </p>
-                <h3 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white">
+                <h3 className="text-lg sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-tight">
                   {stat.value}
                 </h3>
               </div>
-              <div className={`text-xl p-3.5 rounded-2xl ${stat.color} shrink-0`}>
+              <div className={`text-sm sm:text-xl p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl ${stat.color} shrink-0`}>
                 {stat.icon}
               </div>
             </div>
