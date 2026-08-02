@@ -9,9 +9,9 @@ function Footer() {
       {/* Background Glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1/2 h-24 bg-brand-primary/5 dark:bg-brand-primary/10 blur-[100px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-5 relative z-10">
 
-        <div className="space-y-4">
+        <div className="col-span-2 md:col-span-1 space-y-4">
           <Link to="/" className="inline-block">
             <h2 className="text-2xl font-black tracking-tight text-brand-primary">
               Career<span className="text-brand-secondary">Bridge</span>
@@ -57,7 +57,7 @@ function Footer() {
         </div>
 
         {/* Platform Links */}
-        <div>
+        <div className="col-span-1">
           <h3 className="text-slate-900 dark:text-white font-bold mb-6 tracking-wider uppercase text-[10px]">
             Platform
           </h3>
@@ -133,7 +133,7 @@ function Footer() {
         </div>
 
         {/* Legal Links */}
-        <div>
+        <div className="col-span-1">
           <h3 className="text-slate-900 dark:text-white font-bold mb-6 tracking-wider uppercase text-[10px]">
             Legal
           </h3>
@@ -159,28 +159,17 @@ function Footer() {
         </div>
 
         {/* Contact Info */}
-        <div>
-          <h3 className="text-slate-900 dark:text-white font-bold mb-6 tracking-wider uppercase text-[10px]">
+        <div className="col-span-2 md:col-span-1">
+          <h3 className="text-slate-900 dark:text-white font-bold mb-3 tracking-wider uppercase text-[10px]">
             Contact Us
           </h3>
 
-          <div className="space-y-4">
-            <a href="tel:+918435856067" className="block group">
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold mb-1">
-                Call / WhatsApp
-              </p>
-              <p className="text-sm text-slate-700 dark:text-slate-300 group-hover:text-brand-secondary transition-colors duration-200">
-                +91 84358 56067
-              </p>
+          <div className="space-y-2 text-sm text-slate-550 dark:text-slate-400">
+            <a href="tel:+918435856067" className="block hover:text-brand-secondary transition-colors duration-200">
+              <span className="font-bold text-xs uppercase tracking-wider text-slate-450 dark:text-slate-500 mr-1.5">Phone:</span> +91 84358 56067
             </a>
-
-            <a href="mailto:yourcareerbridge.app@gmail.com" className="block group">
-              <p className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-bold mb-1">
-                Email Support
-              </p>
-              <p className="text-sm text-slate-700 dark:text-slate-300 group-hover:text-brand-secondary transition-colors duration-200">
-                yourcareerbridge.app@gmail.com
-              </p>
+            <a href="mailto:yourcareerbridge.app@gmail.com" className="block hover:text-brand-secondary transition-colors duration-200 break-all">
+              <span className="font-bold text-xs uppercase tracking-wider text-slate-455 dark:text-slate-500 mr-1.5">Email:</span> yourcareerbridge.app@gmail.com
             </a>
           </div>
         </div>
