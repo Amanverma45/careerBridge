@@ -242,7 +242,7 @@ function Welcome() {
                   return (
                     <div 
                       key={idx} 
-                      onClick={() => navigate('/profile')} 
+                      onClick={() => window.dispatchEvent(new Event("open-profile"))} 
                       className={`flex items-start gap-3 p-2.5 rounded-2xl border transition duration-200 cursor-pointer ${
                         isDone 
                           ? 'border-emerald-100/50 dark:border-emerald-950/20 bg-emerald-50/10 dark:bg-emerald-955/5 hover:bg-emerald-50/20 dark:hover:bg-emerald-955/10' 
@@ -404,7 +404,7 @@ function Welcome() {
           </div>
 
           <div
-            onClick={() => navigate('/profile')}
+            onClick={() => window.dispatchEvent(new Event("open-profile"))}
             className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-secondary hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left cursor-pointer"
           >
             <div className="relative z-10">
