@@ -97,10 +97,10 @@ function Applicants() {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => navigate('/recruiterdashboard')}
-                            className="p-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-650 dark:text-slate-350 hover:text-slate-900 dark:hover:text-white active:scale-95 transition cursor-pointer"
+                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
                             aria-label="Go back"
                         >
-                            <HiArrowLeft className="text-lg" />
+                            <HiArrowLeft className="text-base" />
                         </button>
                         <div>
                             <h1 className="text-3xl font-black text-slate-800 dark:text-white">

@@ -128,7 +128,7 @@ function RecruiterDashboard() {
           <div className="flex items-center gap-3 pr-4 w-full sm:w-auto">
             <button
               onClick={() => navigate('/')}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white border border-slate-200/60 dark:border-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
               aria-label="Go back"
             >
               <HiArrowLeft className="text-base" />

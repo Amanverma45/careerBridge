@@ -12,6 +12,7 @@ import {
   FaBriefcase, 
   FaSpinner 
 } from 'react-icons/fa'
+import { HiArrowLeft } from 'react-icons/hi'
 
 function AppliedJobs() {
   const [appliedJobs, setAppliedJobs] = useState([])
@@ -86,22 +87,23 @@ function AppliedJobs() {
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300">
       <div className="max-w-7xl mx-auto">
         
-        {/* Back navigation */}
-        <button 
-          onClick={() => navigate('/dashboard')}
-          className="flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary dark:text-slate-400 dark:hover:text-white transition mb-6 cursor-pointer group"
-        >
-          <FaArrowLeft className="group-hover:-translate-x-1 transition" /> Back to Dashboard
-        </button>
-
-        {/* Header section */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-black text-slate-850 dark:text-white">
-            Applied Jobs
-          </h1>
-          <p className="text-slate-400 dark:text-slate-500 mt-2 text-sm">
-            Track and monitor the status of all your submitted job applications.
-          </p>
+        {/* Back navigation & Header */}
+        <div className="flex items-center gap-3 mb-8 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
+            aria-label="Go back"
+          >
+            <HiArrowLeft className="text-base" />
+          </button>
+          <div className="min-w-0">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-855 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis">
+              Applied Jobs
+            </h1>
+            <p className="text-slate-400 dark:text-slate-500 mt-1.5 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+              Track and monitor the status of all your submitted job applications.
+            </p>
+          </div>
         </div>
 
         {/* List Content */}

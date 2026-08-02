@@ -209,7 +209,7 @@ function Profile({ isModal, onClose }) {
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => setIsEditMode(false)}
-                            className="p-2 rounded-xl bg-slate-105 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-800 dark:hover:text-white active:scale-95 transition cursor-pointer"
+                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
                             aria-label="Go back"
                         >
                             <HiArrowLeft className="text-base" />
