@@ -429,13 +429,13 @@ function Resume() {
                                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
 
                                 <div className="text-center">
-                                    <div className="w-14 h-14 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 border border-amber-500/20">
+                                    <div className="w-12 h-12 sm:w-14 sm:h-14 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center text-2xl sm:text-3xl mx-auto mb-4 border border-amber-500/20">
                                         <HiSparkles className="animate-pulse" />
                                     </div>
-                                    <h2 className="text-3xl font-black text-slate-800 dark:text-white">
+                                    <h2 className="text-xl sm:text-3xl font-black text-slate-800 dark:text-white leading-tight">
                                         Build Your Resume with AI
                                     </h2>
-                                    <p className="text-slate-500 dark:text-slate-400 text-sm mt-2">
+                                    <p className="text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2 max-w-md mx-auto">
                                         Fill in your details below. Our AI assistant will optimize your phrasing and generate an ATS-friendly template.
                                     </p>
                                 </div>
@@ -576,7 +576,7 @@ function Resume() {
                                     <button
                                         type="submit"
                                         disabled={aiProcessing}
-                                        className="w-full py-4 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-2xl font-black shadow-lg hover:shadow-xl active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-80"
+                                        className="w-full py-3 sm:py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-2xl font-black shadow-lg hover:shadow-xl active:scale-95 transition flex items-center justify-center gap-2 cursor-pointer disabled:opacity-80 text-xs sm:text-base whitespace-nowrap"
                                     >
                                         {aiProcessing ? (
                                             <>
