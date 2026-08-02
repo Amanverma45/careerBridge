@@ -10,12 +10,14 @@ const Services = () => {
     {
       icon: FaSearchDollar,
       title: "Smart Job Matching",
-      description: "Our AI algorithm connects your unique skills with the most relevant high-paying job opportunities."
+      description: "Our AI algorithm connects your unique skills with the most relevant high-paying job opportunities.",
+      roleBadge: "Candidates"
     },
     {
       icon: FaRobot,
       title: "AI Resume Builder",
-      description: "Generate professional, ATS-friendly resumes in minutes using our advanced AI writing assistant."
+      description: "Generate professional, ATS-friendly resumes in minutes using our advanced AI writing assistant.",
+      roleBadge: "Candidates"
     },
     {
       icon: FaUserTie,
@@ -25,12 +27,14 @@ const Services = () => {
     {
       icon: FaBriefcase,
       title: "Premium Listings",
-      description: "Get early access to exclusive job openings from top-tier tech companies and startups."
+      description: "Get early access to exclusive job openings from top-tier tech companies and startups.",
+      roleBadge: "Candidates"
     },
     {
       icon: FaChartBar,
       title: "Skill Gap Analysis",
-      description: "Identify exactly which skills you need to learn to land your dream role with our data insights."
+      description: "Identify exactly which skills you need to learn to land your dream role with our data insights.",
+      roleBadge: "Candidates"
     },
     {
       icon: FaRocket,
@@ -41,6 +45,14 @@ const Services = () => {
 
   const handleServiceClick = (index) => {
     const token = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+    const user = storedUser ? JSON.parse(storedUser) : null;
+
+    // Block recruiter from Candidate-only features
+    if (user?.role === "recruiter" && [0, 1, 3, 4].includes(index)) {
+      toast.error("This feature is exclusive to Candidate / Job Seeker accounts.");
+      return;
+    }
 
     // Force authentication popup if not logged in for profile-based features
     if (!token && [0, 1, 3, 4].includes(index)) {
@@ -116,6 +128,12 @@ const Services = () => {
                 className={`group p-3.5 xs:p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/30 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} hover:border-brand-primary/40 dark:hover:border-brand-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                {service.roleBadge && (
+                  <span className="absolute top-3.5 right-3.5 px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-secondary z-20">
+                    {service.roleBadge}
+                  </span>
+                )}
 
                 <div
                   className={`w-9 h-9 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm transition-all group-hover:scale-105 duration-300 ${iconColorClass} mb-4 sm:mb-6`}
