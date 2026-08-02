@@ -90,30 +90,30 @@ function Profile({ isModal, onClose }) {
     const cardContent = (
         <div className={`w-full relative ${isModal ? "" : "max-w-2xl bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-5 sm:p-7 shadow-sm space-y-3"}`}>
             
-            {/* Modal Close Button */}
-            {isModal && (
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 sm:top-[22px] right-4 sm:right-5 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition z-20 cursor-pointer"
-                    aria-label="Close modal"
-                >
-                    <HiX className="text-xl stroke-[3px]" />
-                </button>
-            )}
-
             {/* View Mode */}
             {!isEditMode ? (
                 <div className="space-y-3">
-                    <div className="flex flex-col gap-2 items-start justify-start">
-                        <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap pr-10 animate-fade-in">
-                            {isRecruiter ? "Company Profile" : "My Profile"}
-                        </h1>
-                        <button
-                            onClick={() => setIsEditMode(true)}
-                            className="px-3 py-1 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs flex items-center gap-1.5 transition cursor-pointer shrink-0 w-fit"
-                        >
-                            <HiPencilAlt className="text-sm" /> Edit
-                        </button>
+                    <div className="flex justify-between items-start w-full gap-4">
+                        <div className="flex flex-col gap-2 items-start justify-start">
+                            <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap animate-fade-in">
+                                {isRecruiter ? "Company Profile" : "My Profile"}
+                            </h1>
+                            <button
+                                onClick={() => setIsEditMode(true)}
+                                className="px-3 py-1 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs flex items-center gap-1.5 transition cursor-pointer shrink-0 w-fit"
+                            >
+                                <HiPencilAlt className="text-sm" /> Edit
+                            </button>
+                        </div>
+                        {isModal && (
+                            <button
+                                onClick={onClose}
+                                className="text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition cursor-pointer -mt-1.5 -mr-1.5 shrink-0"
+                                aria-label="Close modal"
+                            >
+                                <HiX className="text-xl stroke-[3px]" />
+                            </button>
+                        )}
                     </div>
 
                     {/* Profile Details Block */}
