@@ -448,56 +448,56 @@ function Resume() {
                                         
                                         <div className="grid sm:grid-cols-2 gap-4">
                                             <div>
-                                                <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Full Name</label>
+                                                <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Full Name</label>
                                                 <input
                                                     required
                                                     value={resumeData.name}
                                                     onChange={(e) => setResumeData({ ...resumeData, name: e.target.value })}
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Target Job Title</label>
+                                                <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Target Job Title</label>
                                                 <input
                                                     required
                                                     value={resumeData.targetJob}
                                                     onChange={(e) => setResumeData({ ...resumeData, targetJob: e.target.value })}
                                                     placeholder="e.g. React Developer"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-355 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-355 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                                 />
                                             </div>
                                         </div>
 
                                         <div className="grid sm:grid-cols-2 gap-4">
                                             <div>
-                                                <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Email</label>
+                                                <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Email</label>
                                                 <input
                                                     required
                                                     type="email"
                                                     value={resumeData.email}
                                                     onChange={(e) => setResumeData({ ...resumeData, email: e.target.value })}
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Phone Number</label>
+                                                <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Phone Number</label>
                                                 <input
                                                     required
                                                     value={resumeData.phone}
                                                     onChange={(e) => setResumeData({ ...resumeData, phone: e.target.value })}
                                                     placeholder="e.g. +91 9876543210"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-355 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-355 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                                 />
                                             </div>
                                         </div>
 
                                         <div>
-                                            <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Portfolio or Portfolio Website URL</label>
+                                            <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Portfolio or Portfolio Website URL</label>
                                             <input
                                                 value={resumeData.website}
                                                 onChange={(e) => setResumeData({ ...resumeData, website: e.target.value })}
                                                 placeholder="e.g. github.com/username"
-                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                             />
                                         </div>
                                     </div>
@@ -508,23 +508,23 @@ function Resume() {
                                         
                                         <div className="grid sm:grid-cols-2 gap-4">
                                             <div>
-                                                <label className="block text-[10px] font-black uppercase text-slate-455 dark:text-slate-500 mb-1">Education Details</label>
+                                                <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Education Details</label>
                                                 <input
                                                     required
                                                     value={resumeData.education}
                                                     onChange={(e) => setResumeData({ ...resumeData, education: e.target.value })}
                                                     placeholder="e.g. B.Tech in Computer Science"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-black uppercase text-slate-455 dark:text-slate-500 mb-1">Skills (Comma-separated)</label>
+                                                <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Skills (Comma-separated)</label>
                                                 <input
                                                     required
                                                     value={resumeData.skills}
                                                     onChange={(e) => setResumeData({ ...resumeData, skills: e.target.value })}
                                                     placeholder="React, Node.js, Express, MongoDB"
-                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
+                                                    className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-350 dark:border-slate-800 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary"
                                                 />
                                             </div>
                                         </div>
@@ -535,37 +535,37 @@ function Resume() {
                                         <h3 className="text-sm font-black uppercase tracking-wider text-slate-400 dark:text-slate-500 border-b border-slate-100 dark:border-slate-800/80 pb-1">3. Projects & Work History</h3>
                                         
                                         <div>
-                                            <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Work Experience Details</label>
+                                            <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Work Experience Details</label>
                                             <textarea
                                                 required
                                                 rows="3"
                                                 value={resumeData.experience}
                                                 onChange={(e) => setResumeData({ ...resumeData, experience: e.target.value })}
                                                 placeholder="e.g. Worked as frontend engineer. Engineered user dashboards and managed APIs."
-                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-805 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary font-mono"
+                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-850 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary font-mono"
                                             />
                                         </div>
 
                                         <div>
-                                            <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Projects Description</label>
+                                            <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Projects Description</label>
                                             <textarea
                                                 required
                                                 rows="3"
                                                 value={resumeData.projects}
                                                 onChange={(e) => setResumeData({ ...resumeData, projects: e.target.value })}
                                                 placeholder="e.g. E-Commerce App: Built with React/Node/MongoDB featuring Stripe checkout."
-                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-805 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary font-mono"
+                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-850 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary font-mono"
                                             />
                                         </div>
 
                                         <div>
-                                            <label className="block text-[10px] font-black uppercase text-slate-450 dark:text-slate-500 mb-1">Professional Summary / Bio</label>
+                                            <label className="block text-xs font-black uppercase text-slate-500 dark:text-slate-400 mb-1">Professional Summary / Bio</label>
                                             <textarea
                                                 required
                                                 rows="3"
                                                 value={resumeData.summary}
                                                 onChange={(e) => setResumeData({ ...resumeData, summary: e.target.value })}
-                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-805 p-3 rounded-xl text-sm text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary leading-relaxed"
+                                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-350 dark:border-slate-850 py-2.5 px-3 rounded-xl text-xs text-slate-805 dark:text-slate-100 focus:outline-none focus:border-brand-primary leading-relaxed"
                                             />
                                         </div>
                                     </div>
