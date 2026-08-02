@@ -94,7 +94,7 @@ function Profile({ isModal, onClose }) {
             {isModal && (
                 <button
                     onClick={onClose}
-                    className="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition z-20 cursor-pointer"
+                    className="absolute top-4 sm:top-[22px] right-4 sm:right-5 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition z-20 cursor-pointer"
                     aria-label="Close modal"
                 >
                     <HiX className="text-xl stroke-[3px]" />
@@ -105,7 +105,7 @@ function Profile({ isModal, onClose }) {
             {!isEditMode ? (
                 <div className="space-y-3">
                     <div className="flex flex-col gap-2 items-start justify-start">
-                        <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap pr-8 animate-fade-in">
+                        <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap pr-10 animate-fade-in">
                             {isRecruiter ? "Company Profile" : "My Profile"}
                         </h1>
                         <button
@@ -119,24 +119,22 @@ function Profile({ isModal, onClose }) {
                     {/* Profile Details Block */}
                     <div className="space-y-3 relative">
                         {/* Header Info Block */}
-                        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
-                            <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-855 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-brand-primary text-xl shadow-inner shrink-0">
+                        <div className="flex flex-row gap-3.5 items-start pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+                            <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-855 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-brand-primary text-xl shadow-inner shrink-0 mt-0.5">
                                 {isRecruiter ? <HiOutlineOfficeBuilding /> : <HiOutlineUser />}
                             </div>
-                            <div className="space-y-0.5">
-                                <h2 className="text-lg font-extrabold text-slate-800 dark:text-white leading-tight">
+                            <div className="flex flex-col gap-0.5 min-w-0">
+                                <h2 className="text-lg font-extrabold text-slate-800 dark:text-white leading-tight truncate">
                                     {isRecruiter ? (skills || "Company Name Not Added") : (name || "Name Not Added")}
                                 </h2>
-                                <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-500 dark:text-slate-400">
-                                    {isRecruiter && (
-                                        <span className="flex items-center gap-1">
-                                            <HiOutlineUser className="text-slate-450" /> Recruiter: {name || "Name not specified"}
-                                        </span>
-                                    )}
-                                    <span className="flex items-center gap-1">
-                                        <HiOutlineMail className="text-slate-455" /> {user.email}
-                                    </span>
-                                </div>
+                                {isRecruiter && (
+                                    <p className="flex items-center gap-1.5 text-xs text-slate-550 dark:text-slate-400 leading-tight">
+                                        <HiOutlineUser className="text-slate-450 shrink-0" /> Recruiter: {name || "Name not specified"}
+                                    </p>
+                                )}
+                                <p className="flex items-center gap-1.5 text-xs text-slate-550 dark:text-slate-400 leading-tight">
+                                    <HiOutlineMail className="text-slate-455 shrink-0" /> {user.email}
+                                </p>
                             </div>
                         </div>
 
