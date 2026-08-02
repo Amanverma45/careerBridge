@@ -227,8 +227,8 @@ function Resume() {
 
             <div className="max-w-7xl mx-auto">
                 {/* Back to Dashboard & Title Block */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-200/60 dark:border-slate-800/60 w-full">
+                    <div className="flex items-center gap-3 pr-4 min-w-0 w-full sm:w-auto">
                         <button
                             onClick={() => navigate('/dashboard')}
                             className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
@@ -236,11 +236,11 @@ function Resume() {
                         >
                             <HiArrowLeft className="text-base" />
                         </button>
-                        <div>
-                            <h1 className="text-4xl font-black text-slate-800 dark:text-white">
+                        <div className="min-w-0">
+                            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis">
                                 ATS Resume Suite
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-1 text-sm">
+                            <p className="text-slate-500 dark:text-slate-400 mt-1.5 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                                 Create an ATS-optimized resume or manage your uploads.
                             </p>
                         </div>

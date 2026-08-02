@@ -93,8 +93,8 @@ function Applicants() {
             <div className="max-w-6xl mx-auto px-6">
                 
                 {/* Header Section */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
-                    <div className="flex items-center gap-3">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-6 border-b border-slate-200/60 dark:border-slate-800/60 w-full">
+                    <div className="flex items-center gap-3 pr-4 min-w-0 w-full sm:w-auto">
                         <button
                             onClick={() => navigate('/recruiterdashboard')}
                             className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
@@ -102,18 +102,18 @@ function Applicants() {
                         >
                             <HiArrowLeft className="text-base" />
                         </button>
-                        <div>
-                            <h1 className="text-3xl font-black text-slate-800 dark:text-white">
+                        <div className="min-w-0">
+                            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis">
                                 Applicants
                             </h1>
-                            <p className="text-slate-500 dark:text-slate-400 mt-0.5 text-sm">
+                            <p className="text-slate-500 dark:text-slate-400 mt-1.5 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
                                 Review candidates who applied for this job.
                             </p>
                         </div>
                     </div>
 
                     {applicants.length > 0 && (
-                        <span className="px-4 py-2 bg-brand-primary/10 text-brand-primary font-bold rounded-xl text-sm shrink-0">
+                        <span className="px-4 py-2 bg-brand-primary/10 text-brand-primary font-bold rounded-xl text-sm shrink-0 w-full sm:w-auto text-center sm:text-left">
                             Total: {applicants.length} Candidates
                         </span>
                     )}
@@ -126,14 +126,14 @@ function Applicants() {
                     </div>
                 ) : applicants.length === 0 ? (
                     <div className="bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 p-16 rounded-3xl text-center shadow-sm max-w-lg mx-auto">
-                        <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-950 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto mb-4">
+                        <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-955 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto mb-4">
                             <HiOutlineCalendar />
                         </div>
                         <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-1">No Applicants Yet</h3>
                         <p className="text-slate-500 dark:text-slate-400 text-sm">Applications will show up here once candidates apply.</p>
                     </div>
                 ) : (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className={`grid gap-6 ${applicants.length === 1 ? "grid-cols-1 max-w-2xl mx-auto w-full" : "grid-cols-1 md:grid-cols-2"}`}>
                         {applicants.map((app, index) => {
                           const isShortlisted = app.status === "shortlisted"
                           const borderColors = [
