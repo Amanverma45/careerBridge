@@ -88,13 +88,13 @@ function Profile({ isModal, onClose }) {
     }
 
     const cardContent = (
-        <div className={`w-full relative ${isModal ? "" : "max-w-2xl bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4"}`}>
+        <div className={`w-full relative ${isModal ? "" : "max-w-2xl bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-5 sm:p-7 shadow-sm space-y-3"}`}>
             
             {/* Modal Close Button */}
             {isModal && (
                 <button
                     onClick={onClose}
-                    className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition z-20 cursor-pointer"
+                    className="absolute top-3.5 right-3.5 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 p-2 rounded-lg hover:bg-slate-105 dark:hover:bg-slate-800 transition z-20 cursor-pointer"
                     aria-label="Close modal"
                 >
                     <HiX className="text-xl stroke-[3px]" />
@@ -103,45 +103,45 @@ function Profile({ isModal, onClose }) {
 
             {/* View Mode */}
             {!isEditMode ? (
-                <div className="space-y-4">
-                    <div className="flex flex-col gap-2 items-start justify-start pr-12">
-                        <h1 className="text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap animate-fade-in">
+                <div className="space-y-3">
+                    <div className="flex flex-col gap-2 items-start justify-start">
+                        <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap pr-8 animate-fade-in">
                             {isRecruiter ? "Company Profile" : "My Profile"}
                         </h1>
                         <button
                             onClick={() => setIsEditMode(true)}
-                            className="px-3.5 py-1.5 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-sm flex items-center gap-1.5 transition cursor-pointer shrink-0 w-fit"
+                            className="px-3 py-1 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs flex items-center gap-1.5 transition cursor-pointer shrink-0 w-fit"
                         >
-                            <HiPencilAlt className="text-base" /> Edit
+                            <HiPencilAlt className="text-sm" /> Edit
                         </button>
                     </div>
 
                     {/* Profile Details Block */}
-                    <div className="space-y-4 relative">
+                    <div className="space-y-3 relative">
                         {/* Header Info Block */}
-                        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-                            <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-855 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-brand-primary text-2xl shadow-inner shrink-0">
+                        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center pb-2 border-b border-slate-200/60 dark:border-slate-800/60">
+                            <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-855 border border-slate-100 dark:border-slate-800 flex items-center justify-center text-brand-primary text-xl shadow-inner shrink-0">
                                 {isRecruiter ? <HiOutlineOfficeBuilding /> : <HiOutlineUser />}
                             </div>
-                            <div className="space-y-1">
-                                <h2 className="text-xl font-extrabold text-slate-800 dark:text-white leading-tight">
+                            <div className="space-y-0.5">
+                                <h2 className="text-lg font-extrabold text-slate-800 dark:text-white leading-tight">
                                     {isRecruiter ? (skills || "Company Name Not Added") : (name || "Name Not Added")}
                                 </h2>
-                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+                                <div className="flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-slate-500 dark:text-slate-400">
                                     {isRecruiter && (
-                                        <span className="flex items-center gap-1.5">
-                                            <HiOutlineUser className="text-slate-400" /> Recruiter: {name || "Name not specified"}
+                                        <span className="flex items-center gap-1">
+                                            <HiOutlineUser className="text-slate-450" /> Recruiter: {name || "Name not specified"}
                                         </span>
                                     )}
-                                    <span className="flex items-center gap-1.5">
-                                        <HiOutlineMail className="text-slate-400" /> {user.email}
+                                    <span className="flex items-center gap-1">
+                                        <HiOutlineMail className="text-slate-455" /> {user.email}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Main Grid Content */}
-                        <div className="space-y-4 text-slate-755 dark:text-slate-255">
+                        <div className="space-y-3 text-slate-755 dark:text-slate-255">
                             {isRecruiter ? (
                                 <>
                                     <div className="space-y-0.5">
@@ -151,52 +151,52 @@ function Profile({ isModal, onClose }) {
                                                 href={experience.startsWith('http') ? experience : `https://${experience}`}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="inline-flex items-center gap-1.5 text-brand-secondary hover:underline text-xs sm:text-sm font-semibold"
+                                                className="inline-flex items-center gap-1.5 text-brand-secondary hover:underline text-xs font-semibold"
                                             >
-                                                <HiOutlineGlobeAlt className="text-base" /> {experience}
+                                                <HiOutlineGlobeAlt className="text-sm" /> {experience}
                                             </a>
                                         ) : (
-                                            <p className="text-xs sm:text-sm text-slate-400 dark:text-slate-500 italic">No website specified</p>
+                                            <p className="text-xs text-slate-400 dark:text-slate-500 italic">No website specified</p>
                                         )}
                                     </div>
 
                                     <div className="space-y-0.5">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-555 tracking-wider">Company Description</h3>
-                                        <p className="text-xs sm:text-sm leading-relaxed text-slate-650 dark:text-slate-350 whitespace-pre-line">
+                                        <p className="text-xs leading-relaxed text-slate-650 dark:text-slate-350 whitespace-pre-line">
                                             {bio || "No company description added yet. Edit profile to add details."}
                                         </p>
                                     </div>
                                 </>
                             ) : (
                                 <>
-                                    <div className="space-y-1">
+                                    <div className="space-y-0.5">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-wider">Key Skills</h3>
                                         {skills ? (
                                             <div className="flex flex-wrap gap-1.5">
                                                 {skills.split(',').map((skill, i) => (
                                                     <span 
                                                         key={i}
-                                                        className="px-3 py-1 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200/40 dark:border-slate-800 text-[11px] sm:text-xs font-semibold text-slate-750 dark:text-slate-300 shadow-sm"
+                                                        className="px-2.5 py-0.5 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200/40 dark:border-slate-800 text-[10px] sm:text-xs font-semibold text-slate-750 dark:text-slate-300 shadow-sm"
                                                     >
                                                         {skill.trim()}
                                                     </span>
                                                 ))}
                                             </div>
                                         ) : (
-                                            <p className="text-xs sm:text-sm text-slate-455 italic">No skills listed yet.</p>
+                                            <p className="text-xs text-slate-455 italic">No skills listed yet.</p>
                                         )}
                                     </div>
 
                                     <div className="space-y-0.5">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-wider">Experience</h3>
-                                        <p className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">
+                                        <p className="text-xs font-semibold text-slate-800 dark:text-white">
                                             {experience || "No experience details added yet."}
                                         </p>
                                     </div>
 
                                     <div className="space-y-0.5">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-500 tracking-wider">Bio</h3>
-                                        <p className="text-xs sm:text-sm leading-relaxed text-slate-650 dark:text-slate-350 whitespace-pre-line">
+                                        <p className="text-xs leading-relaxed text-slate-650 dark:text-slate-350 whitespace-pre-line">
                                             {bio || "Write a brief bio about yourself..."}
                                         </p>
                                     </div>
