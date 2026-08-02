@@ -372,46 +372,52 @@ function Welcome() {
         <div className="grid md:grid-cols-3 gap-6">
           <div
             onClick={() => navigate('/jobs')}
-            className="group relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-700 p-6 rounded-[2rem] text-white shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
+            className="group relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-700 p-6 rounded-[2rem] text-white shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition duration-300 min-h-[160px] text-left"
           >
-            <div>
-              <h3 className="text-xl font-bold mb-2">Browse Job Openings</h3>
-              <p className="text-white/80 text-xs leading-relaxed max-w-[200px]">Explore remote, full-time and freelance roles matches your set.</p>
+            <div className="relative z-10 flex flex-col justify-between h-full min-h-[115px]">
+              <div>
+                <h3 className="text-xl font-bold mb-2">Browse Job Openings</h3>
+                <p className="text-white/80 text-xs leading-relaxed max-w-[200px]">Explore remote, full-time and freelance roles matches your set.</p>
+              </div>
+              <div className="flex items-center gap-2 font-bold text-xs group-hover:gap-4 transition-all mt-4">
+                Explore Now <FaArrowRight />
+              </div>
             </div>
-            <div className="flex items-center gap-2 font-bold text-xs group-hover:gap-4 transition-all">
-              Explore Now <FaArrowRight />
-            </div>
-            <FaBriefcase className="absolute -bottom-4 -right-4 text-[7rem] text-white/10 -rotate-12 pointer-events-none" />
+            <FaBriefcase className="absolute -bottom-4 -right-4 text-[7rem] text-white/10 -rotate-12 pointer-events-none z-0" />
           </div>
 
           <div
             onClick={() => navigate('/resume')}
-            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-accent p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-accent hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
+            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-accent p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-accent hover:-translate-y-1 transition duration-300 min-h-[160px] text-left cursor-pointer"
           >
-            <div>
-              <h3 className="text-xl font-bold mb-2">AI Resume Builder & Optimizer</h3>
-              <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[240px]">
-                Build a professional ATS-friendly resume from scratch with AI assistance, or upload & optimize your existing files.
-              </p>
+            <div className="relative z-10 flex flex-col justify-between h-full min-h-[115px]">
+              <div>
+                <h3 className="text-xl font-bold mb-2">AI Resume Builder & Optimizer</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[200px] xs:max-w-[240px]">
+                  Build a professional ATS-friendly resume from scratch with AI assistance, or upload & optimize your existing files.
+                </p>
+              </div>
+              <div className="flex items-center gap-2 font-bold text-xs text-[#F59E0B] group-hover:gap-4 transition-all mt-4">
+                Build & Optimize <FaArrowRight />
+              </div>
             </div>
-            <div className="flex items-center gap-2 font-bold text-xs text-[#F59E0B] group-hover:gap-4 transition-all">
-              Build & Optimize <FaArrowRight />
-            </div>
-            <FaFileAlt className="absolute -bottom-4 -right-4 text-[7rem] text-slate-100 dark:text-slate-800/20 -rotate-12 pointer-events-none" />
+            <FaFileAlt className="absolute -bottom-4 -right-4 text-[7rem] text-slate-100/70 dark:text-slate-800/20 -rotate-12 pointer-events-none z-0" />
           </div>
 
           <div
             onClick={() => navigate('/profile')}
-            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-secondary hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
+            className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-secondary hover:-translate-y-1 transition duration-300 min-h-[160px] text-left cursor-pointer"
           >
-            <div>
-              <h3 className="text-xl font-bold mb-2">Edit Account Profile</h3>
-              <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[200px]">Add experience, bio, details, skills and download profiles.</p>
+            <div className="relative z-10 flex flex-col justify-between h-full min-h-[115px]">
+              <div>
+                <h3 className="text-xl font-bold mb-2">Edit Account Profile</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed max-w-[200px]">Add experience, bio, details, skills and download profiles.</p>
+              </div>
+              <div className="flex items-center gap-2 font-bold text-xs text-brand-secondary group-hover:gap-4 transition-all mt-4">
+                Update Profile <FaArrowRight />
+              </div>
             </div>
-            <div className="flex items-center gap-2 font-bold text-xs text-brand-secondary group-hover:gap-4 transition-all">
-              Update Profile <FaArrowRight />
-            </div>
-            <FaUserCircle className="absolute -bottom-4 -right-4 text-[7rem] text-slate-100 dark:text-slate-800/20 -rotate-12 pointer-events-none" />
+            <FaUserCircle className="absolute -bottom-4 -right-4 text-[7rem] text-slate-100/70 dark:text-slate-800/20 -rotate-12 pointer-events-none z-0" />
           </div>
         </div>
 
