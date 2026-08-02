@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { HiPlus, HiPencilAlt, HiTrash, HiUserGroup, HiLocationMarker, HiCurrencyRupee, HiOfficeBuilding } from 'react-icons/hi';
+import { HiPlus, HiPencilAlt, HiTrash, HiUserGroup, HiLocationMarker, HiCurrencyRupee, HiOfficeBuilding, HiArrowLeft } from 'react-icons/hi';
 
 function RecruiterDashboard() {
   const navigate = useNavigate()
@@ -125,18 +125,27 @@ function RecruiterDashboard() {
         
         {/* Header Block */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10 pb-6 border-b border-slate-200/60 dark:border-slate-800/60">
-          <div>
-            <h1 className="text-4xl font-black text-slate-800 dark:text-white">
-              Recruiter Dashboard
-            </h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-2 text-sm">
-              Manage your jobs and track applicants easily.
-            </p>
+          <div className="flex items-center gap-3 pr-4 w-full sm:w-auto">
+            <button
+              onClick={() => navigate('/')}
+              className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white border border-slate-200/60 dark:border-slate-700/60 active:scale-95 transition cursor-pointer shrink-0"
+              aria-label="Go back"
+            >
+              <HiArrowLeft className="text-base" />
+            </button>
+            <div className="min-w-0">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis">
+                Recruiter Dashboard
+              </h1>
+              <p className="text-slate-500 dark:text-slate-400 mt-1.5 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+                Manage your jobs and track applicants easily.
+              </p>
+            </div>
           </div>
           
           <button
             onClick={() => navigate('/addJobs')}
-            className="px-5 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:scale-95 flex items-center gap-2 cursor-pointer text-sm shrink-0"
+            className="w-full sm:w-auto px-5 py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2 cursor-pointer text-sm shrink-0"
           >
             <HiPlus className="text-lg" /> Post New Job
           </button>
