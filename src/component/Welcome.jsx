@@ -375,7 +375,7 @@ function Welcome() {
             className="group relative overflow-hidden bg-gradient-to-br from-brand-primary to-blue-700 p-6 rounded-[2rem] text-white shadow-lg cursor-pointer hover:shadow-xl hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left"
           >
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-2">Browse Job Openings</h3>
+              <h3 className="text-base sm:text-xl font-bold mb-2 truncate whitespace-nowrap">Browse Job Openings</h3>
               <p className="text-white/80 text-xs leading-relaxed max-w-[200px]">Explore remote, full-time and freelance roles matches your set.</p>
             </div>
             <div className="relative z-10 flex items-center gap-2 font-bold text-xs group-hover:gap-4 transition-all">
@@ -389,7 +389,7 @@ function Welcome() {
             className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-accent p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-accent hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left cursor-pointer"
           >
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-2">AI Resume Builder & Optimizer</h3>
+              <h3 className="text-base sm:text-xl font-bold mb-2 truncate whitespace-nowrap">AI Resume Builder & Optimizer</h3>
               <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[240px]">
                 Build a professional ATS-friendly resume from scratch with AI assistance, or upload & optimize your existing files.
               </p>
@@ -405,7 +405,7 @@ function Welcome() {
             className="group relative overflow-hidden bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-secondary p-6 rounded-[2rem] text-slate-855 dark:text-white shadow-sm hover:shadow-md hover:border-brand-secondary hover:-translate-y-1 transition duration-300 flex flex-col justify-between min-h-[160px] text-left cursor-pointer"
           >
             <div className="relative z-10">
-              <h3 className="text-xl font-bold mb-2">Edit Account Profile</h3>
+              <h3 className="text-base sm:text-xl font-bold mb-2 truncate whitespace-nowrap">Edit Account Profile</h3>
               <p className="text-slate-400 dark:text-slate-550 text-xs leading-relaxed max-w-[200px]">Add experience, bio, details, skills and download profiles.</p>
             </div>
             <div className="relative z-10 flex items-center gap-2 font-bold text-xs text-brand-secondary group-hover:gap-4 transition-all">
