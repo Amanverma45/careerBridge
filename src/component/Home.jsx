@@ -26,7 +26,7 @@ function Home() {
 
   return (
     <>
-      <div className="relative min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] overflow-hidden flex flex-col items-center justify-center px-6 transition-colors duration-300">
+      <div className="relative min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] overflow-hidden flex flex-col items-center justify-center px-4 transition-colors duration-300">
 
         <div className="absolute left-[-10%] w-[35%] h-[35%] rounded-full bg-brand-secondary/10 dark:bg-brand-secondary/5 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[35%] h-[35%] rounded-full bg-brand-primary/10 dark:bg-brand-primary/5 blur-[120px]" />
