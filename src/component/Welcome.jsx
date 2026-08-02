@@ -17,6 +17,7 @@ import {
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import Button from './Button'
+import { HiX } from 'react-icons/hi'
 
 function Welcome() {
   const [applications, setApplications] = useState([])
@@ -443,9 +444,10 @@ function Welcome() {
           <div className="bg-white dark:bg-slate-905 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl max-w-md w-full relative text-slate-800 dark:text-slate-200">
             <button
               onClick={() => setIsSupportOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 text-sm font-bold cursor-pointer"
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              aria-label="Close support modal"
             >
-              ✕
+              <HiX className="text-xl stroke-[3px]" />
             </button>
             
             <div className="mb-6 text-left">
@@ -515,9 +517,10 @@ function Welcome() {
           <div className="bg-white dark:bg-slate-905 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl max-w-2xl w-full relative max-h-[85vh] overflow-y-auto text-slate-800 dark:text-slate-200">
             <button
               onClick={() => setIsHubOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-655 dark:hover:text-slate-200 text-lg font-bold cursor-pointer"
+              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer z-50"
+              aria-label="Close hub modal"
             >
-              ✕
+              <HiX className="text-xl stroke-[3px]" />
             </button>
 
             <div className="mb-6 text-left">
