@@ -1,10 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaRocket, FaRobot, FaBriefcase, FaUserTie, FaSearchDollar, FaChartBar } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const Services = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+            // After transition finishes (800ms), remove animation classes so hover works perfectly
+            setTimeout(() => {
+              entry.target.classList.remove(
+                'scroll-anim-card',
+                'is-visible',
+                'opacity-0',
+                '-translate-x-16',
+                'translate-x-16',
+                'rotate-[-1deg]',
+                'rotate-[1deg]',
+                'lg:-translate-x-24',
+                'lg:translate-y-24',
+                'lg:rotate-[-2deg]',
+                'lg:rotate-[2deg]',
+                'lg:translate-y-0'
+              );
+            }, 800);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: "0px 0px -50px 0px"
+      }
+    );
+
+    const cards = document.querySelectorAll('.scroll-anim-card');
+    cards.forEach((card) => observer.observe(card));
+
+    return () => {
+      cards.forEach((card) => observer.unobserve(card));
+    };
+  }, []);
+
+  const getAnimationClass = (index) => {
+    // 2-column layout (mobile/tablet)
+    const isMobileLeft = index % 2 === 0;
+    const mobileClass = isMobileLeft 
+      ? "-translate-x-16 rotate-[-1deg]" 
+      : "translate-x-16 rotate-[1deg]";
+
+    // 3-column layout (desktop)
+    let desktopClass = "";
+    if (index % 3 === 0) {
+      desktopClass = "lg:-translate-x-24 lg:translate-y-0 lg:rotate-[-2deg]";
+    } else if (index % 3 === 1) {
+      desktopClass = "lg:translate-x-0 lg:translate-y-24 lg:rotate-0";
+    } else {
+      desktopClass = "lg:translate-x-24 lg:translate-y-0 lg:rotate-[2deg]";
+    }
+
+    return `scroll-anim-card opacity-0 ${mobileClass} ${desktopClass}`;
+  };
 
   const servicesList = [
     {
@@ -127,7 +188,7 @@ const Services = () => {
               <div
                 key={index}
                 onClick={() => handleServiceClick(index)}
-                className={`group p-3.5 xs:p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/30 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} hover:border-brand-primary/40 dark:hover:border-brand-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden cursor-pointer`}
+                className={`group p-3.5 xs:p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-white dark:bg-slate-900/30 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} hover:border-brand-primary/40 dark:hover:border-brand-primary/40 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 relative overflow-hidden cursor-pointer ${getAnimationClass(index)}`}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 

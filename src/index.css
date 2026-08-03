@@ -317,3 +317,14 @@ html.dark .border-t-emerald-500 {
 html.dark .border-t-amber-500 {
   border-top-color: #f59e0b !important;
 }
+
+/* Scroll entrance animations */
+.scroll-anim-card {
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, opacity;
+}
+
+.scroll-anim-card.is-visible {
+  opacity: 1 !important;
+  transform: translate(0) rotate(0) !important;
+}
