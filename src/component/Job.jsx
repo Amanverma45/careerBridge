@@ -297,16 +297,27 @@ function Job() {
                 <div
                   key={job._id}
                   className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${
-                    isApplied ? 'border-t-emerald-500' : 'border-t-brand-primary'
+                    job.isPremium 
+                      ? 'border-t-amber-500 shadow-lg shadow-amber-500/5' 
+                      : isApplied 
+                      ? 'border-t-emerald-500' 
+                      : 'border-t-brand-primary'
                   } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
                 >
                   <div className="space-y-4">
                     {/* Card Title & Type */}
                     <div className="flex justify-between items-start gap-3">
                       <div>
-                        <h2 className="text-lg font-black text-slate-805 dark:text-white leading-snug line-clamp-1">
-                          {job.title}
-                        </h2>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <h2 className="text-lg font-black text-slate-805 dark:text-white leading-snug line-clamp-1">
+                            {job.title}
+                          </h2>
+                          {job.isPremium && (
+                            <span className="px-2 py-0.5 bg-gradient-to-r from-amber-500 to-yellow-400 text-white rounded-lg text-[9px] font-black uppercase tracking-wider shrink-0 select-none shadow-sm">
+                              👑 Premium
+                            </span>
+                          )}
+                        </div>
                         <p className="text-xs font-semibold text-brand-primary">
                           {job.company}
                         </p>

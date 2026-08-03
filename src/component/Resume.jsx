@@ -685,20 +685,20 @@ function Resume() {
                                 </div>
 
                                 {/* Right Side: The Premium A4 Sheet Preview */}
-                                <div className="lg:col-span-7">
+                                <div className="lg:col-span-7 w-full">
                                     <div 
                                         id="resume-preview-card"
-                                        className="bg-white text-slate-900 p-10 sm:p-12 shadow-md rounded-2xl border border-slate-200/80 min-h-[850px] relative font-sans leading-relaxed text-sm select-text"
+                                        className="bg-white text-slate-900 p-5 sm:p-10 md:p-12 shadow-md rounded-2xl border border-slate-200/80 min-h-[850px] relative font-sans leading-relaxed text-sm select-text text-left"
                                     >
                                         {/* Sheet Header */}
                                         <div className="border-b-2 border-slate-800 pb-5 text-center">
-                                            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-wide uppercase text-slate-900">{resumeData.name || "YOUR NAME"}</h2>
-                                            <p className="text-sm font-bold text-brand-primary uppercase tracking-wider mt-1">{resumeData.targetJob || "TARGET JOB TITLE"}</p>
+                                            <h2 className="text-xl sm:text-3xl font-extrabold tracking-wide uppercase text-slate-900">{resumeData.name || "YOUR NAME"}</h2>
+                                            <p className="text-xs sm:text-sm font-bold text-brand-primary uppercase tracking-wider mt-1">{resumeData.targetJob || "TARGET JOB TITLE"}</p>
                                             
-                                            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-550 mt-3 font-medium">
-                                                {resumeData.email && <span>{resumeData.email}</span>}
-                                                {resumeData.phone && <span>• {resumeData.phone}</span>}
-                                                {resumeData.website && <span>• {resumeData.website}</span>}
+                                            <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2.5 text-[10px] sm:text-xs text-slate-655 mt-3 font-medium">
+                                                {resumeData.email && <span className="px-2 py-0.5 bg-slate-100 rounded-md border border-slate-200/40">{resumeData.email}</span>}
+                                                {resumeData.phone && <span className="px-2 py-0.5 bg-slate-100 rounded-md border border-slate-200/40">{resumeData.phone}</span>}
+                                                {resumeData.website && <span className="px-2 py-0.5 bg-slate-100 rounded-md border border-slate-200/40">{resumeData.website}</span>}
                                             </div>
                                         </div>
 

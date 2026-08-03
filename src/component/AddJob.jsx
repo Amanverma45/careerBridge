@@ -11,6 +11,8 @@ function AddJob() {
   const [salary, setSalary] = useState('')
   const [description, setDescription] = useState('')
   const [jobType, setJobType] = useState('')
+  const [skills, setSkills] = useState('')
+  const [isPremium, setIsPremium] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
@@ -36,7 +38,9 @@ function AddJob() {
           salary,
           description,
           jobType,
-          postedBy: user._id
+          postedBy: user._id,
+          skills,
+          isPremium
         }
       )
       console.log("USER:", user)
@@ -88,7 +92,7 @@ function AddJob() {
                 onChange={(e) => setTitle(e.target.value)}
                 type="text"
                 placeholder="e.g. Backend Developer"
-                className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-850 dark:text-slate-100 text-sm"
+                className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-855 dark:text-slate-100 text-sm"
               />
             </div>
 
@@ -144,6 +148,32 @@ function AddJob() {
                 <option value="part-time">Part Time</option>
                 <option value="internship">Internship</option>
               </select>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-355">
+                Required Skills (comma separated)
+              </label>
+              <input
+                value={skills}
+                onChange={(e) => setSkills(e.target.value)}
+                type="text"
+                placeholder="e.g. React, Node.js, JavaScript"
+                className="w-full bg-slate-555/5 dark:bg-slate-955 border border-slate-355 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-855 dark:text-slate-100 text-sm"
+              />
+            </div>
+
+            <div className="flex items-center gap-2.5 py-1 select-none">
+              <input
+                id="isPremiumJob"
+                type="checkbox"
+                checked={isPremium}
+                onChange={(e) => setIsPremium(e.target.checked)}
+                className="w-4 h-4 rounded text-brand-primary border-slate-300 focus:ring-brand-primary transition cursor-pointer"
+              />
+              <label htmlFor="isPremiumJob" className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-355 cursor-pointer">
+                Mark as Featured Premium Listing
+              </label>
             </div>
 
             <div className="space-y-1">
