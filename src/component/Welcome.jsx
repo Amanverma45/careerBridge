@@ -608,7 +608,7 @@ function Welcome() {
               <h1 className="text-xl sm:text-2xl font-black text-slate-850 dark:text-white flex items-center gap-1.5">
                 Dashboard {isPremiumUser && <span className="text-xs bg-amber-500 text-white px-2 py-0.5 rounded-full uppercase tracking-wider flex items-center gap-1"><FaCrown className="text-[9px]" /> VIP</span>}
               </h1>
-              <p className="text-xs text-slate-405 dark:text-slate-500">Welcome, {user?.name || "Career Seeker"}</p>
+              <p className="text-xs text-slate-405 dark:text-slate-500">Manage your career progress and tracking</p>
             </div>
           </div>
 

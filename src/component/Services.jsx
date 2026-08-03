@@ -22,7 +22,8 @@ const Services = () => {
     {
       icon: FaUserTie,
       title: "Expert Career Coaching",
-      description: "Connect with industry veterans for 1-on-1 mentorship and personalized career roadmaps."
+      description: "Connect with industry veterans for 1-on-1 mentorship and personalized career roadmaps.",
+      roleBadge: "Candidates"
     },
     {
       icon: FaBriefcase,
@@ -39,7 +40,8 @@ const Services = () => {
     {
       icon: FaRocket,
       title: "Interview Prep",
-      description: "Practice with our AI mock interview tool and get real-time feedback on your performance."
+      description: "Practice with our AI mock interview tool and get real-time feedback on your performance.",
+      roleBadge: "Candidates"
     },
   ];
 
@@ -49,13 +51,13 @@ const Services = () => {
     const user = storedUser ? JSON.parse(storedUser) : null;
 
     // Block recruiter from Candidate-only features
-    if (user?.role === "recruiter" && [0, 1, 3, 4].includes(index)) {
+    if (user?.role === "recruiter" && [0, 1, 2, 3, 4, 5].includes(index)) {
       toast.error("This feature is exclusive to Candidate / Job Seeker accounts.");
       return;
     }
 
     // Force authentication popup if not logged in for profile-based features
-    if (!token && [0, 1, 3, 4].includes(index)) {
+    if (!token && [0, 1, 2, 3, 4, 5].includes(index)) {
       window.dispatchEvent(new Event("open-login"));
       toast.error("Please login to access this service.");
       return;
@@ -84,7 +86,7 @@ const Services = () => {
   };
 
   return (
-    <div className="bg-[#F8FAFC] dark:bg-[#0f172a] py-24 px-6 relative overflow-hidden transition-colors duration-300">
+    <div className="bg-[#F8FAFC] dark:bg-[#0f172a] pt-14 pb-24 px-6 relative overflow-hidden transition-colors duration-300">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-secondary/5 dark:bg-brand-secondary/3 blur-[120px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">

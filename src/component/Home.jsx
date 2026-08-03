@@ -26,7 +26,7 @@ function Home() {
 
   return (
     <>
-      <div className="relative min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] overflow-hidden flex flex-col items-center justify-center px-6 transition-colors duration-300">
+      <div className="relative min-h-[80vh] py-12 sm:py-20 bg-[#F8FAFC] dark:bg-[#0f172a] overflow-hidden flex flex-col items-center justify-center px-6 transition-colors duration-300">
 
         <div className="absolute left-[-10%] w-[35%] h-[35%] rounded-full bg-brand-secondary/10 dark:bg-brand-secondary/5 blur-[120px]" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[35%] h-[35%] rounded-full bg-brand-primary/10 dark:bg-brand-primary/5 blur-[120px]" />
@@ -46,10 +46,10 @@ function Home() {
           Discover verified opportunities, connect with trusted employers, and build a successful career with confidence through CareerBridge.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 w-full justify-center items-center">
+        <div className="flex gap-3 justify-center items-center w-full">
           <button
             onClick={handleExplore}
-            className="w-full sm:w-auto px-8 py-4 bg-brand-primary hover:bg-brand-primary-hover text-white font-semibold rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer"
+            className="px-5 py-3 sm:px-8 sm:py-4 bg-brand-primary hover:bg-brand-primary-hover text-white text-sm sm:text-base font-semibold rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 shadow-blue-500/10 hover:shadow-lg hover:shadow-blue-500/20 cursor-pointer whitespace-nowrap"
           >
             Explore Jobs
           </button>
@@ -57,14 +57,14 @@ function Home() {
           {token ? (
             <button
               onClick={handleDashboardRedirect}
-              className="w-full sm:w-auto px-8 py-4 bg-brand-secondary hover:bg-brand-secondary-hover text-white font-semibold rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 shadow-teal-500/10 hover:shadow-lg hover:shadow-teal-500/20 cursor-pointer"
+              className="px-5 py-3 sm:px-8 sm:py-4 bg-brand-secondary hover:bg-brand-secondary-hover text-white text-sm sm:text-base font-semibold rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:scale-95 shadow-teal-500/10 hover:shadow-lg hover:shadow-teal-500/20 cursor-pointer whitespace-nowrap"
             >
               Go to Dashboard
             </button>
           ) : (
             <button
               onClick={(e) => { e.preventDefault(); window.dispatchEvent(new Event("open-register")); }}
-              className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-brand-primary dark:hover:border-brand-primary text-slate-700 dark:text-slate-300 hover:text-brand-primary dark:hover:text-white font-semibold rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-sm cursor-pointer"
+              className="px-5 py-3 sm:px-8 sm:py-4 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-brand-primary dark:hover:border-brand-primary text-slate-700 dark:text-slate-300 hover:text-brand-primary dark:hover:text-white text-sm sm:text-base font-semibold rounded-xl transition-all hover:-translate-y-0.5 active:scale-95 shadow-sm cursor-pointer whitespace-nowrap"
             >
               Get Started
             </button>
@@ -72,7 +72,7 @@ function Home() {
         </div>
 
         {/* Bottom Text */}
-        <div className="mt-16 text-slate-500 dark:text-slate-400 text-sm font-medium uppercase tracking-widest">
+        <div className="mt-10 sm:mt-16 text-slate-500 dark:text-slate-400 text-[10px] sm:text-sm font-semibold uppercase tracking-wider sm:tracking-widest whitespace-nowrap text-center">
           Connecting Talent With Opportunity
         </div>
 
