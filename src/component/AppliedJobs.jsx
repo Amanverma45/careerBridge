@@ -84,7 +84,7 @@ function AppliedJobs() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300 animate-fade-in">
       <div className="max-w-7xl mx-auto">
         
         {/* Back navigation & Header */}
@@ -146,12 +146,13 @@ function AppliedJobs() {
               ? 'grid-cols-2 lg:grid-cols-3' 
               : 'grid-cols-1 max-w-2xl mx-auto'
           }`}>
-            {appliedJobs.map((app) => {
+            {appliedJobs.map((app, index) => {
               const job = app.jobId || {}
               return (
                 <div
                   key={app._id}
-                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between animate-fade-in-up`}
                 >
                   <div className="space-y-3.5 sm:space-y-4">
                     {/* Card Header Stacked */}

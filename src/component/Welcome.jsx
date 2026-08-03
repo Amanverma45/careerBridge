@@ -587,7 +587,7 @@ function Welcome() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 transition-colors duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 transition-colors duration-300 animate-fade-in">
       
       {/* Premium Accents Header */}
       {isPremiumUser && (

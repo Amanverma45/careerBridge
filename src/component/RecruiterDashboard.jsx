@@ -120,7 +120,7 @@ function RecruiterDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-6 md:p-10 transition-colors duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-6 md:p-10 transition-colors duration-300 animate-fade-in">
       <div className="max-w-7xl mx-auto">
         
         {/* Header Block */}
@@ -184,7 +184,8 @@ function RecruiterDashboard() {
               return (
                 <div
                   key={job._id}
-                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col animate-fade-in-up`}
                 >
                   {editJobId === job._id ? (
                     /* Edit Form Mode */

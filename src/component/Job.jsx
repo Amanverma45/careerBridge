@@ -167,7 +167,7 @@ function Job() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300 animate-fade-in">
       <div className="max-w-7xl mx-auto">
         
         {/* Back navigation & Header */}
@@ -291,18 +291,19 @@ function Job() {
               </button>
             </div>
           ) : (
-            sortedJobs.map((job) => {
+            sortedJobs.map((job, index) => {
               const isApplied = appliedIds.includes(job._id)
               return (
                 <div
                   key={job._id}
+                  style={{ animationDelay: `${index * 50}ms` }}
                   className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${
                     job.isPremium 
                       ? 'border-t-amber-500 shadow-lg shadow-amber-500/5' 
                       : isApplied 
                       ? 'border-t-emerald-500' 
                       : 'border-t-brand-primary'
-                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between`}
+                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between animate-fade-in-up`}
                 >
                   <div className="space-y-4">
                     {/* Card Title & Type */}

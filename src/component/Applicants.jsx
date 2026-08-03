@@ -89,7 +89,7 @@ function Applicants() {
     }
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 py-10 transition-colors duration-300">
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 py-10 transition-colors duration-300 animate-fade-in">
             <div className="max-w-6xl mx-auto px-6">
                 
                 {/* Header Section */}
@@ -146,7 +146,8 @@ function Applicants() {
                           return (
                             <div
                                 key={app._id}
-                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between`}
+                                style={{ animationDelay: `${index * 50}ms` }}
+                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between animate-fade-in-up`}
                             >
                                 <div>
                                     {/* Candidate Row Header */}

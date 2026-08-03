@@ -200,7 +200,7 @@ function Resume() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-6 md:p-10 transition-colors duration-300">
+        <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-6 md:p-10 transition-colors duration-300 animate-fade-in">
             {/* Hidden Print Area Stylesheet Injection */}
             <style dangerouslySetInnerHTML={{__html: `
                 @media print {
@@ -273,7 +273,7 @@ function Resume() {
 
                 {/* TAB 1: UPLOAD MANAGER */}
                 {activeTab === "manager" && (
-                    <div className="flex items-center justify-center py-10">
+                    <div className="flex items-center justify-center py-10 animate-fade-in-up">
                         <div className="bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 p-8 rounded-3xl shadow-sm w-full max-w-md relative overflow-hidden">
                             {/* Decorative top bar */}
                             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
@@ -425,7 +425,7 @@ function Resume() {
                     <>
                         {/* STATE A: FORM FILL UP WIZARD VIEW */}
                         {!isGenerated ? (
-                            <form onSubmit={handleGenerateResume} className="max-w-3xl mx-auto bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 p-8 sm:p-10 rounded-3xl shadow-md space-y-8 relative overflow-hidden">
+                            <form onSubmit={handleGenerateResume} className="max-w-3xl mx-auto bg-white dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/80 p-8 sm:p-10 rounded-3xl shadow-md space-y-8 relative overflow-hidden animate-fade-in-up">
                                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-primary to-brand-secondary" />
 
                                 <div className="text-center">
