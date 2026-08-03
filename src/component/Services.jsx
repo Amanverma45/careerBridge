@@ -13,7 +13,7 @@ const Services = () => {
           if (entry.isIntersecting) {
             entry.target.classList.add('is-visible');
             observer.unobserve(entry.target);
-            // After transition finishes (800ms), remove animation classes so hover works perfectly
+            // After transition finishes (500ms), remove animation classes so hover works perfectly
             setTimeout(() => {
               entry.target.classList.remove(
                 'scroll-anim-card',
@@ -29,13 +29,13 @@ const Services = () => {
                 'lg:rotate-[2deg]',
                 'lg:translate-y-0'
               );
-            }, 800);
+            }, 500);
           }
         });
       },
       {
-        threshold: 0.1,
-        rootMargin: "0px 0px -50px 0px"
+        threshold: 0,
+        rootMargin: "0px 0px 80px 0px"
       }
     );
 
