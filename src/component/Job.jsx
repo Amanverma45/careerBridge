@@ -141,6 +141,13 @@ function Job() {
     }
     fetchJobs()
   }, [])
+  useEffect(() => {
+    if (!loading && window.initScrollAnimations) {
+      setTimeout(() => {
+        window.initScrollAnimations()
+      }, 50)
+    }
+  }, [loading])
 
   const handleApply = async (jobId) => {
     if (!user) {
@@ -296,14 +303,13 @@ function Job() {
               return (
                 <div
                   key={job._id}
-                  style={{ animationDelay: `${index * 50}ms` }}
                   className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${
                     job.isPremium 
                       ? 'border-t-amber-500 shadow-lg shadow-amber-500/5' 
                       : isApplied 
                       ? 'border-t-emerald-500' 
                       : 'border-t-brand-primary'
-                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between animate-fade-in-up`}
+                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
                 >
                   <div className="space-y-4">
                     {/* Card Title & Type */}

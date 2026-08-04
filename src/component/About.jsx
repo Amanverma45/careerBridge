@@ -1,8 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { HiUserAdd, HiIdentification, HiSearch, HiBadgeCheck, HiArrowRight } from 'react-icons/hi'
 
 function About() {
+  useEffect(() => {
+    if (window.initScrollAnimations) {
+      window.initScrollAnimations()
+    }
+  }, [])
+
   const steps = [
     {
       icon: HiUserAdd,
@@ -74,8 +80,7 @@ function About() {
             return (
               <div 
                 key={idx}
-                style={{ animationDelay: `${idx * 80}ms` }}
-                className={`group bg-white/70 dark:bg-slate-900/30 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl p-4 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_30px_rgba(37,99,235,0.08)] dark:hover:shadow-[0_10px_30px_rgba(20,184,166,0.15)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-start gap-4 sm:gap-5 animate-fade-in-up`}
+                className={`group bg-white/70 dark:bg-slate-900/30 backdrop-blur-md border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl p-4 sm:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-[0_10px_30px_rgba(37,99,235,0.08)] dark:hover:shadow-[0_10px_30px_rgba(20,184,166,0.15)] hover:-translate-y-1 transition-all duration-300 flex flex-col items-start gap-4 sm:gap-5 ${window.getScrollAnimClass ? window.getScrollAnimClass(idx) : ""}`}
               >
                 <div className={`w-9 h-9 sm:w-12 sm:h-12 shrink-0 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center border border-slate-100 dark:border-slate-700 shadow-sm transition-all group-hover:scale-105 duration-300 ${iconColorClass}`}>
                   <IconComponent className="text-xl sm:text-2xl" />

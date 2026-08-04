@@ -47,6 +47,14 @@ function AppliedJobs() {
     fetchApplied()
   }, [])
 
+  useEffect(() => {
+    if (!loading && window.initScrollAnimations) {
+      setTimeout(() => {
+        window.initScrollAnimations()
+      }, 50)
+    }
+  }, [loading])
+
   const formatDate = (dateStr) => {
     if (!dateStr) return "N/A"
     const date = new Date(dateStr)
@@ -151,8 +159,7 @@ function AppliedJobs() {
               return (
                 <div
                   key={app._id}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between animate-fade-in-up`}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(app.status)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
                 >
                   <div className="space-y-3.5 sm:space-y-4">
                     {/* Card Header Stacked */}

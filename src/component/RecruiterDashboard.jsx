@@ -50,6 +50,14 @@ function RecruiterDashboard() {
     }
   }, [])
 
+  useEffect(() => {
+    if (!loading && window.initScrollAnimations) {
+      setTimeout(() => {
+        window.initScrollAnimations()
+      }, 50)
+    }
+  }, [loading])
+
   const executeDelete = async (id) => {
     setDeleteJobConfirmId(null)
     try {
@@ -184,8 +192,7 @@ function RecruiterDashboard() {
               return (
                 <div
                   key={job._id}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col animate-fade-in-up`}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-3xl p-6 sm:p-7 shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden flex flex-col ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
                 >
                   {editJobId === job._id ? (
                     /* Edit Form Mode */

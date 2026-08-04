@@ -38,6 +38,14 @@ function Applicants() {
     }, [jobId])
 
     useEffect(() => {
+        if (!loading && window.initScrollAnimations) {
+            setTimeout(() => {
+                window.initScrollAnimations()
+            }, 50)
+        }
+    }, [loading])
+
+    useEffect(() => {
         if (!selectedResume) {
             setIframeUrl(null)
             return
@@ -146,8 +154,7 @@ function Applicants() {
                           return (
                             <div
                                 key={app._id}
-                                style={{ animationDelay: `${index * 50}ms` }}
-                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between animate-fade-in-up`}
+                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
                             >
                                 <div>
                                     {/* Candidate Row Header */}

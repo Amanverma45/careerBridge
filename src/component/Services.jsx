@@ -7,64 +7,13 @@ const Services = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            observer.unobserve(entry.target);
-            // After transition finishes (500ms), remove animation classes so hover works perfectly
-            setTimeout(() => {
-              entry.target.classList.remove(
-                'scroll-anim-card',
-                'is-visible',
-                'opacity-0',
-                '-translate-x-16',
-                'translate-x-16',
-                'rotate-[-1deg]',
-                'rotate-[1deg]',
-                'lg:-translate-x-24',
-                'lg:translate-y-24',
-                'lg:rotate-[-2deg]',
-                'lg:rotate-[2deg]',
-                'lg:translate-y-0'
-              );
-            }, 500);
-          }
-        });
-      },
-      {
-        threshold: 0,
-        rootMargin: "0px 0px 80px 0px"
-      }
-    );
-
-    const cards = document.querySelectorAll('.scroll-anim-card');
-    cards.forEach((card) => observer.observe(card));
-
-    return () => {
-      cards.forEach((card) => observer.unobserve(card));
-    };
+    if (window.initScrollAnimations) {
+      window.initScrollAnimations();
+    }
   }, []);
 
   const getAnimationClass = (index) => {
-    // 2-column layout (mobile/tablet)
-    const isMobileLeft = index % 2 === 0;
-    const mobileClass = isMobileLeft 
-      ? "-translate-x-16 rotate-[-1deg]" 
-      : "translate-x-16 rotate-[1deg]";
-
-    // 3-column layout (desktop)
-    let desktopClass = "";
-    if (index % 3 === 0) {
-      desktopClass = "lg:-translate-x-24 lg:translate-y-0 lg:rotate-[-2deg]";
-    } else if (index % 3 === 1) {
-      desktopClass = "lg:translate-x-0 lg:translate-y-24 lg:rotate-0";
-    } else {
-      desktopClass = "lg:translate-x-24 lg:translate-y-0 lg:rotate-[2deg]";
-    }
-
-    return `scroll-anim-card opacity-0 ${mobileClass} ${desktopClass}`;
+    return window.getScrollAnimClass ? window.getScrollAnimClass(index) : "";
   };
 
   const servicesList = [
