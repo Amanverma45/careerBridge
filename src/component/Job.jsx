@@ -134,7 +134,7 @@ function Job() {
         const response = await axios.get(
           "/job/getJob"
         )
-        const fetched = response.data.jobs || []
+        const fetched = response.data && Array.isArray(response.data.jobs) ? response.data.jobs : []
         setJobs(fetched)
         jobsCache = fetched
         

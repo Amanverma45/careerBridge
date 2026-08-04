@@ -38,7 +38,7 @@ function SavedJobs() {
         const response = await axios.get(
           `/api/savedJobs/${user._id}`
         )
-        const fetchedSaved = response.data || []
+        const fetchedSaved = Array.isArray(response.data) ? response.data : []
         setSavedJobs(fetchedSaved)
         savedJobsCache = fetchedSaved
       } catch (err) {
@@ -157,11 +157,11 @@ function SavedJobs() {
         ) : (
           /* Grid Configuration: 1x1 if single saved job, 2x2 on mobile if multiple */
           <div className={`grid gap-4 sm:gap-6 ${
-            savedJobs.length === 1 
+            Array.isArray(savedJobs) && savedJobs.length === 1 
               ? 'grid-cols-1 max-w-2xl mx-auto w-full' 
               : 'grid-cols-2 lg:grid-cols-3'
           }`}>
-            {savedJobs.map((job, index) => {
+            {Array.isArray(savedJobs) && savedJobs.map((job, index) => {
               const isExiting = exitingIds.includes(job._id)
               return (
                 <div
