@@ -54,8 +54,12 @@ window.getScrollAnimClass = (index) => {
 };
 
 axios.interceptors.request.use((config) => {
-  if (config.url && config.url.includes('https://careerbridge-b-1.onrender.com')) {
-    config.url = config.url.replace('https://careerbridge-b-1.onrender.com', window.API_URL);
+  if (config.url) {
+    if (config.url.includes('https://careerbridge-b-1.onrender.com')) {
+      config.url = config.url.replace('https://careerbridge-b-1.onrender.com', window.API_URL);
+    } else if (!config.url.startsWith('http')) {
+      config.url = `${window.API_URL || 'http://localhost:5000'}${config.url}`;
+    }
   }
   return config;
 }, (error) => {
