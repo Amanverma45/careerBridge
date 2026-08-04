@@ -10,10 +10,17 @@ import {
   FaSpinner, 
   FaCheckCircle,
   FaBookmark,
-  FaRegBookmark 
+  FaRegBookmark,
+  FaShareAlt,
+  FaWhatsapp,
+  FaLinkedin,
+  FaFacebook,
+  FaInstagram,
+  FaCommentAlt,
+  FaLink
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
-import { HiArrowLeft } from 'react-icons/hi';
+import { HiArrowLeft, HiX } from 'react-icons/hi';
 import Button from "./Button";
 
 let jobsCache = null;
@@ -24,6 +31,7 @@ function Job() {
   const [jobs, setJobs] = useState(jobsCache || [])
   const [appliedIds, setAppliedIds] = useState(appliedIdsCache || [])
   const [savedIds, setSavedIds] = useState(savedIdsCache || [])
+  const [shareJob, setShareJob] = useState(null)
 
   const [search, setSearch] = useState("")
   const [location, setLocation] = useState("")
@@ -353,7 +361,7 @@ function Job() {
                         {/* Save Job Button */}
                         <button
                           onClick={(e) => { e.stopPropagation(); handleToggleSave(job._id); }}
-                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 text-slate-400 hover:text-brand-primary dark:text-slate-500 dark:hover:text-brand-primary transition-all duration-200 cursor-pointer active:scale-90"
+                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-brand-primary dark:text-slate-500 dark:hover:text-brand-primary transition-all duration-200 cursor-pointer active:scale-90"
                           title={savedIds.includes(job._id) ? "Remove from Saved" : "Save Job"}
                         >
                           {savedIds.includes(job._id) ? (
@@ -361,6 +369,15 @@ function Job() {
                           ) : (
                             <FaRegBookmark className="text-sm sm:text-base" />
                           )}
+                        </button>
+
+                        {/* Share Job Button */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setShareJob(job); }}
+                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-brand-primary dark:text-slate-500 dark:hover:text-brand-primary transition-all duration-200 cursor-pointer active:scale-90"
+                          title="Share Job"
+                        >
+                          <FaShareAlt className="text-sm sm:text-base" />
                         </button>
 
                         <div className="text-right flex flex-col items-end gap-1.5">
@@ -466,6 +483,112 @@ function Job() {
           )}
         </div>
       </div>
+      {/* Share Modal */}
+      {shareJob && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/85 dark:border-slate-800/85 p-6 rounded-[2rem] w-full max-w-sm shadow-2xl relative overflow-hidden animate-scale-in text-center">
+            
+            {/* Header */}
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-black text-slate-855 dark:text-white">Share Job Opportunity</h3>
+              <button 
+                onClick={() => setShareJob(null)}
+                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition active:scale-90 cursor-pointer border-none text-slate-500 dark:text-slate-400"
+              >
+                <HiX className="text-base" />
+              </button>
+            </div>
+
+            {/* Job Details Card Preview */}
+            <div className="bg-slate-50 dark:bg-slate-850 p-4 rounded-2xl mb-4 text-left border border-slate-100 dark:border-slate-800">
+              <h4 className="text-sm font-black text-slate-800 dark:text-white leading-tight truncate">{shareJob.title}</h4>
+              <p className="text-xs font-semibold text-brand-primary mt-1">{shareJob.company}</p>
+              <p className="text-[10px] text-slate-405 mt-1">{shareJob.location}</p>
+            </div>
+
+            {/* Copy Link Section (Top Option) */}
+            <div className="mb-6 p-2 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2">
+              <span className="text-xs text-slate-400 truncate flex-1 text-left px-2 select-all overflow-hidden">
+                {`${window.location.origin}/jobs?jobId=${shareJob._id}`}
+              </span>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/jobs?jobId=${shareJob._id}`);
+                  toast.success("Job link copied to clipboard!");
+                }}
+                className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-bold rounded-xl transition active:scale-95 cursor-pointer border-none shrink-0"
+              >
+                Copy
+              </button>
+            </div>
+
+            {/* Social Sharing Title */}
+            <p className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider text-left mb-3">Or Share Via</p>
+
+            {/* Social Grid */}
+            <div className="grid grid-cols-3 gap-3.5">
+              {/* WhatsApp */}
+              <a
+                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this job opening for ${shareJob.title} at ${shareJob.company} on CareerBridge! \n\nLink: ${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShareJob(null)}
+                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100/50 dark:hover:bg-emerald-950/40 transition active:scale-95 shadow-sm"
+              >
+                <FaWhatsapp className="text-2xl sm:text-3xl mb-1.5" />
+                <span className="text-[10px] font-bold">WhatsApp</span>
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShareJob(null)}
+                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950/40 transition active:scale-95 shadow-sm"
+              >
+                <FaLinkedin className="text-2xl sm:text-3xl mb-1.5" />
+                <span className="text-[10px] font-bold">LinkedIn</span>
+              </a>
+
+              {/* Facebook */}
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setShareJob(null)}
+                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100/50 dark:hover:bg-indigo-950/40 transition active:scale-95 shadow-sm"
+              >
+                <FaFacebook className="text-2xl sm:text-3xl mb-1.5" />
+                <span className="text-[10px] font-bold">Facebook</span>
+              </a>
+
+              {/* SMS */}
+              <a
+                href={`sms:?body=${encodeURIComponent(`Check out this job opening for ${shareJob.title} at ${shareJob.company} on CareerBridge! \n\nLink: ${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
+                onClick={() => setShareJob(null)}
+                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-50 dark:bg-amber-955/15 text-amber-600 dark:text-amber-400 hover:bg-amber-100/50 dark:hover:bg-amber-955/25 transition active:scale-95 shadow-sm"
+              >
+                <FaCommentAlt className="text-2xl sm:text-3xl mb-1.5" />
+                <span className="text-[10px] font-bold">SMS</span>
+              </a>
+
+              {/* Instagram */}
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/jobs?jobId=${shareJob._id}`);
+                  toast.success("Link copied! Share it on your Instagram story or DM.");
+                  setShareJob(null);
+                }}
+                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-pink-50 dark:bg-pink-955/15 text-pink-600 dark:text-pink-400 hover:bg-pink-100/50 dark:hover:bg-pink-955/25 transition active:scale-95 shadow-sm cursor-pointer border-none"
+              >
+                <FaInstagram className="text-2xl sm:text-3xl mb-1.5" />
+                <span className="text-[10px] font-bold">Instagram</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
