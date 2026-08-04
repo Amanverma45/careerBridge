@@ -186,13 +186,7 @@ function Job() {
   const userSkills = (user?.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
 
   const computeJobMatch = (job) => {
-    if (userSkills.length === 0) {
-      return { 
-        score: 15, 
-        matched: [], 
-        missing: job.skills ? job.skills.split(',').map(s => s.trim()).filter(Boolean) : [] 
-      }
-    }
+    if (!userSkills.length) return { score: 0, matched: [], missing: [] }
 
     const jobSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
     
@@ -207,42 +201,42 @@ function Job() {
           missing.push(skill)
         }
       })
+      const score = Math.round((matched.length / jobSkills.length) * 100)
+      return { score, matched, missing }
     } else {
-      // Check job description/title
+      // Check job description/title for keywords
       const textToSearch = `${job.title} ${job.description}`.toLowerCase()
-      userSkills.forEach(skill => {
-        if (textToSearch.includes(skill)) {
-          matched.push(skill)
-        }
+      const commonSkills = [
+        "react", "node", "express", "mongodb", "javascript", "js", "html", "css",
+        "laravel", "php", "java", "spring", "c++", "c#", "dotnet", ".net", "python",
+        "django", "flask", "angular", "vue", "typescript", "ts", "mysql", "sql", "postgresql",
+        "aws", "docker", "kubernetes", "git", "nextjs", "next.js", "nuxt", "svelte"
+      ]
+      
+      const detectedJobSkills = commonSkills.filter(skill => {
+        const regex = new RegExp(`\\b${skill.replace('.', '\\.')}\\b`, 'i')
+        return regex.test(textToSearch)
       })
-      // Assume basic developer tools are missing if description is empty and user doesn't have them
-      const generalStack = ["react", "node.js", "javascript", "python", "docker", "typescript", "mongodb", "sql"]
-      generalStack.forEach(skill => {
-        if (textToSearch.includes(skill) && !userSkills.includes(skill)) {
-          missing.push(skill)
-        }
-      })
-    }
 
-    let rawScore = 15
-    if (jobSkills.length > 0) {
-      const ratio = matched.length / jobSkills.length
-      rawScore = ratio * 85 + 15
-    } else if (userSkills.length > 0) {
-      const textMatchRatio = matched.length / userSkills.length
-      rawScore = textMatchRatio * 65 + 15
-    }
-
-    // Title match boost
-    const titleLower = (job.title || "").toLowerCase()
-    const matchAnyTitle = userSkills.some(skill => titleLower.includes(skill))
-    if (matchAnyTitle) rawScore += 15
-
-    const finalScore = Math.min(Math.round(rawScore), 99)
-    return {
-      score: finalScore < 15 ? 15 : finalScore,
-      matched,
-      missing
+      if (detectedJobSkills.length > 0) {
+        detectedJobSkills.forEach(skill => {
+          if (userSkills.includes(skill)) {
+            matched.push(skill)
+          } else {
+            missing.push(skill)
+          }
+        })
+        const score = Math.round((matched.length / detectedJobSkills.length) * 100)
+        return { score, matched, missing }
+      } else {
+        userSkills.forEach(skill => {
+          if (textToSearch.includes(skill)) {
+            matched.push(skill)
+          }
+        })
+        const score = matched.length > 0 ? Math.round((matched.length / userSkills.length) * 100) : 0
+        return { score, matched, missing: [] }
+      }
     }
   }
 
@@ -540,111 +534,122 @@ function Job() {
         </div>
       </div>
       {/* Share Modal */}
-      {shareJob && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white dark:bg-slate-900 border border-slate-200/85 dark:border-slate-800/85 p-6 rounded-[2rem] w-full max-w-sm shadow-2xl relative overflow-hidden animate-scale-in text-center">
-            
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-black text-slate-855 dark:text-white">Share Job Opportunity</h3>
-              <button 
-                onClick={() => setShareJob(null)}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition active:scale-90 cursor-pointer border-none text-slate-500 dark:text-slate-400"
-              >
-                <HiX className="text-base" />
-              </button>
-            </div>
+      {shareJob && (() => {
+        const shareText = `${shareJob.title} at ${shareJob.company}\n📍 ${shareJob.location || "Remote"}\n💼 ${shareJob.jobType || "Full-Time"}\n\nApply now: ${window.location.origin}/jobs?jobId=${shareJob._id}`;
+        return (
+          <div 
+            onClick={() => setShareJob(null)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-end sm:items-center justify-center p-0 sm:p-4 transition-all duration-300 animate-fade-in"
+          >
+            <div 
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white dark:bg-slate-900 border-t sm:border border-slate-200/85 dark:border-slate-800/85 w-full sm:max-w-sm rounded-t-[2.5rem] sm:rounded-[2rem] p-6 shadow-2xl relative overflow-hidden text-center transition-all duration-300 animate-slide-up sm:animate-scale-in pb-8 sm:pb-6"
+            >
+              {/* Drag Handle for Mobile Bottom Sheet */}
+              <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full mx-auto mb-4 sm:hidden" />
+              
+              {/* Header */}
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-black text-slate-855 dark:text-white">Share Job Opportunity</h3>
+                <button 
+                  onClick={() => setShareJob(null)}
+                  className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition active:scale-90 cursor-pointer border-none text-slate-500 dark:text-slate-400"
+                >
+                  <HiX className="text-base" />
+                </button>
+              </div>
 
-            {/* Job Details Card Preview */}
-            <div className="bg-slate-50 dark:bg-slate-850 p-4 rounded-2xl mb-4 text-left border border-slate-100 dark:border-slate-800">
-              <h4 className="text-sm font-black text-slate-800 dark:text-white leading-tight truncate">{shareJob.title}</h4>
-              <p className="text-xs font-semibold text-brand-primary mt-1">{shareJob.company}</p>
-              <p className="text-[10px] text-slate-405 mt-1">{shareJob.location}</p>
-            </div>
+              {/* Job Details Card Preview */}
+              <div className="bg-slate-50 dark:bg-slate-850 p-4 rounded-2xl mb-4 text-left border border-slate-100 dark:border-slate-800">
+                <h4 className="text-sm font-black text-slate-800 dark:text-white leading-tight truncate">{shareJob.title}</h4>
+                <p className="text-xs font-semibold text-brand-primary mt-1">{shareJob.company}</p>
+                <p className="text-[10px] text-slate-405 mt-1">{shareJob.location}</p>
+              </div>
 
-            {/* Copy Link Section (Top Option) */}
-            <div className="mb-6 p-2 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2">
-              <span className="text-xs text-slate-400 truncate flex-1 text-left px-2 select-all overflow-hidden">
-                {`${window.location.origin}/jobs?jobId=${shareJob._id}`}
-              </span>
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/jobs?jobId=${shareJob._id}`);
-                  toast.success("Job link copied to clipboard!");
-                }}
-                className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-bold rounded-xl transition active:scale-95 cursor-pointer border-none shrink-0"
-              >
-                Copy
-              </button>
-            </div>
+              {/* Copy Link Section (Top Option) */}
+              <div className="mb-6 p-2 rounded-2xl bg-slate-50 dark:bg-slate-850 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between gap-2">
+                <span className="text-xs text-slate-400 truncate flex-1 text-left px-2 select-all overflow-hidden">
+                  {`${window.location.origin}/jobs?jobId=${shareJob._id}`}
+                </span>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareText);
+                    toast.success("Job details copied to clipboard!");
+                  }}
+                  className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-bold rounded-xl transition active:scale-95 cursor-pointer border-none shrink-0"
+                >
+                  Copy
+                </button>
+              </div>
 
-            {/* Social Sharing Title */}
-            <p className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider text-left mb-3">Or Share Via</p>
+              {/* Social Sharing Title */}
+              <p className="text-xs font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider text-left mb-3">Or Share Via</p>
 
-            {/* Social Grid */}
-            <div className="grid grid-cols-3 gap-3.5">
-              {/* WhatsApp */}
-              <a
-                href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Check out this job opening for ${shareJob.title} at ${shareJob.company} on CareerBridge! \n\nLink: ${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setShareJob(null)}
-                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100/50 dark:hover:bg-emerald-950/40 transition active:scale-95 shadow-sm"
-              >
-                <FaWhatsapp className="text-2xl sm:text-3xl mb-1.5" />
-                <span className="text-[10px] font-bold">WhatsApp</span>
-              </a>
+              {/* Social Grid */}
+              <div className="grid grid-cols-3 gap-3.5">
+                {/* WhatsApp */}
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShareJob(null)}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100/50 dark:hover:bg-emerald-950/40 transition active:scale-95 shadow-sm"
+                >
+                  <FaWhatsapp className="text-2xl sm:text-3xl mb-1.5" />
+                  <span className="text-[10px] font-bold">WhatsApp</span>
+                </a>
 
-              {/* LinkedIn */}
-              <a
-                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setShareJob(null)}
-                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950/40 transition active:scale-95 shadow-sm"
-              >
-                <FaLinkedin className="text-2xl sm:text-3xl mb-1.5" />
-                <span className="text-[10px] font-bold">LinkedIn</span>
-              </a>
+                {/* LinkedIn */}
+                <a
+                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(`${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShareJob(null)}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-blue-50 dark:bg-blue-950/20 text-blue-600 dark:text-blue-400 hover:bg-blue-100/50 dark:hover:bg-blue-950/40 transition active:scale-95 shadow-sm"
+                >
+                  <FaLinkedin className="text-2xl sm:text-3xl mb-1.5" />
+                  <span className="text-[10px] font-bold">LinkedIn</span>
+                </a>
 
-              {/* Facebook */}
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setShareJob(null)}
-                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100/50 dark:hover:bg-indigo-950/40 transition active:scale-95 shadow-sm"
-              >
-                <FaFacebook className="text-2xl sm:text-3xl mb-1.5" />
-                <span className="text-[10px] font-bold">Facebook</span>
-              </a>
+                {/* Facebook */}
+                <a
+                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setShareJob(null)}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100/50 dark:hover:bg-indigo-950/40 transition active:scale-95 shadow-sm"
+                >
+                  <FaFacebook className="text-2xl sm:text-3xl mb-1.5" />
+                  <span className="text-[10px] font-bold">Facebook</span>
+                </a>
 
-              {/* SMS */}
-              <a
-                href={`sms:?body=${encodeURIComponent(`Check out this job opening for ${shareJob.title} at ${shareJob.company} on CareerBridge! \n\nLink: ${window.location.origin}/jobs?jobId=${shareJob._id}`)}`}
-                onClick={() => setShareJob(null)}
-                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-50 dark:bg-amber-955/15 text-amber-600 dark:text-amber-400 hover:bg-amber-100/50 dark:hover:bg-amber-955/25 transition active:scale-95 shadow-sm"
-              >
-                <FaCommentAlt className="text-2xl sm:text-3xl mb-1.5" />
-                <span className="text-[10px] font-bold">SMS</span>
-              </a>
+                {/* SMS */}
+                <a
+                  href={`sms:?body=${encodeURIComponent(shareText)}`}
+                  onClick={() => setShareJob(null)}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-amber-50 dark:bg-amber-955/15 text-amber-600 dark:text-amber-400 hover:bg-amber-100/50 dark:hover:bg-amber-955/25 transition active:scale-95 shadow-sm"
+                >
+                  <FaCommentAlt className="text-2xl sm:text-3xl mb-1.5" />
+                  <span className="text-[10px] font-bold">SMS</span>
+                </a>
 
-              {/* Instagram */}
-              <button
-                onClick={() => {
-                  navigator.clipboard.writeText(`${window.location.origin}/jobs?jobId=${shareJob._id}`);
-                  toast.success("Link copied! Share it on your Instagram story or DM.");
-                  setShareJob(null);
-                }}
-                className="flex flex-col items-center justify-center p-3 rounded-2xl bg-pink-50 dark:bg-pink-955/15 text-pink-600 dark:text-pink-400 hover:bg-pink-100/50 dark:hover:bg-pink-955/25 transition active:scale-95 shadow-sm cursor-pointer border-none"
-              >
-                <FaInstagram className="text-2xl sm:text-3xl mb-1.5" />
-                <span className="text-[10px] font-bold">Instagram</span>
-              </button>
+                {/* Instagram */}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(shareText);
+                    toast.success("Job details copied! Share it on your Instagram story or DM.");
+                    setShareJob(null);
+                  }}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-pink-50 dark:bg-pink-955/15 text-pink-600 dark:text-pink-400 hover:bg-pink-100/50 dark:hover:bg-pink-955/25 transition active:scale-95 shadow-sm cursor-pointer border-none"
+                >
+                  <FaInstagram className="text-2xl sm:text-3xl mb-1.5" />
+                  <span className="text-[10px] font-bold">Instagram</span>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
     </div>
   )
 }

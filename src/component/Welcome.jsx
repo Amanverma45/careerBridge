@@ -325,7 +325,7 @@ function Welcome() {
   const userSkills = (user?.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
 
   const computeJobMatch = (job) => {
-    if (userSkills.length === 0) return { score: 15, matched: [], missing: job.skills ? job.skills.split(',').map(s => s.trim()).filter(Boolean) : [] }
+    if (!userSkills.length) return { score: 0, matched: [], missing: [] }
 
     const jobSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
     
@@ -340,42 +340,42 @@ function Welcome() {
           missing.push(skill)
         }
       })
+      const score = Math.round((matched.length / jobSkills.length) * 100)
+      return { score, matched, missing }
     } else {
-      // Check job description/title
+      // Check job description/title for keywords
       const textToSearch = `${job.title} ${job.description}`.toLowerCase()
-      userSkills.forEach(skill => {
-        if (textToSearch.includes(skill)) {
-          matched.push(skill)
-        }
+      const commonSkills = [
+        "react", "node", "express", "mongodb", "javascript", "js", "html", "css",
+        "laravel", "php", "java", "spring", "c++", "c#", "dotnet", ".net", "python",
+        "django", "flask", "angular", "vue", "typescript", "ts", "mysql", "sql", "postgresql",
+        "aws", "docker", "kubernetes", "git", "nextjs", "next.js", "nuxt", "svelte"
+      ]
+      
+      const detectedJobSkills = commonSkills.filter(skill => {
+        const regex = new RegExp(`\\b${skill.replace('.', '\\.')}\\b`, 'i')
+        return regex.test(textToSearch)
       })
-      // Assume basic developer tools are missing if description is empty and user doesn't have them
-      const generalStack = ["react", "node.js", "javascript", "python", "docker", "typescript", "mongodb", "sql"]
-      generalStack.forEach(skill => {
-        if (textToSearch.includes(skill) && !userSkills.includes(skill)) {
-          missing.push(skill)
-        }
-      })
-    }
 
-    let rawScore = 15
-    if (jobSkills.length > 0) {
-      const ratio = matched.length / jobSkills.length
-      rawScore = ratio * 85 + 15
-    } else if (userSkills.length > 0) {
-      const textMatchRatio = matched.length / userSkills.length
-      rawScore = textMatchRatio * 65 + 15
-    }
-
-    // Title match boost
-    const titleLower = (job.title || "").toLowerCase()
-    const matchAnyTitle = userSkills.some(skill => titleLower.includes(skill))
-    if (matchAnyTitle) rawScore += 15
-
-    const finalScore = Math.min(Math.round(rawScore), 99)
-    return {
-      score: finalScore < 15 ? 15 : finalScore,
-      matched,
-      missing
+      if (detectedJobSkills.length > 0) {
+        detectedJobSkills.forEach(skill => {
+          if (userSkills.includes(skill)) {
+            matched.push(skill)
+          } else {
+            missing.push(skill)
+          }
+        })
+        const score = Math.round((matched.length / detectedJobSkills.length) * 100)
+        return { score, matched, missing }
+      } else {
+        userSkills.forEach(skill => {
+          if (textToSearch.includes(skill)) {
+            matched.push(skill)
+          }
+        })
+        const score = matched.length > 0 ? Math.round((matched.length / userSkills.length) * 100) : 0
+        return { score, matched, missing: [] }
+      }
     }
   }
 

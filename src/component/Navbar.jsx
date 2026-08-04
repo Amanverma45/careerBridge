@@ -324,7 +324,7 @@ function Navbar() {
                 <Link
                   to="/addJobs"
                   onClick={() => setMenuOpen(false)}
-                  className={`col-span-2 flex items-center justify-center py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                  className={`col-span-2 flex items-center justify-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
                     isActive('/addJobs')
                       ? 'bg-brand-primary/10 text-brand-primary'
                       : 'bg-slate-50 dark:bg-slate-800/40 text-slate-655 dark:text-slate-350 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -338,7 +338,7 @@ function Navbar() {
                 <Link
                   to="/savedJobs"
                   onClick={() => setMenuOpen(false)}
-                  className={`col-span-2 flex items-center justify-center py-3.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
+                  className={`col-span-1 flex items-center justify-center py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all duration-200 ${
                     isActive('/savedJobs')
                       ? 'bg-brand-primary/10 text-brand-primary'
                       : 'bg-slate-50 dark:bg-slate-800/40 text-slate-655 dark:text-slate-355 hover:text-brand-primary hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -352,7 +352,7 @@ function Navbar() {
                 <Link
                   to="/jobs"
                   onClick={() => setMenuOpen(false)}
-                  className="col-span-2 flex items-center justify-center py-3.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all"
+                  className={`col-span-1 flex items-center justify-center py-3 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md active:scale-95 transition-all`}
                 >
                   Jobs Explorer
                 </Link>
