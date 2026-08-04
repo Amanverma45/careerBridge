@@ -35,87 +35,7 @@ function Job() {
 
   const storedUser = localStorage.getItem('user')
   const user = storedUser ? JSON.parse(storedUser) : null
-
   const navigate = useNavigate()
-
-  const filteredJobs = jobs.filter(job => {
-    const matchSearch =
-      (job.title || '').toLowerCase().includes(search.toLowerCase()) ||
-      (job.company || '').toLowerCase().includes(search.toLowerCase())
-
-    const matchLocation =
-      location === "" ||
-      (job.location || '').toLowerCase().includes(location.toLowerCase())
-
-    const matchType =
-      jobType === "" ||
-      (job.jobType || '').toLowerCase().includes(jobType.toLowerCase())
-
-    let matchSalary = true
-
-    if (salary === "0-30000") {
-      matchSalary = job.salary <= 30000
-    } else if (salary === "30000-60000") {
-      matchSalary = job.salary > 30000 && job.salary <= 60000
-    } else if (salary === "60000-100000") {
-      matchSalary = job.salary > 60000 && job.salary <= 100000
-    } else if (salary === "100000+") {
-      matchSalary = job.salary > 100000
-    }
-
-    return matchSearch && matchLocation && matchType && matchSalary
-  })
-
-  const getMatchScore = (job) => {
-    if (!user) return 0;
-    
-    const userSkills = (user.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-    if (userSkills.length === 0) return 15;
-    
-    let jobSkills = [];
-    if (job.skills) {
-      jobSkills = job.skills.toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-    }
-    
-    const matchedSkills = userSkills.filter(skill => jobSkills.includes(skill));
-    const jobText = `${job.title} ${job.description} ${job.skills || ""}`.toLowerCase();
-    const textMatchedSkills = userSkills.filter(skill => jobText.includes(skill));
-    
-    const titleKeywords = (job.title || "").toLowerCase().split(' ').map(w => w.trim()).filter(w => w.length > 2);
-    const targetJobKeywords = (user.targetJob || "").toLowerCase().split(' ').map(w => w.trim()).filter(w => w.length > 2);
-    const titleMatch = targetJobKeywords.some(keyword => titleKeywords.includes(keyword));
-    
-    let score = 0;
-    if (jobSkills.length > 0) {
-      const directRatio = matchedSkills.length / jobSkills.length;
-      const indirectRatio = textMatchedSkills.length / userSkills.length;
-      score = (directRatio * 0.75 + indirectRatio * 0.25) * 100;
-    } else {
-      score = (textMatchedSkills.length / userSkills.length) * 80;
-    }
-    
-    if (titleMatch) {
-      score += 20;
-    }
-    
-    const finalScore = Math.min(Math.round(score), 99);
-    return finalScore < 15 ? 15 + (finalScore % 10) : finalScore;
-  }
-
-  // Map match scores
-  let mappedJobs = filteredJobs.map(job => ({
-    ...job,
-    matchScore: getMatchScore(job)
-  }))
-
-  let sortedJobs = [...mappedJobs]
-  if (sort === "low") {
-    sortedJobs.sort((a, b) => a.salary - b.salary)
-  } else if (sort === "high") {
-    sortedJobs.sort((a, b) => b.salary - a.salary)
-  } else if (sort === "match") {
-    sortedJobs.sort((a, b) => b.matchScore - a.matchScore)
-  }
 
   const handleClearFilters = () => {
     setSearch("")
@@ -134,7 +54,7 @@ function Job() {
         const response = await axios.get(
           "/job/getJob"
         )
-        const fetched = response.data && Array.isArray(response.data.jobs) ? response.data.jobs : []
+        const fetched = response.data.jobs && Array.isArray(response.data.jobs) ? response.data.jobs : []
         setJobs(fetched)
         jobsCache = fetched
         
@@ -161,6 +81,7 @@ function Job() {
     }
     fetchJobs()
   }, [])
+
   useEffect(() => {
     if (!loading && window.initScrollAnimations) {
       setTimeout(() => {
@@ -231,6 +152,46 @@ function Job() {
     }
   }
 
+  // filter & sort jobs logic
+  const filteredJobs = jobs.filter(job => {
+    const matchSearch = 
+      (job.title || "").toLowerCase().includes(search.toLowerCase()) || 
+      (job.company || "").toLowerCase().includes(search.toLowerCase());
+    
+    const matchLocation = location ? (job.location || "").toLowerCase() === location.toLowerCase() : true;
+    const matchJobType = jobType ? (job.jobType || "") === jobType : true;
+    
+    // salary range check
+    let matchSalary = true;
+    if (salary) {
+      const jobSal = parseFloat(job.salary) || 0;
+      if (salary === "0-30000") matchSalary = jobSal <= 30000;
+      else if (salary === "30000-60000") matchSalary = jobSal > 30000 && jobSal <= 60000;
+      else if (salary === "60000-100000") matchSalary = jobSal > 60000 && jobSal <= 100000;
+      else if (salary === "100000+") matchSalary = jobSal > 100000;
+    }
+
+    return matchSearch && matchLocation && matchJobType && matchSalary;
+  });
+
+  // Calculate Match Score
+  const jobsWithScores = filteredJobs.map(job => {
+    if (!user) return { ...job, matchScore: 0 };
+    const uSkills = (user.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+    const jSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+    if (jSkills.length === 0) return { ...job, matchScore: 0 };
+    const matched = uSkills.filter(s => jSkills.includes(s));
+    const score = Math.round((matched.length / jSkills.length) * 100);
+    return { ...job, matchScore: score };
+  });
+
+  const sortedJobs = [...jobsWithScores].sort((a, b) => {
+    if (sort === "match") return b.matchScore - a.matchScore;
+    if (sort === "low") return (parseFloat(a.salary) || 0) - (parseFloat(b.salary) || 0);
+    if (sort === "high") return (parseFloat(b.salary) || 0) - (parseFloat(a.salary) || 0);
+    return 0;
+  });
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#0f172a] text-slate-800 dark:text-slate-200 p-4 sm:p-6 md:p-10 transition-colors duration-300 animate-fade-in">
       <div className="max-w-7xl mx-auto">
@@ -248,7 +209,7 @@ function Job() {
             <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-slate-855 dark:text-white leading-none whitespace-nowrap overflow-hidden text-ellipsis">
               Available Jobs
             </h1>
-            <p className="text-slate-400 dark:text-slate-500 mt-1.5 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+            <p className="text-slate-405 dark:text-slate-500 mt-1.5 text-xs sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis">
               Discover opportunities that match your skills, preferences, and career goals.
             </p>
           </div>
@@ -343,7 +304,7 @@ function Job() {
                 <FaBriefcase />
               </div>
               <div>
-                <h2 className="text-lg font-black text-slate-850 dark:text-white">No Jobs Found</h2>
+                <h2 className="text-lg font-black text-slate-855 dark:text-white">No Jobs Found</h2>
                 <p className="text-slate-400 dark:text-slate-500 text-xs mt-1 leading-relaxed">
                   We couldn't find any job opportunities matching your criteria. Try adjusting the search keywords or filters.
                 </p>
@@ -392,7 +353,7 @@ function Job() {
                         {/* Save Job Button */}
                         <button
                           onClick={(e) => { e.stopPropagation(); handleToggleSave(job._id); }}
-                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-brand-primary dark:text-slate-500 dark:hover:text-brand-primary transition-all duration-200 cursor-pointer active:scale-90"
+                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800 text-slate-400 hover:text-brand-primary dark:text-slate-500 dark:hover:text-brand-primary transition-all duration-200 cursor-pointer active:scale-90"
                           title={savedIds.includes(job._id) ? "Remove from Saved" : "Save Job"}
                         >
                           {savedIds.includes(job._id) ? (
@@ -403,25 +364,25 @@ function Job() {
                         </button>
 
                         <div className="text-right flex flex-col items-end gap-1.5">
-                        {job.jobType && (
-                          <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0 select-none">
-                            {job.jobType}
-                          </span>
-                        )}
-                        {user && (
-                          <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider select-none shrink-0 ${
-                            job.matchScore >= 80 
-                              ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400' 
-                              : job.matchScore >= 50
-                              ? 'bg-amber-100 text-amber-700 dark:bg-amber-955/40 dark:text-amber-400'
-                              : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
-                          }`}>
-                            {job.matchScore}% Match
-                          </span>
-                        )}
+                          {job.jobType && (
+                            <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0 select-none">
+                              {job.jobType}
+                            </span>
+                          )}
+                          {user && (
+                            <span className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase tracking-wider select-none shrink-0 ${
+                              job.matchScore >= 80 
+                                ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400' 
+                                : job.matchScore >= 50
+                                ? 'bg-amber-100 text-amber-700 dark:bg-amber-955/40 dark:text-amber-400'
+                                : 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-400'
+                            }`}>
+                              {job.matchScore}% Match
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
                     {/* Details: Location & Salary */}
                     <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">
@@ -509,4 +470,4 @@ function Job() {
   )
 }
 
-export default Job
+export default Job;
