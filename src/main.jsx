@@ -22,6 +22,8 @@ window.initScrollAnimations = () => {
               'scroll-anim-card',
               'is-visible',
               'opacity-0',
+              'scale-95',
+              'translate-y-6',
               'scale-97',
               '-translate-x-16',
               'translate-x-16',
@@ -33,13 +35,13 @@ window.initScrollAnimations = () => {
               'lg:rotate-[2deg]',
               'lg:translate-y-0'
             );
-          }, 450);
+          }, 600);
         }
       });
     },
     {
-      threshold: 0,
-      rootMargin: "0px 0px 100px 0px"
+      threshold: 0.05,
+      rootMargin: "0px 0px -30px 0px"
     }
   );
 
@@ -48,7 +50,7 @@ window.initScrollAnimations = () => {
 };
 
 window.getScrollAnimClass = (index) => {
-  return "scroll-anim-card opacity-0 scale-97";
+  return "scroll-anim-card opacity-0 scale-95 translate-y-6";
 };
 
 axios.interceptors.request.use((config) => {
