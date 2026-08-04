@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   FaUserCircle, 
+  FaHeart, 
   FaBriefcase, 
   FaFileAlt, 
   FaChartLine, 
@@ -55,6 +56,7 @@ function Welcome() {
   const [isPremiumUser, setIsPremiumUser] = useState(user?.isPremium || false)
   const [applyLoadingId, setApplyLoadingId] = useState(null)
   const [appliedIds, setAppliedIds] = useState([])
+  const [savedCount, setSavedCount] = useState(0)
 
   // Modal & Support states
   const [isSupportOpen, setIsSupportOpen] = useState(false)
@@ -182,6 +184,13 @@ function Welcome() {
         } else {
           setApplications([])
         }
+
+        const savedRes = await axios.get(
+          `https://careerbridge-b-1.onrender.com/api/savedJobs/${user._id}`
+        )
+        if (savedRes.data && Array.isArray(savedRes.data)) {
+          setSavedCount(savedRes.data.length)
+        }
       } catch (err) {
         console.error("Fetch dashboard data error:", err)
         setError("Unable to retrieve job applications. Please try again later.")
@@ -253,6 +262,7 @@ function Welcome() {
   const stats = [
     { label: "Profile Strength", value: `${strength}%`, icon: <FaChartLine />, color: "text-brand-primary bg-brand-primary/10", borderClass: "border-t-brand-primary" },
     { label: "Applied Jobs", value: appsArray.length, icon: <FaBriefcase />, color: "text-violet-500 bg-violet-500/10", borderClass: "border-t-violet-500" },
+    { label: "Saved Jobs", value: savedCount, icon: <FaHeart />, color: "text-rose-500 bg-rose-500/10", borderClass: "border-t-rose-500", onClick: () => navigate('/savedJobs') },
     { label: "Shortlisted", value: shortlistedCount, icon: <FaCheckCircle />, color: "text-emerald-500 bg-emerald-500/10", borderClass: "border-t-emerald-500" },
     { label: "Pending Reviews", value: pendingCount, icon: <FaHourglassHalf />, color: "text-amber-500 bg-amber-500/10", borderClass: "border-t-amber-500" }
   ]
@@ -708,11 +718,12 @@ function Welcome() {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 sm:gap-6">
               {stats.map((stat, i) => (
                 <div
                   key={i}
-                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${stat.borderClass} p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex items-center justify-between gap-2.5 sm:gap-4`}
+                  onClick={stat.onClick}
+                  className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${stat.borderClass} p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex items-center justify-between gap-2.5 sm:gap-4 ${stat.onClick ? 'cursor-pointer active:scale-95' : ''}`}
                 >
                   <div className="space-y-0.5 sm:space-y-1 min-w-0">
                     <p className="text-slate-405 dark:text-slate-505 text-[10px] sm:text-xs font-black uppercase tracking-wider truncate">

@@ -8,7 +8,9 @@ import {
   FaRupeeSign, 
   FaSearch, 
   FaSpinner, 
-  FaCheckCircle 
+  FaCheckCircle,
+  FaHeart,
+  FaRegHeart 
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { HiArrowLeft } from 'react-icons/hi';
@@ -17,6 +19,7 @@ import Button from "./Button";
 function Job() {
   const [jobs, setJobs] = useState([])
   const [appliedIds, setAppliedIds] = useState([])
+  const [savedIds, setSavedIds] = useState([])
 
   const [search, setSearch] = useState("")
   const [location, setLocation] = useState("")
@@ -132,6 +135,12 @@ function Job() {
           )
           const ids = appliedRes.data.map(app => app.jobId?._id).filter(id => id != null)
           setAppliedIds(ids)
+
+          const savedRes = await axios.get(
+            `https://careerbridge-b-1.onrender.com/api/savedJobs/${user._id}`
+          )
+          const sIds = savedRes.data.map(job => job._id).filter(id => id != null)
+          setSavedIds(sIds)
         }
       } catch (error) {
         console.error("Fetch Jobs Error:", error)
@@ -148,6 +157,32 @@ function Job() {
       }, 50)
     }
   }, [loading])
+
+  const handleToggleSave = async (jobId) => {
+    if (!user) {
+      toast.error("Please login to save jobs")
+      window.dispatchEvent(new Event("open-login"))
+      return
+    }
+
+    try {
+      const response = await axios.post("https://careerbridge-b-1.onrender.com/api/toggleSaveJob", {
+        userId: user._id,
+        jobId
+      })
+      const isSavedNow = response.data.isSaved
+      if (isSavedNow) {
+        setSavedIds(prev => [...prev, jobId])
+        toast.success("Job saved successfully!")
+      } else {
+        setSavedIds(prev => prev.filter(id => id !== jobId))
+        toast.success("Job removed from saved list")
+      }
+    } catch (error) {
+      console.error("Toggle Save Error:", error)
+      toast.error("Failed to update save status")
+    }
+  }
 
   const handleApply = async (jobId) => {
     if (!user) {
@@ -314,7 +349,7 @@ function Job() {
                   <div className="space-y-4">
                     {/* Card Title & Type */}
                     <div className="flex justify-between items-start gap-3">
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
                           <h2 className="text-lg font-black text-slate-805 dark:text-white leading-snug line-clamp-1">
                             {job.title}
@@ -329,7 +364,22 @@ function Job() {
                           {job.company}
                         </p>
                       </div>
-                      <div className="text-right flex flex-col items-end gap-1.5">
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {/* Save Job Button */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); handleToggleSave(job._id); }}
+                          className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer active:scale-90"
+                          title={savedIds.includes(job._id) ? "Remove from Saved" : "Save Job"}
+                        >
+                          {savedIds.includes(job._id) ? (
+                            <FaHeart className="text-rose-500 text-sm sm:text-base animate-scale-in" />
+                          ) : (
+                            <FaRegHeart className="text-sm sm:text-base" />
+                          )}
+                        </button>
+
+                        <div className="text-right flex flex-col items-end gap-1.5">
                         {job.jobType && (
                           <span className="px-2.5 py-1 bg-brand-primary/10 text-brand-primary dark:bg-brand-primary/20 dark:text-brand-primary-light rounded-lg text-[10px] font-black uppercase tracking-wider shrink-0 select-none">
                             {job.jobType}
@@ -348,6 +398,7 @@ function Job() {
                         )}
                       </div>
                     </div>
+                  </div>
 
                     {/* Details: Location & Salary */}
                     <div className="space-y-2 text-xs text-slate-500 dark:text-slate-400">

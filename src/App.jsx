@@ -15,6 +15,7 @@ import RecruiterDashboard from './component/RecruiterDashboard.jsx'
 import AddJob from './component/AddJob.jsx'
 import Applicants from './component/Applicants.jsx'
 import Resume from './component/Resume.jsx'
+import SavedJobs from './component/SavedJobs.jsx'
 import { Toaster } from 'react-hot-toast'
 import OTP from './component/OTP.jsx'
 import Privacy from './component/Privacy.jsx'
@@ -89,6 +90,7 @@ function App() {
           <Route path="/welcome" element={<Navigate to="/dashboard" replace />} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/appliedJobs" element={<ProtectedRoute role="user"><AppliedJobs /></ProtectedRoute>} />
+          <Route path="/savedJobs" element={<ProtectedRoute role="user"><SavedJobs /></ProtectedRoute>} />
           <Route path="/addJobs" element={<ProtectedRoute role="recruiter"><AddJob /></ProtectedRoute>} />
           <Route path="/recruiterdashboard" element={<ProtectedRoute role="recruiter"><RecruiterDashboard /></ProtectedRoute>} />
           <Route path="/applicants/:jobId" element={<ProtectedRoute role="recruiter"><Applicants /></ProtectedRoute>} />
