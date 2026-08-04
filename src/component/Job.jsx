@@ -16,17 +16,21 @@ import toast from 'react-hot-toast';
 import { HiArrowLeft } from 'react-icons/hi';
 import Button from "./Button";
 
+let jobsCache = null;
+let appliedIdsCache = null;
+let savedIdsCache = null;
+
 function Job() {
-  const [jobs, setJobs] = useState([])
-  const [appliedIds, setAppliedIds] = useState([])
-  const [savedIds, setSavedIds] = useState([])
+  const [jobs, setJobs] = useState(jobsCache || [])
+  const [appliedIds, setAppliedIds] = useState(appliedIdsCache || [])
+  const [savedIds, setSavedIds] = useState(savedIdsCache || [])
 
   const [search, setSearch] = useState("")
   const [location, setLocation] = useState("")
   const [jobType, setJobType] = useState("")
   const [salary, setSalary] = useState("")
   const [sort, setSort] = useState("match")
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!jobsCache)
   const [applyLoadingId, setApplyLoadingId] = useState(null);
 
   const storedUser = localStorage.getItem('user')
@@ -124,10 +128,15 @@ function Job() {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
+        if (!jobsCache) {
+          setLoading(true)
+        }
         const response = await axios.get(
           "/job/getJob"
         )
-        setJobs(response.data.jobs)
+        const fetched = response.data.jobs || []
+        setJobs(fetched)
+        jobsCache = fetched
         
         if (user) {
           const appliedRes = await axios.get(
@@ -135,12 +144,14 @@ function Job() {
           )
           const ids = appliedRes.data.map(app => app.jobId?._id).filter(id => id != null)
           setAppliedIds(ids)
+          appliedIdsCache = ids
 
           const savedRes = await axios.get(
             `/api/savedJobs/${user._id}`
           )
           const sIds = savedRes.data.map(job => job._id).filter(id => id != null)
           setSavedIds(sIds)
+          savedIdsCache = sIds
         }
       } catch (error) {
         console.error("Fetch Jobs Error:", error)
@@ -172,10 +183,18 @@ function Job() {
       })
       const isSavedNow = response.data.isSaved
       if (isSavedNow) {
-        setSavedIds(prev => [...prev, jobId])
+        setSavedIds(prev => {
+          const updated = [...prev, jobId]
+          savedIdsCache = updated
+          return updated
+        })
         toast.success("Job saved successfully!")
       } else {
-        setSavedIds(prev => prev.filter(id => id !== jobId))
+        setSavedIds(prev => {
+          const updated = prev.filter(id => id !== jobId)
+          savedIdsCache = updated
+          return updated
+        })
         toast.success("Job removed from saved list")
       }
     } catch (error) {
@@ -199,7 +218,11 @@ function Job() {
           jobId
         }
       )
-      setAppliedIds(prev => [...prev, jobId])
+      setAppliedIds(prev => {
+        const updated = [...prev, jobId]
+        appliedIdsCache = updated
+        return updated
+      })
       toast.success(response.data.message || "Applied successfully!");
     } catch (error) {
       toast.error(error.response?.data?.message || "Application failed")

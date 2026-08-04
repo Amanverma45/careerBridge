@@ -12,9 +12,11 @@ import {
 } from "react-icons/fa"
 import { HiArrowLeft } from "react-icons/hi"
 
+let savedJobsCache = null;
+
 function SavedJobs() {
-  const [savedJobs, setSavedJobs] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [savedJobs, setSavedJobs] = useState(savedJobsCache || [])
+  const [loading, setLoading] = useState(!savedJobsCache)
   const [error, setError] = useState(null)
   const [exitingIds, setExitingIds] = useState([])
 
@@ -30,11 +32,15 @@ function SavedJobs() {
 
     const fetchSaved = async () => {
       try {
-        setLoading(true)
+        if (!savedJobsCache) {
+          setLoading(true)
+        }
         const response = await axios.get(
           `/api/savedJobs/${user._id}`
         )
-        setSavedJobs(response.data)
+        const fetchedSaved = response.data || []
+        setSavedJobs(fetchedSaved)
+        savedJobsCache = fetchedSaved
       } catch (err) {
         console.error("FETCH SAVED JOBS ERROR:", err)
         setError("Could not load your saved jobs. Please try again.")
@@ -67,7 +73,11 @@ function SavedJobs() {
             userId: user._id,
             jobId
           })
-          setSavedJobs(prev => prev.filter(job => job._id !== jobId))
+          setSavedJobs(prev => {
+            const updated = prev.filter(job => job._id !== jobId)
+            savedJobsCache = updated
+            return updated
+          })
           setExitingIds(prev => prev.filter(id => id !== jobId))
           toast.success("Job removed from saved list")
         } catch (error) {
