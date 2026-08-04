@@ -170,9 +170,14 @@ function Navbar() {
               {user?.role === "user" && (
                 <Link
                   to="/jobs"
-                  className="px-5 py-2.5 rounded-xl text-sm font-semibold bg-brand-primary hover:bg-brand-primary-hover text-white shadow-[0_4px_12px_rgba(37,99,235,0.15)] hover:shadow-[0_4px_20px_rgba(37,99,235,0.3)] transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                  className={`relative px-3 py-2 text-sm font-semibold tracking-wide transition-all duration-300 group ${
+                    isActive('/jobs') ? 'text-brand-secondary' : 'text-slate-655 hover:text-brand-secondary dark:text-slate-300 dark:hover:text-brand-secondary'
+                  }`}
                 >
                   Jobs
+                  <span className={`absolute bottom-0 left-0 h-[2px] bg-brand-secondary transition-all duration-300 ${
+                    isActive('/jobs') ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`} />
                 </Link>
               )}
 
