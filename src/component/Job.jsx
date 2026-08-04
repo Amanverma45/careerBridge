@@ -9,8 +9,8 @@ import {
   FaSearch, 
   FaSpinner, 
   FaCheckCircle,
-  FaHeart,
-  FaRegHeart 
+  FaBookmark,
+  FaRegBookmark 
 } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { HiArrowLeft } from 'react-icons/hi';
@@ -125,19 +125,19 @@ function Job() {
     const fetchJobs = async () => {
       try {
         const response = await axios.get(
-          "https://careerbridge-b-1.onrender.com/job/getJob"
+          "/job/getJob"
         )
         setJobs(response.data.jobs)
         
         if (user) {
           const appliedRes = await axios.get(
-            `https://careerbridge-b-1.onrender.com/application/appliedJobs/${user._id}`
+            `/application/appliedJobs/${user._id}`
           )
           const ids = appliedRes.data.map(app => app.jobId?._id).filter(id => id != null)
           setAppliedIds(ids)
 
           const savedRes = await axios.get(
-            `https://careerbridge-b-1.onrender.com/api/savedJobs/${user._id}`
+            `/api/savedJobs/${user._id}`
           )
           const sIds = savedRes.data.map(job => job._id).filter(id => id != null)
           setSavedIds(sIds)
@@ -166,7 +166,7 @@ function Job() {
     }
 
     try {
-      const response = await axios.post("https://careerbridge-b-1.onrender.com/api/toggleSaveJob", {
+      const response = await axios.post("/api/toggleSaveJob", {
         userId: user._id,
         jobId
       })
@@ -193,7 +193,7 @@ function Job() {
     try {
       setApplyLoadingId(jobId)
       const response = await axios.post(
-        "https://careerbridge-b-1.onrender.com/application/applyJob",
+        "/application/applyJob",
         {
           userId: user._id,
           jobId
@@ -369,13 +369,13 @@ function Job() {
                         {/* Save Job Button */}
                         <button
                           onClick={(e) => { e.stopPropagation(); handleToggleSave(job._id); }}
-                          className="p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition cursor-pointer active:scale-90"
+                          className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-brand-primary dark:text-slate-500 dark:hover:text-brand-primary transition-all duration-200 cursor-pointer active:scale-90"
                           title={savedIds.includes(job._id) ? "Remove from Saved" : "Save Job"}
                         >
                           {savedIds.includes(job._id) ? (
-                            <FaHeart className="text-rose-500 text-sm sm:text-base animate-scale-in" />
+                            <FaBookmark className="text-brand-primary text-sm sm:text-base animate-scale-in" />
                           ) : (
-                            <FaRegHeart className="text-sm sm:text-base" />
+                            <FaRegBookmark className="text-sm sm:text-base" />
                           )}
                         </button>
 

@@ -7,7 +7,8 @@ import {
   FaBriefcase, 
   FaRupeeSign, 
   FaSpinner, 
-  FaHeart 
+  FaBookmark,
+  FaRegBookmark 
 } from "react-icons/fa"
 import { HiArrowLeft } from "react-icons/hi"
 
@@ -31,7 +32,7 @@ function SavedJobs() {
       try {
         setLoading(true)
         const response = await axios.get(
-          `https://careerbridge-b-1.onrender.com/api/savedJobs/${user._id}`
+          `/api/savedJobs/${user._id}`
         )
         setSavedJobs(response.data)
       } catch (err) {
@@ -62,7 +63,7 @@ function SavedJobs() {
 
       setTimeout(async () => {
         try {
-          await axios.post("https://careerbridge-b-1.onrender.com/api/toggleSaveJob", {
+          await axios.post("/api/toggleSaveJob", {
             userId: user._id,
             jobId
           })
@@ -128,7 +129,7 @@ function SavedJobs() {
         ) : savedJobs.length === 0 ? (
           <div className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 p-16 rounded-[2rem] text-center shadow-sm max-w-lg mx-auto space-y-5">
             <div className="w-16 h-16 bg-slate-555/5 dark:bg-slate-950 rounded-2xl flex items-center justify-center text-slate-400 dark:text-slate-500 text-3xl mx-auto">
-              <FaHeart className="text-slate-350" />
+              <FaBookmark className="text-slate-350" />
             </div>
             <div>
               <h2 className="text-lg font-black text-slate-850 dark:text-white">No Saved Jobs</h2>
@@ -176,10 +177,10 @@ function SavedJobs() {
                         
                         <button
                           onClick={() => handleUnsave(job._id)}
-                          className="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-955/20 text-rose-550 dark:text-rose-400 hover:bg-rose-100 hover:text-rose-600 transition cursor-pointer shrink-0"
+                          className="p-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-brand-primary dark:text-slate-400 dark:hover:text-brand-primary transition cursor-pointer shrink-0"
                           title="Remove from Saved"
                         >
-                          <FaHeart className="text-xs sm:text-sm" />
+                          <FaBookmark className="text-xs sm:text-sm text-brand-primary" />
                         </button>
                       </div>
 

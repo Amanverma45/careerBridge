@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { 
   FaUserCircle, 
-  FaHeart, 
+  FaBookmark,
   FaBriefcase, 
   FaFileAlt, 
   FaChartLine, 
@@ -186,7 +186,7 @@ function Welcome() {
         }
 
         const savedRes = await axios.get(
-          `https://careerbridge-b-1.onrender.com/api/savedJobs/${user._id}`
+          `/api/savedJobs/${user._id}`
         )
         if (savedRes.data && Array.isArray(savedRes.data)) {
           setSavedCount(savedRes.data.length)
@@ -262,7 +262,7 @@ function Welcome() {
   const stats = [
     { label: "Profile Strength", value: `${strength}%`, icon: <FaChartLine />, color: "text-brand-primary bg-brand-primary/10", borderClass: "border-t-brand-primary" },
     { label: "Applied Jobs", value: appsArray.length, icon: <FaBriefcase />, color: "text-violet-500 bg-violet-500/10", borderClass: "border-t-violet-500" },
-    { label: "Saved Jobs", value: savedCount, icon: <FaHeart />, color: "text-rose-500 bg-rose-500/10", borderClass: "border-t-rose-500", onClick: () => navigate('/savedJobs') },
+    { label: "Saved Jobs", value: savedCount, icon: <FaBookmark />, color: "text-brand-primary bg-brand-primary/10", borderClass: "border-t-brand-primary", onClick: () => navigate('/savedJobs') },
     { label: "Shortlisted", value: shortlistedCount, icon: <FaCheckCircle />, color: "text-emerald-500 bg-emerald-500/10", borderClass: "border-t-emerald-500" },
     { label: "Pending Reviews", value: pendingCount, icon: <FaHourglassHalf />, color: "text-amber-500 bg-amber-500/10", borderClass: "border-t-amber-500" }
   ]
