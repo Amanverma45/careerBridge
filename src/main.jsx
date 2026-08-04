@@ -22,6 +22,7 @@ window.initScrollAnimations = () => {
               'scroll-anim-card',
               'is-visible',
               'opacity-0',
+              'scale-97',
               '-translate-x-16',
               'translate-x-16',
               'rotate-[-1deg]',
@@ -32,13 +33,13 @@ window.initScrollAnimations = () => {
               'lg:rotate-[2deg]',
               'lg:translate-y-0'
             );
-          }, 600);
+          }, 450);
         }
       });
     },
     {
       threshold: 0,
-      rootMargin: "0px 0px 80px 0px"
+      rootMargin: "0px 0px 100px 0px"
     }
   );
 
@@ -47,21 +48,7 @@ window.initScrollAnimations = () => {
 };
 
 window.getScrollAnimClass = (index) => {
-  const isMobileLeft = index % 2 === 0;
-  const mobileClass = isMobileLeft 
-    ? "-translate-x-16 rotate-[-1deg]" 
-    : "translate-x-16 rotate-[1deg]";
-
-  let desktopClass = "";
-  if (index % 3 === 0) {
-    desktopClass = "lg:-translate-x-24 lg:translate-y-0 lg:rotate-[-2deg]";
-  } else if (index % 3 === 1) {
-    desktopClass = "lg:translate-x-0 lg:translate-y-24 lg:rotate-0";
-  } else {
-    desktopClass = "lg:translate-x-24 lg:translate-y-0 lg:rotate-[2deg]";
-  }
-
-  return `scroll-anim-card opacity-0 ${mobileClass} ${desktopClass}`;
+  return "scroll-anim-card opacity-0 scale-97";
 };
 
 axios.interceptors.request.use((config) => {
