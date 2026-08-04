@@ -182,15 +182,79 @@ function Job() {
     return matchSearch && matchLocation && matchJobType && matchSalary;
   });
 
+  // --- SMART MATCHING ALGORITHM IMPLEMENTATION (Identical to Dashboard) ---
+  const userSkills = (user?.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
+
+  const computeJobMatch = (job) => {
+    if (userSkills.length === 0) {
+      return { 
+        score: 15, 
+        matched: [], 
+        missing: job.skills ? job.skills.split(',').map(s => s.trim()).filter(Boolean) : [] 
+      }
+    }
+
+    const jobSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
+    
+    let matched = []
+    let missing = []
+
+    if (jobSkills.length > 0) {
+      jobSkills.forEach(skill => {
+        if (userSkills.includes(skill)) {
+          matched.push(skill)
+        } else {
+          missing.push(skill)
+        }
+      })
+    } else {
+      // Check job description/title
+      const textToSearch = `${job.title} ${job.description}`.toLowerCase()
+      userSkills.forEach(skill => {
+        if (textToSearch.includes(skill)) {
+          matched.push(skill)
+        }
+      })
+      // Assume basic developer tools are missing if description is empty and user doesn't have them
+      const generalStack = ["react", "node.js", "javascript", "python", "docker", "typescript", "mongodb", "sql"]
+      generalStack.forEach(skill => {
+        if (textToSearch.includes(skill) && !userSkills.includes(skill)) {
+          missing.push(skill)
+        }
+      })
+    }
+
+    let rawScore = 15
+    if (jobSkills.length > 0) {
+      const ratio = matched.length / jobSkills.length
+      rawScore = ratio * 85 + 15
+    } else if (userSkills.length > 0) {
+      const textMatchRatio = matched.length / userSkills.length
+      rawScore = textMatchRatio * 65 + 15
+    }
+
+    // Title match boost
+    const titleLower = (job.title || "").toLowerCase()
+    const matchAnyTitle = userSkills.some(skill => titleLower.includes(skill))
+    if (matchAnyTitle) rawScore += 15
+
+    const finalScore = Math.min(Math.round(rawScore), 99)
+    return {
+      score: finalScore < 15 ? 15 : finalScore,
+      matched,
+      missing
+    }
+  }
+
   // Calculate Match Score
   const jobsWithScores = filteredJobs.map(job => {
-    if (!user) return { ...job, matchScore: 0 };
-    const uSkills = (user.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-    const jSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-    if (jSkills.length === 0) return { ...job, matchScore: 0 };
-    const matched = uSkills.filter(s => jSkills.includes(s));
-    const score = Math.round((matched.length / jSkills.length) * 100);
-    return { ...job, matchScore: score };
+    const matchDetails = computeJobMatch(job)
+    return { 
+      ...job, 
+      matchScore: matchDetails.score,
+      matchedSkills: matchDetails.matched,
+      missingSkills: matchDetails.missing
+    }
   });
 
   const sortedJobs = [...jobsWithScores].sort((a, b) => {
@@ -427,30 +491,22 @@ function Job() {
                       <div className="border-t border-slate-100 dark:border-slate-800/40 pt-3 space-y-1.5">
                         <p className="text-[10px] font-black uppercase text-slate-400 dark:text-slate-500 tracking-wider">AI Skill Match</p>
                         <div className="flex flex-wrap gap-1.5">
-                          {(() => {
-                            const uSkills = (user.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-                            const jSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-                            const matched = uSkills.filter(s => jSkills.includes(s));
-                            const missing = jSkills.filter(s => !uSkills.includes(s));
-
-                            return (
-                              <>
-                                {matched.length === 0 && missing.length === 0 && (
-                                  <span className="text-[10px] text-slate-400 italic">No skills overlap info available</span>
-                                )}
-                                {matched.map((skill, idx) => (
-                                  <span key={`m-${idx}`} className="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
-                                    ✓ {skill}
-                                  </span>
-                                ))}
-                                {missing.slice(0, 3).map((skill, idx) => (
-                                  <span key={`ms-${idx}`} className="bg-slate-100 text-slate-500 dark:bg-slate-850 dark:text-slate-500 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider">
-                                    {skill}
-                                  </span>
-                                ))}
-                              </>
-                            );
-                          })()}
+                          {((job.matchedSkills || []).length === 0 && (job.missingSkills || []).length === 0) ? (
+                            <span className="text-[10px] text-slate-400 italic">No skills overlap info available</span>
+                          ) : (
+                            <>
+                              {(job.matchedSkills || []).map((skill, idx) => (
+                                <span key={`m-${idx}`} className="bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">
+                                  ✓ {skill}
+                                </span>
+                              ))}
+                              {(job.missingSkills || []).slice(0, 3).map((skill, idx) => (
+                                <span key={`ms-${idx}`} className="bg-slate-100 text-slate-500 dark:bg-slate-850 dark:text-slate-500 px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider">
+                                  {skill}
+                                </span>
+                              ))}
+                            </>
+                          )}
                         </div>
                       </div>
                     )}
