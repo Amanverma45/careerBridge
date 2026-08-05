@@ -95,6 +95,21 @@ function Profile({ isModal, onClose }) {
         }
     }
 
+    const handleRemovePhoto = async () => {
+        try {
+            setUploadingPhoto(true)
+            const response = await axios.post("/api/removePhoto", { userId: user._id })
+            localStorage.setItem("user", JSON.stringify(response.data.user))
+            setUser(response.data.user)
+            toast.success("Profile photo removed successfully!")
+        } catch (error) {
+            console.error(error)
+            toast.error(error.response?.data?.message || "Failed to remove photo")
+        } finally {
+            setUploadingPhoto(false)
+        }
+    }
+
     const handleResumeUpload = async (e) => {
         const file = e.target.files[0]
         if (!file) return
@@ -577,14 +592,37 @@ function Profile({ isModal, onClose }) {
                             <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-1">
                                 <p className="text-xs font-bold text-slate-755 dark:text-slate-350">Profile Picture</p>
                                 <p className="text-[10px] text-slate-400">Upload JPEG, PNG or WEBP (Max 10MB)</p>
-                                <button
-                                    onClick={() => fileInputRef.current.click()}
-                                    type="button"
-                                    disabled={uploadingPhoto}
-                                    className="mt-1.5 px-3 py-1.5 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs transition cursor-pointer border-none flex items-center gap-1.5 active:scale-95"
-                                >
-                                    <FaCamera /> Upload Photo
-                                </button>
+                                <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                                    {user.profilePhoto ? (
+                                        <>
+                                            <button
+                                                onClick={() => fileInputRef.current.click()}
+                                                type="button"
+                                                disabled={uploadingPhoto}
+                                                className="px-3 py-1.5 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs transition cursor-pointer border-none flex items-center gap-1.5 active:scale-95"
+                                            >
+                                                <FaCamera /> Change Photo
+                                            </button>
+                                            <button
+                                                onClick={handleRemovePhoto}
+                                                type="button"
+                                                disabled={uploadingPhoto}
+                                                className="px-3 py-1.5 bg-rose-500/10 hover:bg-rose-500 hover:text-white text-rose-500 font-bold rounded-xl text-xs transition cursor-pointer border-none flex items-center gap-1.5 active:scale-95"
+                                            >
+                                                Remove Photo
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <button
+                                            onClick={() => fileInputRef.current.click()}
+                                            type="button"
+                                            disabled={uploadingPhoto}
+                                            className="px-3 py-1.5 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs transition cursor-pointer border-none flex items-center gap-1.5 active:scale-95"
+                                        >
+                                            <FaCamera /> Upload Photo
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
 
