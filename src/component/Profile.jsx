@@ -20,6 +20,7 @@ function Profile({ isModal, onClose }) {
     const resumeInputRef = useRef(null)
 
     const [isEditMode, setIsEditMode] = useState(false)
+    const [isPreviewOpen, setIsPreviewOpen] = useState(false)
     const [name, setName] = useState('')
     const [skills, setSkills] = useState('')
     const [experience, setExperience] = useState('')
@@ -216,9 +217,14 @@ function Profile({ isModal, onClose }) {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {/* Left Column - User info, Photo, Contacts, Resume (Unified inside 1 Card) */}
                         <div className="md:col-span-1 p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-6 shadow-sm flex flex-col justify-start">
-                            {/* Profile Photo Display with upload wrapper */}
+                            {/* Profile Photo Display with zoom preview wrapper */}
                             <div className="flex flex-col items-center text-center relative group">
-                                <div className="relative w-28 h-28 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center">
+                                <button 
+                                    onClick={() => setIsPreviewOpen(true)}
+                                    type="button"
+                                    className="relative w-28 h-28 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center cursor-zoom-in group border-none p-0 outline-none"
+                                    title="Click to zoom photo"
+                                >
                                     {user.profilePhoto ? (
                                         <img 
                                             src={user.profilePhoto} 
@@ -229,21 +235,12 @@ function Profile({ isModal, onClose }) {
                                         <HiOutlineUser className="text-5xl text-slate-400" />
                                     )}
                                     
-                                    {/* Upload photo overlay */}
-                                    <button 
-                                        onClick={() => fileInputRef.current.click()}
-                                        className="absolute inset-0 bg-black/50 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer border-none"
-                                    >
-                                        <FaCamera className="text-xl mb-1" />
-                                        <span className="text-[10px] font-bold uppercase tracking-wider">Change</span>
-                                    </button>
-                                    
-                                    {uploadingPhoto && (
-                                        <div className="absolute inset-0 bg-slate-900/80 flex items-center justify-center">
-                                            <span className="text-xs text-white font-bold">Uploading...</span>
-                                        </div>
-                                    )}
-                                </div>
+                                    {/* Zoom overlay on hover */}
+                                    <div className="absolute inset-0 bg-black/40 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                                        <FaEye className="text-2xl" />
+                                        <span className="text-[9px] font-bold uppercase tracking-wider mt-1">Preview</span>
+                                    </div>
+                                </button>
                                 <input 
                                     ref={fileInputRef}
                                     type="file"
@@ -559,6 +556,38 @@ function Profile({ isModal, onClose }) {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+                        {/* Profile Photo edit section inside Edit Profile */}
+                        <div className="md:col-span-2 flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50/50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 rounded-3xl">
+                            <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center shrink-0">
+                                {user.profilePhoto ? (
+                                    <img 
+                                        src={user.profilePhoto} 
+                                        alt="Preview" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <HiOutlineUser className="text-4xl text-slate-400" />
+                                )}
+                                {uploadingPhoto && (
+                                    <div className="absolute inset-0 bg-slate-900/80 flex items-center justify-center">
+                                        <span className="text-[10px] text-white font-bold">Uploading...</span>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex flex-col items-center sm:items-start text-center sm:text-left gap-1">
+                                <p className="text-xs font-bold text-slate-755 dark:text-slate-350">Profile Picture</p>
+                                <p className="text-[10px] text-slate-400">Upload JPEG, PNG or WEBP (Max 10MB)</p>
+                                <button
+                                    onClick={() => fileInputRef.current.click()}
+                                    type="button"
+                                    disabled={uploadingPhoto}
+                                    className="mt-1.5 px-3 py-1.5 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary font-bold rounded-xl text-xs transition cursor-pointer border-none flex items-center gap-1.5 active:scale-95"
+                                >
+                                    <FaCamera /> Upload Photo
+                                </button>
+                            </div>
+                        </div>
+
                         {/* Name */}
                         <div>
                             <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-350">
@@ -795,6 +824,39 @@ function Profile({ isModal, onClose }) {
                         >
                             {loading ? "Saving..." : "Save Changes"}
                         </button>
+                    </div>
+                </div>
+            )}
+            {/* Image Preview Lightbox */}
+            {isPreviewOpen && (
+                <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[80] flex items-center justify-center p-4 animate-fade-in" onClick={() => setIsPreviewOpen(false)}>
+                    <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-2xl relative animate-scale-in" onClick={(e) => e.stopPropagation()}>
+                        {/* Header with Name and Close button */}
+                        <div className="flex justify-between items-center w-full pb-3 border-b border-slate-200 dark:border-slate-850">
+                            <h2 className="text-lg font-black text-slate-800 dark:text-white leading-none">
+                                {isRecruiter ? (skills || "Company Profile") : (name || "Profile Photo")}
+                            </h2>
+                            <button
+                                onClick={() => setIsPreviewOpen(false)}
+                                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition cursor-pointer border-none flex items-center justify-center"
+                                aria-label="Close preview"
+                            >
+                                <HiX className="text-lg stroke-[3px]" />
+                            </button>
+                        </div>
+                        
+                        {/* Large Image */}
+                        <div className="mt-4 flex items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-950 aspect-square border border-slate-200 dark:border-slate-800">
+                            {user.profilePhoto ? (
+                                <img 
+                                    src={user.profilePhoto} 
+                                    alt="Profile Zoom" 
+                                    className="w-full h-full object-contain"
+                                />
+                            ) : (
+                                <HiOutlineUser className="text-8xl text-slate-350 dark:text-slate-700" />
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
