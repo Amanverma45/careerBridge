@@ -376,12 +376,12 @@ function Profile({ isModal, onClose }) {
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Key Skills</h3>
                                         {skills ? (
                                             <div className="flex flex-wrap gap-1.5">
-                                                {skills.split(',').map((skill, i) => (
+                                                {skills.split(',').map(s => s.trim()).filter(Boolean).map((skill, i) => (
                                                     <span 
                                                         key={i}
                                                         className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800 text-[10px] sm:text-xs font-semibold text-slate-755 dark:text-slate-300 shadow-sm"
                                                     >
-                                                        {skill.trim()}
+                                                        {skill}
                                                     </span>
                                                 ))}
                                             </div>
