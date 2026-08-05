@@ -325,10 +325,56 @@ function Welcome() {
   const userSkills = (user?.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
 
   const computeJobMatch = (job) => {
+    if (!job) return { score: 0, matched: [], missing: [] }
     if (!userSkills.length) return { score: 0, matched: [], missing: [] }
 
-    const jobSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
+    let jobSkills = (job.skills || "").toLowerCase().split(',').map(s => s.trim()).filter(Boolean)
     
+    const titleLower = (job.title || "").toLowerCase()
+    const descLower = (job.description || "").toLowerCase()
+    const textToSearch = `${titleLower} ${descLower}`
+
+    // 1. If job has no explicit skills, let's infer them from title/description categories
+    if (jobSkills.length === 0) {
+      const commonSkills = [
+        "react", "node", "express", "mongodb", "javascript", "js", "html", "css",
+        "laravel", "php", "java", "spring", "c++", "c#", "dotnet", ".net", "python",
+        "django", "flask", "angular", "vue", "typescript", "ts", "mysql", "sql", "postgresql",
+        "aws", "docker", "kubernetes", "git", "nextjs", "next.js", "nuxt", "svelte"
+      ]
+      
+      const detectedTech = commonSkills.filter(skill => {
+        const escaped = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const regex = new RegExp(`\\b${escaped}\\b`, 'i')
+        return regex.test(textToSearch)
+      })
+
+      if (detectedTech.length > 0) {
+        jobSkills = detectedTech
+      } else {
+        const frontendKeywords = ["frontend", "web dev", "web developer", "ui", "ux", "designer"]
+        const backendKeywords = ["backend", "apis", "api", "server"]
+        const fullstackKeywords = ["full stack", "fullstack"]
+
+        const isFrontendJob = frontendKeywords.some(kw => textToSearch.includes(kw))
+        const isBackendJob = backendKeywords.some(kw => textToSearch.includes(kw))
+        const isFullStackJob = fullstackKeywords.some(kw => textToSearch.includes(kw))
+
+        const impliedSkills = new Set()
+        if (isFrontendJob) {
+          ["html", "css", "javascript", "js", "react"].forEach(s => impliedSkills.add(s))
+        }
+        if (isBackendJob) {
+          ["node", "express", "mongodb"].forEach(s => impliedSkills.add(s))
+        }
+        if (isFullStackJob) {
+          ["html", "css", "javascript", "js", "react", "node", "express", "mongodb"].forEach(s => impliedSkills.add(s))
+        }
+        jobSkills = Array.from(impliedSkills)
+      }
+    }
+
+    // 2. Perform match computation
     let matched = []
     let missing = []
 
@@ -337,47 +383,22 @@ function Welcome() {
         if (userSkills.includes(skill)) {
           matched.push(skill)
         } else {
-          missing.push(skill)
-        }
-      })
-      const score = Math.round((matched.length / jobSkills.length) * 100)
-      return { score, matched, missing }
-    } else {
-      // Check job description/title for keywords
-      const textToSearch = `${job.title} ${job.description}`.toLowerCase()
-      const commonSkills = [
-        "react", "node", "express", "mongodb", "javascript", "js", "html", "css",
-        "laravel", "php", "java", "spring", "c++", "c#", "dotnet", ".net", "python",
-        "django", "flask", "angular", "vue", "typescript", "ts", "mysql", "sql", "postgresql",
-        "aws", "docker", "kubernetes", "git", "nextjs", "next.js", "nuxt", "svelte"
-      ]
-      
-      const detectedJobSkills = commonSkills.filter(skill => {
-        const escaped = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-        const regex = new RegExp(`\\b${escaped}\\b`, 'i')
-        return regex.test(textToSearch)
-      })
-
-      if (detectedJobSkills.length > 0) {
-        detectedJobSkills.forEach(skill => {
-          if (userSkills.includes(skill)) {
+          // Synonym support for JS/Javascript
+          if (skill === "js" && userSkills.includes("javascript")) {
+            matched.push(skill)
+          } else if (skill === "javascript" && userSkills.includes("js")) {
             matched.push(skill)
           } else {
             missing.push(skill)
           }
-        })
-        const score = Math.round((matched.length / detectedJobSkills.length) * 100)
-        return { score, matched, missing }
-      } else {
-        userSkills.forEach(skill => {
-          if (textToSearch.includes(skill)) {
-            matched.push(skill)
-          }
-        })
-        const score = matched.length > 0 ? Math.round((matched.length / userSkills.length) * 100) : 0
-        return { score, matched, missing: [] }
-      }
+        }
+      })
+
+      const score = Math.round((matched.length / jobSkills.length) * 100)
+      return { score, matched, missing }
     }
+
+    return { score: 0, matched: [], missing: [] }
   }
 
   const matchedJobs = allJobs.map(job => {
