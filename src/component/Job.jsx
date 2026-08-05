@@ -214,7 +214,8 @@ function Job() {
       ]
       
       const detectedJobSkills = commonSkills.filter(skill => {
-        const regex = new RegExp(`\\b${skill.replace('.', '\\.')}\\b`, 'i')
+        const escaped = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+        const regex = new RegExp(`\\b${escaped}\\b`, 'i')
         return regex.test(textToSearch)
       })
 
