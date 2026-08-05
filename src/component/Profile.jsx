@@ -189,7 +189,7 @@ function Profile({ isModal, onClose }) {
             {!isEditMode ? (
                 <div className="space-y-6">
                     {/* Header bar */}
-                    <div className="flex justify-between items-center w-full pb-4 border-b border-slate-200/60 dark:border-slate-800/60">
+                    <div className={`flex justify-between items-center w-full pb-4 border-b border-slate-200/60 dark:border-slate-800/60 ${isModal ? "pr-10" : ""}`}>
                         <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap">
                             {isRecruiter ? "Company Profile" : "My Profile"}
                         </h1>
@@ -506,7 +506,7 @@ function Profile({ isModal, onClose }) {
             ) : (
                 // Edit Mode Form
                 <div className="space-y-6">
-                    <div className="flex items-center gap-3 pb-4 border-b border-slate-200/60 dark:border-slate-800/60">
+                    <div className={`flex items-center gap-3 pb-4 border-b border-slate-200/60 dark:border-slate-800/60 ${isModal ? "pr-10" : ""}`}>
                         <button
                             onClick={() => setIsEditMode(false)}
                             className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0 border-none"
