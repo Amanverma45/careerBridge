@@ -13,7 +13,7 @@ import {
 
 function Profile({ isModal, onClose }) {
     const storedUser = localStorage.getItem("user")
-    const user = storedUser ? JSON.parse(storedUser) : null
+    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null)
     const isRecruiter = user?.role === 'recruiter'
 
     const fileInputRef = useRef(null)
@@ -68,7 +68,7 @@ function Profile({ isModal, onClose }) {
                 setCertification(user.certification || '')
             }
         }
-    }, [isEditMode])
+    }, [isEditMode, user])
 
     const handlePhotoUpload = async (e) => {
         const file = e.target.files[0]
@@ -84,8 +84,8 @@ function Profile({ isModal, onClose }) {
                 headers: { "Content-Type": "multipart/form-data" }
             })
             localStorage.setItem("user", JSON.stringify(response.data.user))
+            setUser(response.data.user)
             toast.success("Profile photo updated successfully!")
-            setTimeout(() => { window.location.reload() }, 500)
         } catch (error) {
             console.error(error)
             toast.error(error.response?.data?.message || "Failed to upload photo")
@@ -108,8 +108,8 @@ function Profile({ isModal, onClose }) {
                 headers: { "Content-Type": "multipart/form-data" }
             })
             localStorage.setItem("user", JSON.stringify(response.data.user))
+            setUser(response.data.user)
             toast.success("Resume uploaded successfully!")
-            setTimeout(() => { window.location.reload() }, 500)
         } catch (error) {
             console.error(error)
             toast.error(error.response?.data?.message || "Failed to upload resume")
@@ -162,6 +162,7 @@ function Profile({ isModal, onClose }) {
                 "user",
                 JSON.stringify(response.data.user)
             )
+            setUser(response.data.user)
             toast.success("Profile updated successfully")
             setIsEditMode(false)
         } catch (error) {
