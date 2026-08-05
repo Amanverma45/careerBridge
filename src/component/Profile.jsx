@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import toast from "react-hot-toast"
-import { 
-  HiOutlineOfficeBuilding, HiOutlineUser, HiOutlineGlobeAlt, 
-  HiOutlineMail, HiPencilAlt, HiArrowLeft, HiX 
+import {
+    HiOutlineOfficeBuilding, HiOutlineUser, HiOutlineGlobeAlt,
+    HiOutlineMail, HiPencilAlt, HiArrowLeft, HiX
 } from 'react-icons/hi'
-import { 
-  FaCamera, FaGithub, FaLinkedin, FaGlobe, FaFilePdf, 
-  FaPhone, FaMapMarkerAlt, FaGraduationCap, FaBriefcase, 
-  FaCertificate, FaDownload, FaUpload, FaEye 
+import {
+    FaCamera, FaGithub, FaLinkedin, FaGlobe, FaFilePdf,
+    FaPhone, FaMapMarkerAlt, FaGraduationCap, FaBriefcase,
+    FaCertificate, FaDownload, FaUpload, FaEye
 } from 'react-icons/fa'
 
 function Profile({ isModal, onClose }) {
@@ -25,7 +25,7 @@ function Profile({ isModal, onClose }) {
     const [skills, setSkills] = useState('')
     const [experience, setExperience] = useState('')
     const [bio, setBio] = useState('')
-    
+
     // New fields
     const [phone, setPhone] = useState('')
     const [location, setLocation] = useState('')
@@ -54,7 +54,7 @@ function Profile({ isModal, onClose }) {
                 setSkills(user.skills || '')
                 setExperience(user.experience || '')
                 setBio(user.bio || '')
-                
+
                 // New user fields
                 setPhone(user.phone || '')
                 setLocation(user.location || '')
@@ -201,7 +201,7 @@ function Profile({ isModal, onClose }) {
 
     const cardContent = (
         <div className={`w-full relative animate-scale-in ${isModal ? "" : "max-w-4xl bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/80 rounded-3xl p-5 sm:p-7 shadow-sm space-y-4"}`}>
-            
+
             {/* View Mode */}
             {!isEditMode ? (
                 <div className="space-y-6">
@@ -234,35 +234,28 @@ function Profile({ isModal, onClose }) {
                         <div className="md:col-span-1 p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-6 shadow-sm flex flex-col justify-start">
                             {/* Profile Photo Display with zoom preview wrapper */}
                             <div className="flex flex-col items-center text-center relative group">
-                                <button 
-                                    onClick={() => setIsPreviewOpen(true)}
+                                <button
+                                    onClick={() => {
+                                        if (user.profilePhoto) {
+                                            setIsPreviewOpen(true);
+                                        } else {
+                                            toast.error("No profile image");
+                                        }
+                                    }}
                                     type="button"
-                                    className="relative w-28 h-28 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center cursor-zoom-in group border-none p-0 outline-none"
+                                    className="relative w-28 h-28 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center cursor-pointer group border-none p-0 outline-none"
                                     title="Click to zoom photo"
                                 >
                                     {user.profilePhoto ? (
-                                        <img 
-                                            src={user.profilePhoto} 
-                                            alt="Profile" 
+                                        <img
+                                            src={user.profilePhoto}
+                                            alt="Profile"
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
                                         <HiOutlineUser className="text-5xl text-slate-400" />
                                     )}
-                                    
-                                    {/* Zoom overlay on hover */}
-                                    <div className="absolute inset-0 bg-black/40 text-white flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                        <FaEye className="text-2xl" />
-                                        <span className="text-[9px] font-bold uppercase tracking-wider mt-1">Preview</span>
-                                    </div>
                                 </button>
-                                <input 
-                                    ref={fileInputRef}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handlePhotoUpload}
-                                    className="hidden"
-                                />
 
                                 <h2 className="text-lg font-black text-slate-800 dark:text-white mt-4 leading-tight truncate w-full">
                                     {isRecruiter ? (skills || "Company Name") : (name || "Name Not Added")}
@@ -277,12 +270,12 @@ function Profile({ isModal, onClose }) {
                             {/* Contacts & Metadata */}
                             <div className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400">
                                 <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Contact Info</h3>
-                                
+
                                 <p className="flex items-center gap-2.5">
                                     <HiOutlineMail className="text-base text-slate-400 shrink-0" />
                                     <span className="truncate">{user.email}</span>
                                 </p>
-                                
+
                                 {user.phone && (
                                     <p className="flex items-center gap-2.5">
                                         <FaPhone className="text-sm text-slate-400 shrink-0" />
@@ -304,7 +297,7 @@ function Profile({ isModal, onClose }) {
                                     <hr className="border-slate-200/60 dark:border-slate-800/60" />
                                     <div className="text-xs space-y-4">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">My Resume</h3>
-                                        
+
                                         {user.resume ? (
                                             <div className="space-y-3">
                                                 <div className="flex items-center gap-3 p-3 bg-white dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl">
@@ -316,16 +309,16 @@ function Profile({ isModal, onClose }) {
                                                 </div>
 
                                                 <div className="grid grid-cols-2 gap-2">
-                                                    <a 
-                                                        href={user.resume} 
-                                                        target="_blank" 
+                                                    <a
+                                                        href={user.resume}
+                                                        target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="flex items-center justify-center gap-1.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 text-center no-underline border-none"
                                                     >
                                                         <FaEye /> View
                                                     </a>
-                                                    <a 
-                                                        href={user.resume} 
+                                                    <a
+                                                        href={user.resume}
                                                         download="Resume.pdf"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
@@ -335,7 +328,7 @@ function Profile({ isModal, onClose }) {
                                                     </a>
                                                 </div>
 
-                                                <button 
+                                                <button
                                                     onClick={() => resumeInputRef.current.click()}
                                                     disabled={uploadingResume}
                                                     className="w-full py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2"
@@ -346,7 +339,7 @@ function Profile({ isModal, onClose }) {
                                         ) : (
                                             <div className="text-center py-4 space-y-3">
                                                 <p className="text-slate-400 italic text-xs">No resume uploaded yet</p>
-                                                <button 
+                                                <button
                                                     onClick={() => resumeInputRef.current.click()}
                                                     disabled={uploadingResume}
                                                     className="px-4 py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2 mx-auto"
@@ -355,7 +348,7 @@ function Profile({ isModal, onClose }) {
                                                 </button>
                                             </div>
                                         )}
-                                        <input 
+                                        <input
                                             ref={resumeInputRef}
                                             type="file"
                                             accept=".pdf,.doc,.docx"
@@ -386,7 +379,7 @@ function Profile({ isModal, onClose }) {
                                     <div className="space-y-1">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Company Website</h3>
                                         {experience ? (
-                                            <a 
+                                            <a
                                                 href={experience.startsWith('http') ? experience : `https://${experience}`}
                                                 target="_blank"
                                                 rel="noreferrer"
@@ -409,7 +402,7 @@ function Profile({ isModal, onClose }) {
                                         {skills ? (
                                             <div className="flex flex-wrap gap-1.5">
                                                 {skills.split(',').map(s => s.trim()).filter(Boolean).map((skill, i) => (
-                                                    <span 
+                                                    <span
                                                         key={i}
                                                         className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800 text-[10px] sm:text-xs font-semibold text-slate-755 dark:text-slate-300 shadow-sm"
                                                     >
@@ -429,7 +422,7 @@ function Profile({ isModal, onClose }) {
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider flex items-center gap-1.5">
                                             <FaBriefcase className="text-slate-400 text-xs" /> Work Experience
                                         </h3>
-                                        
+
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <div className="space-y-0.5">
                                                 <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Experience Level</p>
@@ -498,12 +491,12 @@ function Profile({ isModal, onClose }) {
                                     {/* Social links */}
                                     <div className="space-y-4">
                                         <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Social Links & Portfolios</h3>
-                                        
+
                                         <div className="flex flex-wrap gap-2.5">
                                             {github && (
-                                                <a 
+                                                <a
                                                     href={github.startsWith('http') ? github : `https://${github}`}
-                                                    target="_blank" 
+                                                    target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
                                                 >
@@ -512,9 +505,9 @@ function Profile({ isModal, onClose }) {
                                             )}
 
                                             {linkedin && (
-                                                <a 
+                                                <a
                                                     href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`}
-                                                    target="_blank" 
+                                                    target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
                                                 >
@@ -523,9 +516,9 @@ function Profile({ isModal, onClose }) {
                                             )}
 
                                             {portfolio && (
-                                                <a 
+                                                <a
                                                     href={portfolio.startsWith('http') ? portfolio : `https://${portfolio}`}
-                                                    target="_blank" 
+                                                    target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="flex items-center gap-2 px-3 py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white font-bold rounded-xl text-xs tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
                                                 >
@@ -572,12 +565,12 @@ function Profile({ isModal, onClose }) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
                         {/* Profile Photo edit section inside Edit Profile */}
-                        <div className="md:col-span-2 flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50/50 dark:bg-slate-900 border border-slate-200/60 dark:border-slate-800/60 rounded-3xl">
+                        <div className="md:col-span-2 flex flex-col sm:flex-row items-center gap-4 p-4 bg-slate-50/50 border border-slate-200/60 dark:border-slate-800/60 rounded-3xl">
                             <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center shrink-0">
                                 {user.profilePhoto ? (
-                                    <img 
-                                        src={user.profilePhoto} 
-                                        alt="Preview" 
+                                    <img
+                                        src={user.profilePhoto}
+                                        alt="Preview"
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
@@ -719,7 +712,7 @@ function Profile({ isModal, onClose }) {
                                 <div className="md:col-span-2 border-t border-slate-150 dark:border-slate-800/80 pt-4 mt-2">
                                     <h3 className="text-xs uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider font-bold">Employment Details</h3>
                                 </div>
-                                
+
                                 <div>
                                     <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-350">
                                         Employer / Company Name
@@ -867,37 +860,44 @@ function Profile({ isModal, onClose }) {
             )}
             {/* Image Preview Lightbox */}
             {isPreviewOpen && (
-                <div className="fixed inset-0 bg-black/85 backdrop-blur-md z-[80] flex items-center justify-center p-4 animate-fade-in" onClick={() => setIsPreviewOpen(false)}>
-                    <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 shadow-2xl relative animate-scale-in" onClick={(e) => e.stopPropagation()}>
-                        {/* Header with Name and Close button */}
-                        <div className="flex justify-between items-center w-full pb-3 border-b border-slate-200 dark:border-slate-850">
-                            <h2 className="text-lg font-black text-slate-800 dark:text-white leading-none">
-                                {isRecruiter ? (skills || "Company Profile") : (name || "Profile Photo")}
-                            </h2>
-                            <button
-                                onClick={() => setIsPreviewOpen(false)}
-                                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition cursor-pointer border-none flex items-center justify-center"
-                                aria-label="Close preview"
-                            >
-                                <HiX className="text-lg stroke-[3px]" />
-                            </button>
-                        </div>
-                        
-                        {/* Large Image */}
-                        <div className="mt-4 flex items-center justify-center overflow-hidden rounded-2xl bg-slate-100 dark:bg-slate-950 aspect-square border border-slate-200 dark:border-slate-800">
-                            {user.profilePhoto ? (
-                                <img 
-                                    src={user.profilePhoto} 
-                                    alt="Profile Zoom" 
-                                    className="w-full h-full object-contain"
-                                />
-                            ) : (
-                                <HiOutlineUser className="text-8xl text-slate-350 dark:text-slate-700" />
-                            )}
-                        </div>
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[80] flex flex-col items-center justify-center p-6 animate-fade-in" onClick={() => setIsPreviewOpen(false)}>
+                    {/* Top bar — Name + Close floats above image */}
+                    <div className="flex justify-between items-center w-full max-w-sm mb-4" onClick={(e) => e.stopPropagation()}>
+                        <h2 className="text-base font-black text-white leading-none drop-shadow">
+                            {isRecruiter ? (skills || "Company Profile") : (name || "Profile Photo")}
+                        </h2>
+                        <button
+                            onClick={() => setIsPreviewOpen(false)}
+                            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/25 text-white transition cursor-pointer border-none flex items-center justify-center"
+                            aria-label="Close preview"
+                        >
+                            <HiX className="text-lg stroke-[3px]" />
+                        </button>
+                    </div>
+
+                    {/* Image only — no card, no border */}
+                    <div className="w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                        {user.profilePhoto ? (
+                            <img
+                                src={user.profilePhoto}
+                                alt="Profile Zoom"
+                                className="w-full h-auto object-cover"
+                            />
+                        ) : (
+                            <div className="flex items-center justify-center aspect-square">
+                                <HiOutlineUser className="text-8xl text-white/30" />
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
+            <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handlePhotoUpload}
+                className="hidden"
+            />
         </div>
     );
 
