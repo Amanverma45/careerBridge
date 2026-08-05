@@ -189,16 +189,27 @@ function Profile({ isModal, onClose }) {
             {!isEditMode ? (
                 <div className="space-y-6">
                     {/* Header bar */}
-                    <div className={`flex justify-between items-center w-full pb-4 border-b border-slate-200/60 dark:border-slate-800/60 ${isModal ? "pr-10" : ""}`}>
+                    <div className="flex justify-between items-center w-full pb-4 border-b border-slate-200/60 dark:border-slate-800/60">
                         <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white leading-none whitespace-nowrap">
                             {isRecruiter ? "Company Profile" : "My Profile"}
                         </h1>
-                        <button
-                            onClick={() => setIsEditMode(true)}
-                            className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95 border-none shadow-sm"
-                        >
-                            <HiPencilAlt className="text-sm" /> Edit Profile
-                        </button>
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            <button
+                                onClick={() => setIsEditMode(true)}
+                                className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95 border-none shadow-sm"
+                            >
+                                <HiPencilAlt className="text-sm" /> Edit Profile
+                            </button>
+                            {isModal && onClose && (
+                                <button
+                                    onClick={onClose}
+                                    className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition active:scale-90 cursor-pointer border-none flex items-center justify-center shrink-0"
+                                    aria-label="Close modal"
+                                >
+                                    <HiX className="text-lg stroke-[3px]" />
+                                </button>
+                            )}
+                        </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -506,19 +517,28 @@ function Profile({ isModal, onClose }) {
             ) : (
                 // Edit Mode Form
                 <div className="space-y-6">
-                    <div className={`flex items-center gap-3 pb-4 border-b border-slate-200/60 dark:border-slate-800/60 ${isModal ? "pr-10" : ""}`}>
-                        <button
-                            onClick={() => setIsEditMode(false)}
-                            className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0 border-none"
-                            aria-label="Go back"
-                        >
-                            <HiArrowLeft className="text-base" />
-                        </button>
-                        <div>
-                            <h1 className="text-xl font-black text-slate-800 dark:text-white">
+                    <div className="flex justify-between items-center w-full pb-4 border-b border-slate-200/60 dark:border-slate-800/60">
+                        <div className="flex items-center gap-3">
+                            <button
+                                onClick={() => setIsEditMode(false)}
+                                className="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-655 dark:text-slate-355 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-700/60 active:scale-95 transition cursor-pointer shrink-0 border-none"
+                                aria-label="Go back"
+                            >
+                                <HiArrowLeft className="text-base" />
+                            </button>
+                            <h1 className="text-xl font-black text-slate-800 dark:text-white leading-none">
                                 Edit Profile Details
                             </h1>
                         </div>
+                        {isModal && onClose && (
+                            <button
+                                onClick={onClose}
+                                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition active:scale-90 cursor-pointer border-none flex items-center justify-center shrink-0"
+                                aria-label="Close modal"
+                            >
+                                <HiX className="text-lg stroke-[3px]" />
+                            </button>
+                        )}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">

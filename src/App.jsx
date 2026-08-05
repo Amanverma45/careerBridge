@@ -136,13 +136,6 @@ function App() {
       {isProfileOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
           <div className="w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button
-              onClick={() => setIsProfileOpen(false)}
-              className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer z-50"
-              aria-label="Close modal"
-            >
-              <HiX className="text-xl stroke-[3px]" />
-            </button>
             <Profile isModal={true} onClose={() => setIsProfileOpen(false)} />
           </div>
         </div>
