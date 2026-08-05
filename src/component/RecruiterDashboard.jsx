@@ -33,10 +33,12 @@ function RecruiterDashboard() {
         setLoading(true)
 
         const response = await axios.get(
-          `https://careerbridge-b-1.onrender.com/job/recruiterJobs/${user._id}`
+          `/job/recruiterJobs/${user._id}`
         )
 
-        setJobs(response.data)
+        // Sort on frontend as fallback guarantee
+        const sorted = (response.data || []).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        setJobs(sorted)
 
       } catch (error) {
         console.log(error.message)
@@ -63,7 +65,7 @@ function RecruiterDashboard() {
     try {
       setDeleteLoadingId(id)
       await axios.delete(
-        `https://careerbridge-b-1.onrender.com/job/deletejob/${id}`
+        `/job/deletejob/${id}`
       )
       toast.success("Job deleted successfully")
       setJobs(jobs.filter(job => job._id !== id))
@@ -108,7 +110,7 @@ function RecruiterDashboard() {
       setUpdateLoadingId(id)
 
       await axios.put(
-        `https://careerbridge-b-1.onrender.com/job/updatejob/${id}`,
+        `/job/updatejob/${id}`,
         editData
       )
       toast.success("Job updated successfully")
