@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import axios from 'axios'
 import toast from "react-hot-toast"
 import {
@@ -859,7 +860,7 @@ function Profile({ isModal, onClose }) {
                 </div>
             )}
             {/* Image Preview Lightbox */}
-            {isPreviewOpen && (
+            {isPreviewOpen && createPortal(
                 <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[80] flex items-center justify-center p-4 animate-fade-in cursor-zoom-out" onClick={() => setIsPreviewOpen(false)}>
                     <div className="relative max-w-sm sm:max-w-md w-full animate-scale-in" onClick={(e) => e.stopPropagation()}>
                         {/* Close button floating at top-right corner of the image */}
@@ -870,7 +871,7 @@ function Profile({ isModal, onClose }) {
                         >
                             <HiX className="text-xl stroke-[3px]" />
                         </button>
-                        
+
                         {/* Image with white border frame */}
                         <div className="rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl bg-white">
                             {user.profilePhoto ? (
@@ -886,7 +887,8 @@ function Profile({ isModal, onClose }) {
                             )}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
             <input
                 ref={fileInputRef}
@@ -910,6 +912,3 @@ function Profile({ isModal, onClose }) {
 }
 
 export default Profile
-
-
-
