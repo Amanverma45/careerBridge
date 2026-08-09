@@ -69,7 +69,14 @@ function RecruiterDashboard() {
         `/job/deletejob/${id}`
       )
       toast.success("Job deleted successfully")
-      setJobs(jobs.filter(job => job._id !== id))
+      const updatedJobs = jobs.filter(job => job._id !== id)
+      setJobs(updatedJobs)
+
+      // Adjust current page if it is now out of bounds
+      const newTotalPages = Math.ceil(updatedJobs.length / jobsPerPage) || 1
+      if (currentPage > newTotalPages) {
+        setCurrentPage(newTotalPages)
+      }
     } catch (error) {
       toast.error("Failed to delete job")
       console.log(error.message)
