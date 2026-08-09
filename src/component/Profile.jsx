@@ -860,34 +860,31 @@ function Profile({ isModal, onClose }) {
             )}
             {/* Image Preview Lightbox */}
             {isPreviewOpen && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[80] flex flex-col items-center justify-center p-6 animate-fade-in" onClick={() => setIsPreviewOpen(false)}>
-                    {/* Top bar — Name + Close floats above image */}
-                    <div className="flex justify-between items-center w-full max-w-sm mb-4" onClick={(e) => e.stopPropagation()}>
-                        <h2 className="text-base font-black text-white leading-none drop-shadow">
-                            {isRecruiter ? (skills || "Company Profile") : (name || "Profile Photo")}
-                        </h2>
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[80] flex items-center justify-center p-4 animate-fade-in cursor-zoom-out" onClick={() => setIsPreviewOpen(false)}>
+                    <div className="relative max-w-sm sm:max-w-md w-full animate-scale-in" onClick={(e) => e.stopPropagation()}>
+                        {/* Close button floating at top-right corner of the image */}
                         <button
                             onClick={() => setIsPreviewOpen(false)}
-                            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/25 text-white transition cursor-pointer border-none flex items-center justify-center"
+                            className="absolute -top-12 right-0 p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition cursor-pointer border-none flex items-center justify-center z-10"
                             aria-label="Close preview"
                         >
-                            <HiX className="text-lg stroke-[3px]" />
+                            <HiX className="text-xl stroke-[3px]" />
                         </button>
-                    </div>
-
-                    {/* Image only — no card, no border */}
-                    <div className="w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-                        {user.profilePhoto ? (
-                            <img
-                                src={user.profilePhoto}
-                                alt="Profile Zoom"
-                                className="w-full h-auto object-cover"
-                            />
-                        ) : (
-                            <div className="flex items-center justify-center aspect-square">
-                                <HiOutlineUser className="text-8xl text-white/30" />
-                            </div>
-                        )}
+                        
+                        {/* Image with white border frame */}
+                        <div className="rounded-3xl overflow-hidden border-[6px] border-white shadow-2xl bg-white">
+                            {user.profilePhoto ? (
+                                <img
+                                    src={user.profilePhoto}
+                                    alt="Profile Zoom"
+                                    className="w-full h-auto object-cover"
+                                />
+                            ) : (
+                                <div className="flex items-center justify-center aspect-square bg-slate-100">
+                                    <HiOutlineUser className="text-8xl text-slate-400" />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             )}
@@ -913,3 +910,6 @@ function Profile({ isModal, onClose }) {
 }
 
 export default Profile
+
+
+
