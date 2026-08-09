@@ -82,17 +82,17 @@ function Applicants() {
         }
     }, [selectedResume])
 
-    const handleShortlist = async (appId) => {
+    const handleStatusUpdate = async (appId, status) => {
         try {
             setStatusLoadingId(appId)
             await axios.put(
                 `https://careerbridge-b-1.onrender.com/application/status/${appId}`,
-                { status: "shortlisted" }
+                { status }
             )
-            toast.success("Candidate Shortlisted successfully")
-            setApplicants(prev => prev.map(app => app._id === appId ? { ...app, status: "shortlisted" } : app))
+            toast.success(`Candidate ${status === "shortlisted" ? "Shortlisted" : "Rejected"} successfully`)
+            setApplicants(prev => prev.map(app => app._id === appId ? { ...app, status } : app))
         } catch (error) {
-            toast.error("Failed to shortlist candidate")
+            toast.error("Failed to update candidate status")
             console.log(error)
         } finally {
             setStatusLoadingId(null)
@@ -192,8 +192,10 @@ function Applicants() {
                                         <div className="flex justify-between items-center text-[10px] sm:text-xs">
                                             <span className="text-slate-450 dark:text-slate-505">Status:</span>
                                             <span className={`px-2 py-0.5 rounded-lg font-bold text-[9px] sm:text-[10px] uppercase border ${
-                                                isShortlisted 
+                                                app.status === "shortlisted"
                                                     ? "bg-teal-50 dark:bg-teal-950/20 text-teal-650 dark:text-teal-400 border-teal-200/50 dark:border-teal-900/30"
+                                                    : app.status === "rejected"
+                                                    ? "bg-rose-50 dark:bg-rose-950/20 text-rose-600 dark:text-rose-455 border-rose-200/50 dark:border-rose-900/30"
                                                     : "bg-amber-50 dark:bg-amber-950/20 text-amber-655 dark:text-amber-400 border-amber-200/50 dark:border-amber-900/30"
                                             }`}>
                                                 {app.status || "pending"}
@@ -239,21 +241,36 @@ function Applicants() {
                                         )}
                                     </div>
 
-                                    {/* Shortlist button below them taking full width */}
-                                    {!isShortlisted && (
-                                        <button
-                                            onClick={() => handleShortlist(app._id)}
-                                            disabled={statusLoadingId === app._id}
-                                            className="w-full py-1.5 sm:py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50"
-                                        >
-                                            {statusLoadingId === app._id ? (
-                                                <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                            ) : (
-                                                <>
-                                                    <HiCheck className="text-sm shrink-0" /> Shortlist
-                                                </>
-                                            )}
-                                        </button>
+                                    {/* Action Buttons (Only show when status is pending) */}
+                                    {(app.status === "pending" || !app.status) && (
+                                        <div className="grid grid-cols-2 gap-2 w-full">
+                                            <button
+                                                onClick={() => handleStatusUpdate(app._id, "shortlisted")}
+                                                disabled={statusLoadingId === app._id}
+                                                className="py-1.5 sm:py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50 border-none shadow-sm"
+                                            >
+                                                {statusLoadingId === app._id ? (
+                                                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                ) : (
+                                                    <>
+                                                        <HiCheck className="text-sm shrink-0" /> Shortlist
+                                                    </>
+                                                )}
+                                            </button>
+                                            <button
+                                                onClick={() => handleStatusUpdate(app._id, "rejected")}
+                                                disabled={statusLoadingId === app._id}
+                                                className="py-1.5 sm:py-2 bg-rose-500 hover:bg-rose-600 text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1 cursor-pointer disabled:opacity-50 border-none shadow-sm"
+                                            >
+                                                {statusLoadingId === app._id ? (
+                                                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                ) : (
+                                                    <>
+                                                        <HiX className="text-sm shrink-0" /> Reject
+                                                    </>
+                                                )}
+                                            </button>
+                                        </div>
                                     )}
                                 </div>
                             </div>
