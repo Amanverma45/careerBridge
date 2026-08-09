@@ -54,7 +54,9 @@ function Login({ isModal, onClose }) {
           onClose();
         }
 
-        if (user.role === "recruiter") {
+        if (user.role === "admin") {
+          navigate('/admindashboard', { replace: true })
+        } else if (user.role === "recruiter") {
           navigate('/recruiterdashboard', { replace: true })
         } else {
           navigate('/dashboard', { replace: true })

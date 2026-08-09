@@ -18,6 +18,7 @@ import Resume from './component/Resume.jsx'
 import SavedJobs from './component/SavedJobs.jsx'
 import { Toaster } from 'react-hot-toast'
 import OTP from './component/OTP.jsx'
+import AdminDashboard from './component/AdminDashboard.jsx'
 import Privacy from './component/Privacy.jsx'
 import Terms from './component/Terms.jsx'
 
@@ -94,6 +95,7 @@ function App() {
           <Route path="/addJobs" element={<ProtectedRoute role="recruiter"><AddJob /></ProtectedRoute>} />
           <Route path="/recruiterdashboard" element={<ProtectedRoute role="recruiter"><RecruiterDashboard /></ProtectedRoute>} />
           <Route path="/applicants/:jobId" element={<ProtectedRoute role="recruiter"><Applicants /></ProtectedRoute>} />
+          <Route path="/admindashboard" element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>} />
           <Route path="/resume" element={<ProtectedRoute role="user"><Resume /></ProtectedRoute>} />
           <Route path="/verify-otp" element={<OTP />} />
           <Route path="/privacy" element={<Privacy />} />
