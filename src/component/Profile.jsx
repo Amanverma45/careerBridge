@@ -33,7 +33,6 @@ function Profile({ isModal, onClose, viewUser }) {
     const [experience, setExperience] = useState('')
     const [bio, setBio] = useState('')
 
-    // New fields
     const [phone, setPhone] = useState('')
     const [location, setLocation] = useState('')
     const [educationGrad, setEducationGrad] = useState('')

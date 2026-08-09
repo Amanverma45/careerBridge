@@ -144,7 +144,7 @@ function Applicants() {
                         <p className="text-slate-500 dark:text-slate-400 text-sm">Applications will show up here once candidates apply.</p>
                     </div>
                 ) : (
-                    <div className={`grid gap-3.5 sm:gap-6 ${applicants.length === 1 ? "grid-cols-1 max-w-2xl mx-auto w-full" : "grid-cols-2"}`}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto w-full">
                         {applicants.map((app, index) => {
                           const isShortlisted = app.status === "shortlisted"
                           const borderColors = [
@@ -157,7 +157,7 @@ function Applicants() {
                           return (
                             <div
                                 key={app._id}
-                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
+                                className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${borderClass} rounded-2xl sm:rounded-3xl p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between max-w-md w-full mx-auto ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
                             >
                                 <div>
                                     {/* Candidate Row Header */}
