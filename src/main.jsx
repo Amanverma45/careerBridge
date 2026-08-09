@@ -5,8 +5,12 @@ import App from './App.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import axios from 'axios'
 
-window.API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:5000'
+window.API_URL = (
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1' || 
+  window.location.hostname === '10.170.89.7'
+)
+  ? `http://${window.location.hostname}:5000`
   : 'https://careerbridge-b-1.onrender.com';
 
 // Global Scroll Animations Engine

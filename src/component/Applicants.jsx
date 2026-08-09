@@ -23,7 +23,7 @@ function Applicants() {
         try {
             setLoading(true)
             const res = await axios.get(
-                `https://careerbridge-b-1.onrender.com/application/applicants/${jobId}`
+                `${window.API_URL || 'http://localhost:5000'}/application/applicants/${jobId}`
             )
             setApplicants(res.data)
         } catch (error) {
@@ -86,7 +86,7 @@ function Applicants() {
         try {
             setStatusLoadingId(appId)
             await axios.put(
-                `https://careerbridge-b-1.onrender.com/application/status/${appId}`,
+                `${window.API_URL || 'http://localhost:5000'}/application/status/${appId}`,
                 { status }
             )
             toast.success(`Candidate ${status === "shortlisted" ? "Shortlisted" : "Rejected"} successfully`)
