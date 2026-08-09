@@ -866,10 +866,10 @@ function Profile({ isModal, onClose }) {
                         {/* Close button floating at top-right corner of the image */}
                         <button
                             onClick={() => setIsPreviewOpen(false)}
-                            className="absolute -top-12 right-0 p-2 rounded-full bg-white/20 hover:bg-white/40 text-white transition cursor-pointer border-none flex items-center justify-center z-10"
+                            className="absolute -top-3 -right-3 w-8 h-8 rounded-full bg-slate-900/80 hover:bg-slate-800 text-white border-2 border-white shadow-lg flex items-center justify-center transition active:scale-95 cursor-pointer z-20"
                             aria-label="Close preview"
                         >
-                            <HiX className="text-xl stroke-[3px]" />
+                            <HiX className="text-base stroke-[3px]" />
                         </button>
 
                         {/* Image with white border frame */}
