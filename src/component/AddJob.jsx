@@ -3,6 +3,7 @@ import axios from 'axios'
 import toast from "react-hot-toast"
 import { useNavigate } from 'react-router-dom'
 import { HiOutlineBriefcase, HiArrowLeft } from 'react-icons/hi'
+import { validateText, validateSalary } from '../utils/validation'
 
 function AddJob() {
   const [title, setTitle] = useState('')
@@ -26,6 +27,45 @@ function AddJob() {
     if (!title || !company || !location || !salary || !jobType || !description) {
       toast.error("Please fill in all fields")
       return
+    }
+
+    // Validate inputs for keyboard smashing / gibberish and correct formats
+    const titleError = validateText(title, "Job Title");
+    if (titleError) {
+      toast.error(titleError);
+      return;
+    }
+
+    const companyError = validateText(company, "Company Name");
+    if (companyError) {
+      toast.error(companyError);
+      return;
+    }
+
+    const locationError = validateText(location, "Location");
+    if (locationError) {
+      toast.error(locationError);
+      return;
+    }
+
+    const salaryError = validateSalary(salary);
+    if (salaryError) {
+      toast.error(salaryError);
+      return;
+    }
+
+    const descriptionError = validateText(description, "Job Description");
+    if (descriptionError) {
+      toast.error(descriptionError);
+      return;
+    }
+
+    if (skills) {
+      const skillsError = validateText(skills, "Required Skills");
+      if (skillsError) {
+        toast.error(skillsError);
+        return;
+      }
     }
 
     try {

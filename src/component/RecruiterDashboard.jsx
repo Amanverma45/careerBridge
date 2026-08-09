@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { HiPlus, HiPencilAlt, HiTrash, HiUserGroup, HiLocationMarker, HiCurrencyRupee, HiOfficeBuilding, HiArrowLeft } from 'react-icons/hi';
+import { validateText, validateSalary } from '../utils/validation'
 
 function RecruiterDashboard() {
   const navigate = useNavigate()
@@ -88,6 +89,45 @@ function RecruiterDashboard() {
     ) {
       toast.error("Please fill in all fields")
       return
+    }
+
+    // Validate inputs for keyboard smashing / gibberish and correct formats
+    const titleError = validateText(editData.title, "Job Title");
+    if (titleError) {
+      toast.error(titleError);
+      return;
+    }
+
+    const companyError = validateText(editData.company, "Company Name");
+    if (companyError) {
+      toast.error(companyError);
+      return;
+    }
+
+    const locationError = validateText(editData.location, "Location");
+    if (locationError) {
+      toast.error(locationError);
+      return;
+    }
+
+    const salaryError = validateSalary(editData.salary);
+    if (salaryError) {
+      toast.error(salaryError);
+      return;
+    }
+
+    const descriptionError = validateText(editData.description, "Job Description");
+    if (descriptionError) {
+      toast.error(descriptionError);
+      return;
+    }
+
+    if (editData.skills) {
+      const skillsError = validateText(editData.skills, "Required Skills");
+      if (skillsError) {
+        toast.error(skillsError);
+        return;
+      }
     }
 
     const originalJob = jobs.find(job => job._id === id)

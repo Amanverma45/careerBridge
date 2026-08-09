@@ -11,6 +11,7 @@ import {
     FaPhone, FaMapMarkerAlt, FaGraduationCap, FaBriefcase,
     FaCertificate, FaDownload, FaUpload, FaEye
 } from 'react-icons/fa'
+import { validateText, validatePhone, validateUrl } from '../utils/validation'
 
 function Profile({ isModal, onClose, viewUser }) {
     const storedUser = localStorage.getItem("user")
@@ -141,6 +142,45 @@ function Profile({ isModal, onClose, viewUser }) {
     }
 
     const handleUpdate = async () => {
+        // Run validations on inputs
+        const nameError = validateText(name, "Name");
+        if (nameError) {
+            toast.error(nameError);
+            return;
+        }
+
+        if (skills) {
+            const skillsError = validateText(skills, isRecruiter ? "Company Name" : "Skills");
+            if (skillsError) {
+                toast.error(skillsError);
+                return;
+            }
+        }
+
+        if (experience) {
+            if (isRecruiter) {
+                const websiteError = validateUrl(experience, "Company Website");
+                if (websiteError) {
+                    toast.error(websiteError);
+                    return;
+                }
+            } else {
+                const expError = validateText(experience, "Experience");
+                if (expError) {
+                    toast.error(expError);
+                    return;
+                }
+            }
+        }
+
+        if (bio) {
+            const bioError = validateText(bio, isRecruiter ? "Company Description" : "Bio");
+            if (bioError) {
+                toast.error(bioError);
+                return;
+            }
+        }
+
         if (!isRecruiter) {
             const hasGrad = (educationGrad || '').trim().length > 0;
             const has12 = (education12 || '').trim().length > 0;
@@ -148,6 +188,86 @@ function Profile({ isModal, onClose, viewUser }) {
             if (!hasGrad && !has12 && !has10) {
                 toast.error("Please add at least one education record (Graduation, 12th, or 10th)");
                 return;
+            }
+
+            const phoneError = validatePhone(phone);
+            if (phoneError) {
+                toast.error(phoneError);
+                return;
+            }
+
+            if (location) {
+                const locError = validateText(location, "Location");
+                if (locError) {
+                    toast.error(locError);
+                    return;
+                }
+            }
+
+            if (educationGrad) {
+                const eduGradError = validateText(educationGrad, "Graduation details");
+                if (eduGradError) {
+                    toast.error(eduGradError);
+                    return;
+                }
+            }
+
+            if (education12) {
+                const edu12Error = validateText(education12, "12th details");
+                if (edu12Error) {
+                    toast.error(edu12Error);
+                    return;
+                }
+            }
+
+            if (education10) {
+                const edu10Error = validateText(education10, "10th details");
+                if (edu10Error) {
+                    toast.error(edu10Error);
+                    return;
+                }
+            }
+
+            if (experienceCompany) {
+                const expCompError = validateText(experienceCompany, "Experience Company");
+                if (expCompError) {
+                    toast.error(expCompError);
+                    return;
+                }
+            }
+
+            if (experienceRole) {
+                const expRoleError = validateText(experienceRole, "Experience Role");
+                if (expRoleError) {
+                    toast.error(expRoleError);
+                    return;
+                }
+            }
+
+            const linkedinError = validateUrl(linkedin, "LinkedIn URL");
+            if (linkedinError) {
+                toast.error(linkedinError);
+                return;
+            }
+
+            const githubError = validateUrl(github, "GitHub URL");
+            if (githubError) {
+                toast.error(githubError);
+                return;
+            }
+
+            const portfolioError = validateUrl(portfolio, "Portfolio URL");
+            if (portfolioError) {
+                toast.error(portfolioError);
+                return;
+            }
+
+            if (certification) {
+                const certError = validateText(certification, "Certification");
+                if (certError) {
+                    toast.error(certError);
+                    return;
+                }
             }
         }
 
