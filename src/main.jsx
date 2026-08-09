@@ -58,6 +58,11 @@ window.getScrollAnimClass = (index) => {
 };
 
 axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   if (config.url) {
     if (config.url.includes('https://careerbridge-b-1.onrender.com')) {
       config.url = config.url.replace('https://careerbridge-b-1.onrender.com', window.API_URL);
