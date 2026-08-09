@@ -27,6 +27,7 @@ function SavedJobs() {
   const [error, setError] = useState(null)
   const [exitingIds, setExitingIds] = useState([])
   const [shareJob, setShareJob] = useState(null)
+  const [hasAnimated, setHasAnimated] = useState(false)
 
   const navigate = useNavigate()
   const storedUser = localStorage.getItem("user")
@@ -64,6 +65,7 @@ function SavedJobs() {
     if (!loading && window.initScrollAnimations) {
       setTimeout(() => {
         window.initScrollAnimations()
+        setHasAnimated(true)
       }, 50)
     }
   }, [loading])
@@ -177,7 +179,7 @@ function SavedJobs() {
                   className={`bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 ${getCardBorder(job)} p-4 sm:p-6 rounded-[1.5rem] sm:rounded-3xl shadow-sm hover:shadow-md transition-all duration-400 ease-in-out flex flex-col justify-between ${
                     isExiting 
                       ? 'opacity-0 scale-90 -translate-y-4 max-h-0 py-0 my-0 border-none overflow-hidden' 
-                      : (window.getScrollAnimClass ? window.getScrollAnimClass(index) : "")
+                      : (window.getScrollAnimClass && !hasAnimated ? window.getScrollAnimClass(index) : "")
                   }`}
                 >
                   <div className="space-y-3.5 sm:space-y-4">

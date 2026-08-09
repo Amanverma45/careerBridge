@@ -40,6 +40,7 @@ function Job() {
   const [sort, setSort] = useState("match")
   const [loading, setLoading] = useState(!jobsCache)
   const [applyLoadingId, setApplyLoadingId] = useState(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   const storedUser = localStorage.getItem('user')
   const user = storedUser ? JSON.parse(storedUser) : null
@@ -94,6 +95,7 @@ function Job() {
     if (!loading && window.initScrollAnimations) {
       setTimeout(() => {
         window.initScrollAnimations()
+        setHasAnimated(true)
       }, 50)
     }
   }, [loading])
@@ -416,7 +418,7 @@ function Job() {
                       : isApplied 
                       ? 'border-t-emerald-500' 
                       : 'border-t-brand-primary'
-                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between ${window.getScrollAnimClass ? window.getScrollAnimClass(index) : ""}`}
+                  } p-6 rounded-3xl shadow-sm hover:shadow-md transition duration-300 flex flex-col justify-between ${window.getScrollAnimClass && !hasAnimated ? window.getScrollAnimClass(index) : ""}`}
                 >
                   <div className="space-y-4">
                     {/* Card Title & Type */}
