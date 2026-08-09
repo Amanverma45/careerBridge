@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react"
 import axios from "axios"
 import { useParams, useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
-import { HiArrowLeft, HiOutlineMail, HiOutlineCalendar, HiEye, HiDownload, HiCheck, HiX, HiMinus, HiPlus, HiRefresh, HiExternalLink } from 'react-icons/hi'
+import { HiArrowLeft, HiOutlineMail, HiOutlineCalendar, HiEye, HiDownload, HiCheck, HiX, HiMinus, HiPlus, HiRefresh, HiExternalLink, HiOutlineUser } from 'react-icons/hi'
+import Profile from './Profile.jsx'
 
 function Applicants() {
     const { jobId } = useParams()
     const navigate = useNavigate()
     const [applicants, setApplicants] = useState([])
+    const [viewProfileUser, setViewProfileUser] = useState(null)
     const [selectedResume, setSelectedResume] = useState(null)
     const [zoom, setZoom] = useState(1)
     const [isFullScreen, setIsFullScreen] = useState(false)
@@ -201,6 +203,14 @@ function Applicants() {
 
                                 {/* Actions Block */}
                                 <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex flex-col gap-2 w-full">
+                                    {/* Candidate Profile Button */}
+                                    <button
+                                        onClick={() => setViewProfileUser(app.userId)}
+                                        className="w-full py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-white rounded-lg sm:rounded-xl font-bold transition text-[10px] sm:text-xs flex items-center justify-center gap-1.5 cursor-pointer border-none shadow-sm"
+                                    >
+                                        <HiOutlineUser className="text-sm shrink-0" /> View Profile
+                                    </button>
+
                                     {/* View / Get inline row */}
                                     <div className="grid grid-cols-2 gap-2 w-full">
                                         {app.userId?.resume ? (
@@ -299,30 +309,31 @@ function Applicants() {
 
                                 <a
                                     href={selectedResume}
+                                    download="Resume.pdf"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="px-3 py-2 bg-brand-primary/10 hover:bg-brand-primary hover:text-white text-brand-primary rounded-xl transition text-xs font-bold flex items-center gap-1 cursor-pointer"
+                                    className="px-3 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-xl transition text-xs font-bold flex items-center gap-1.5 no-underline border-none"
                                 >
-                                    <HiExternalLink className="text-sm" /> Open in New Tab
+                                    <HiDownload className="text-sm shrink-0" /> Get
                                 </a>
-                            </div>
 
-                            <button
-                                onClick={() => setSelectedResume(null)}
-                                className="absolute top-2.5 right-2.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer shrink-0 z-50"
-                                aria-label="Close preview"
-                            >
-                                <HiX className="text-xl stroke-[3px]" />
-                            </button>
+                                <button
+                                    onClick={() => setSelectedResume(null)}
+                                    className="p-2 bg-slate-200/60 dark:bg-slate-850 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 rounded-xl transition cursor-pointer"
+                                    aria-label="Close"
+                                >
+                                    <HiX className="text-sm" />
+                                </button>
+                            </div>
                         </div>
 
-                         {/* Resume Content View */}
+                        {/* Resume Frame Container */}
                         <div className="w-full h-full overflow-auto flex flex-col items-center bg-slate-100 dark:bg-slate-955 p-6 relative">
                             
                             {iframeLoading ? (
                                 <div className="flex flex-col items-center justify-center h-[50vh] gap-3">
                                     <div className="w-8 h-8 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
-                                    <p className="text-xs text-slate-550 dark:text-slate-450 font-semibold animate-pulse">Loading resume details...</p>
+                                    <p className="text-xs text-slate-550 dark:text-slate-455 font-semibold animate-pulse">Loading resume details...</p>
                                 </div>
                             ) : (
                                 iframeUrl && (
@@ -340,6 +351,15 @@ function Applicants() {
                             )}
                         </div>
 
+                    </div>
+                </div>
+            )}
+
+            {/* Candidate Profile Modal */}
+            {viewProfileUser && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+                    <div className="w-full max-w-4xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 sm:p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto animate-scale-in">
+                        <Profile isModal={true} viewUser={viewProfileUser} onClose={() => setViewProfileUser(null)} />
                     </div>
                 </div>
             )}

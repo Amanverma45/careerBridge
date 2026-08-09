@@ -12,10 +12,16 @@ import {
     FaCertificate, FaDownload, FaUpload, FaEye
 } from 'react-icons/fa'
 
-function Profile({ isModal, onClose }) {
+function Profile({ isModal, onClose, viewUser }) {
     const storedUser = localStorage.getItem("user")
-    const [user, setUser] = useState(storedUser ? JSON.parse(storedUser) : null)
+    const [user, setUser] = useState(viewUser || (storedUser ? JSON.parse(storedUser) : null))
     const isRecruiter = user?.role === 'recruiter'
+
+    useEffect(() => {
+        if (viewUser) {
+            setUser(viewUser)
+        }
+    }, [viewUser])
 
     const fileInputRef = useRef(null)
     const resumeInputRef = useRef(null)
@@ -212,12 +218,14 @@ function Profile({ isModal, onClose }) {
                             {isRecruiter ? "Company Profile" : "My Profile"}
                         </h1>
                         <div className="flex items-center gap-2 sm:gap-3">
-                            <button
-                                onClick={() => setIsEditMode(true)}
-                                className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95 border-none shadow-sm"
-                            >
-                                <HiPencilAlt className="text-sm" /> Edit Profile
-                            </button>
+                            {!viewUser && (
+                                <button
+                                    onClick={() => setIsEditMode(true)}
+                                    className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95 border-none shadow-sm"
+                                >
+                                    <HiPencilAlt className="text-sm" /> Edit Profile
+                                </button>
+                            )}
                             {isModal && onClose && (
                                 <button
                                     onClick={onClose}
@@ -329,24 +337,28 @@ function Profile({ isModal, onClose }) {
                                                     </a>
                                                 </div>
 
-                                                <button
-                                                    onClick={() => resumeInputRef.current.click()}
-                                                    disabled={uploadingResume}
-                                                    className="w-full py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2"
-                                                >
-                                                    <FaUpload /> {uploadingResume ? "Uploading..." : "Update Resume"}
-                                                </button>
+                                                {!viewUser && (
+                                                    <button
+                                                        onClick={() => resumeInputRef.current.click()}
+                                                        disabled={uploadingResume}
+                                                        className="w-full py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2"
+                                                    >
+                                                        <FaUpload /> {uploadingResume ? "Uploading..." : "Update Resume"}
+                                                    </button>
+                                                )}
                                             </div>
                                         ) : (
                                             <div className="text-center py-4 space-y-3">
                                                 <p className="text-slate-400 italic text-xs">No resume uploaded yet</p>
-                                                <button
-                                                    onClick={() => resumeInputRef.current.click()}
-                                                    disabled={uploadingResume}
-                                                    className="px-4 py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2 mx-auto"
-                                                >
-                                                    <FaUpload /> {uploadingResume ? "Uploading..." : "Upload Resume"}
-                                                </button>
+                                                {!viewUser && (
+                                                    <button
+                                                        onClick={() => resumeInputRef.current.click()}
+                                                        disabled={uploadingResume}
+                                                        className="px-4 py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2 mx-auto"
+                                                    >
+                                                        <FaUpload /> {uploadingResume ? "Uploading..." : "Upload Resume"}
+                                                    </button>
+                                                )}
                                             </div>
                                         )}
                                         <input
