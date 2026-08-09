@@ -135,28 +135,16 @@ function AdminDashboard() {
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
-            {/* Header / Admin Navbar */}
-            <header className="sticky top-0 z-40 w-full bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-all">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2 select-none">
-                        <span className="text-xl font-black text-brand-primary tracking-tight">
-                            Career<span className="text-teal-500">Bridge</span>
-                            <span className="ml-2 px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-xs font-black uppercase tracking-wider">Admin</span>
-                        </span>
-                    </div>
-
-                    <div className="flex items-center gap-4">
-                        <button
-                            onClick={handleLogout}
-                            className="px-4 py-2 border-none bg-rose-500 hover:bg-rose-600 text-white font-bold rounded-xl text-xs sm:text-sm flex items-center gap-1.5 transition cursor-pointer active:scale-95 shadow-sm"
-                        >
-                            <HiOutlineLogout className="text-sm shrink-0" /> Logout
-                        </button>
-                    </div>
-                </div>
-            </header>
-
             <main className="max-w-7xl mx-auto px-6 py-8">
+                {/* Title Section */}
+                <div className="mb-8">
+                    <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2 leading-none">
+                        Admin Control Panel 
+                        <span className="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-wider">Super Admin</span>
+                    </h1>
+                    <p className="text-slate-500 dark:text-slate-400 text-xs mt-1.5">Manage system recruiters, candidates, and job postings.</p>
+                </div>
+
                 {/* Search and Navigation tabs row */}
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                     {/* Tabs */}
