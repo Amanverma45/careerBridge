@@ -168,7 +168,7 @@ function SavedJobs() {
           /* Grid Configuration: 1x1 if single saved job, 2x2 on mobile if multiple */
           <div className={`grid gap-4 sm:gap-6 ${
             Array.isArray(savedJobs) && savedJobs.length === 1 
-              ? 'grid-cols-1 max-w-2xl mx-auto w-full' 
+              ? 'grid-cols-1 max-w-md mx-auto w-full' 
               : 'grid-cols-2 lg:grid-cols-3'
           }`}>
             {Array.isArray(savedJobs) && savedJobs.map((job, index) => {
@@ -237,7 +237,7 @@ function SavedJobs() {
                       )}
                       {job.salary && (
                         <p className="flex items-center gap-1.5">
-                          <FaRupeeSign className="text-slate-405" /> {Number(job.salary).toLocaleString("en-IN")} / month
+                          <FaRupeeSign className="text-slate-405" /> {isNaN(Number(job.salary)) ? job.salary : Number(job.salary).toLocaleString("en-IN")} / month
                         </p>
                       )}
                     </div>

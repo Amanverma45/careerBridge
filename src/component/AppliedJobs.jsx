@@ -152,7 +152,7 @@ function AppliedJobs() {
           <div className={`grid gap-4 sm:gap-6 ${
             appliedJobs.length > 1 
               ? 'grid-cols-2 lg:grid-cols-3' 
-              : 'grid-cols-1 max-w-2xl mx-auto'
+              : 'grid-cols-1 max-w-md mx-auto w-full'
           }`}>
             {appliedJobs.map((app, index) => {
               const job = app.jobId || {}
