@@ -205,47 +205,47 @@ function AdminDashboard() {
                         <p className="text-slate-500 dark:text-slate-400 text-sm">Try broadening your search term or select another tab.</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
                         {filteredItems.map((item, idx) => (
                             <div 
                                 key={item._id}
-                                className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-primary rounded-2xl p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+                                className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 border-t-4 border-t-brand-primary rounded-2xl p-3.5 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col justify-between"
                             >
                                 <div>
                                     {/* Card Header */}
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="w-11 h-11 bg-brand-primary/10 text-brand-primary rounded-xl flex items-center justify-center text-base font-black shrink-0">
+                                    <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                                        <div className="w-9 h-9 sm:w-11 sm:h-11 bg-brand-primary/10 text-brand-primary rounded-xl flex items-center justify-center text-sm sm:text-base font-black shrink-0">
                                             {item.name?.charAt(0).toUpperCase() || (activeTab === 'jobs' ? item.title?.charAt(0).toUpperCase() : "?")}
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <h3 className="text-sm font-extrabold text-slate-850 dark:text-white truncate leading-tight">
+                                            <h3 className="text-xs sm:text-sm font-extrabold text-slate-850 dark:text-white truncate leading-tight">
                                                 {activeTab === 'jobs' ? item.title : item.name}
                                             </h3>
-                                            <p className="text-[11px] text-slate-500 dark:text-slate-450 truncate flex items-center gap-1.5 mt-1">
+                                            <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-450 truncate flex items-center gap-1 sm:gap-1.5 mt-0.5 sm:mt-1">
                                                 {activeTab === 'jobs' ? (
                                                     <>
-                                                        <HiOutlineOfficeBuilding className="shrink-0" /> {item.company}
+                                                        <HiOutlineOfficeBuilding className="shrink-0 text-xs" /> <span className="truncate">{item.company}</span>
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <HiOutlineMail className="shrink-0" /> {item.email}
+                                                        <HiOutlineMail className="shrink-0 text-xs" /> <span className="truncate">{item.email}</span>
                                                     </>
                                                 )}
                                             </p>
                                         </div>
                                     </div>
-
+ 
                                     {/* Card details based on Tab */}
-                                    <div className="space-y-2 mt-4 pt-3 border-t border-slate-100 dark:border-slate-800/60 text-xs">
+                                    <div className="space-y-1.5 sm:space-y-2 mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/60 text-[10px] sm:text-xs">
                                         {activeTab === 'recruiters' && (
                                             <>
-                                                <div className="flex justify-between">
-                                                    <span className="text-slate-400">Company:</span>
-                                                    <span className="font-semibold">{item.companyName || "Not Specified"}</span>
+                                                <div className="flex justify-between gap-1">
+                                                    <span className="text-slate-400 shrink-0">Company:</span>
+                                                    <span className="font-semibold truncate">{item.companyName || "Not Specified"}</span>
                                                 </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-slate-400">Website:</span>
-                                                    <span className="font-semibold text-brand-primary truncate max-w-[150px]">
+                                                <div className="flex justify-between gap-1">
+                                                    <span className="text-slate-400 shrink-0">Website:</span>
+                                                    <span className="font-semibold text-brand-primary truncate">
                                                         {item.companyWebsite ? (
                                                             <a href={item.companyWebsite} target="_blank" rel="noopener noreferrer" className="hover:underline text-brand-primary no-underline">Link</a>
                                                         ) : "None"}
@@ -253,49 +253,49 @@ function AdminDashboard() {
                                                 </div>
                                             </>
                                         )}
-
+ 
                                         {activeTab === 'users' && (
                                             <>
-                                                <div className="flex justify-between">
-                                                    <span className="text-slate-400">Skills:</span>
-                                                    <span className="font-semibold truncate max-w-[160px]">{item.skills || "No skills listed"}</span>
+                                                <div className="flex justify-between gap-1">
+                                                    <span className="text-slate-400 shrink-0">Skills:</span>
+                                                    <span className="font-semibold truncate">{item.skills || "No skills listed"}</span>
                                                 </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-slate-400">Location:</span>
-                                                    <span className="font-semibold">{item.location || "Not Specified"}</span>
+                                                <div className="flex justify-between gap-1">
+                                                    <span className="text-slate-400 shrink-0">Location:</span>
+                                                    <span className="font-semibold truncate">{item.location || "Not Specified"}</span>
                                                 </div>
                                             </>
                                         )}
-
+ 
                                         {activeTab === 'jobs' && (
                                             <>
-                                                <div className="flex justify-between">
-                                                    <span className="text-slate-400">Location:</span>
-                                                    <span className="font-semibold">{item.location || "Remote"}</span>
+                                                <div className="flex justify-between gap-1">
+                                                    <span className="text-slate-400 shrink-0">Location:</span>
+                                                    <span className="font-semibold truncate">{item.location || "Remote"}</span>
                                                 </div>
-                                                <div className="flex justify-between">
-                                                    <span className="text-slate-400">Type:</span>
-                                                    <span className="font-semibold uppercase text-brand-secondary">{item.jobType || "Full Time"}</span>
+                                                <div className="flex justify-between gap-1">
+                                                    <span className="text-slate-400 shrink-0">Type:</span>
+                                                    <span className="font-semibold uppercase text-brand-secondary truncate">{item.jobType || "Full Time"}</span>
                                                 </div>
                                             </>
                                         )}
                                     </div>
                                 </div>
-
+ 
                                 {/* Actions row */}
-                                <div className="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between gap-2.5">
+                                <div className="mt-4 sm:mt-5 pt-2.5 sm:pt-3 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between gap-2">
                                     {/* Profile view (Recruiter or Candidate) */}
                                     {activeTab !== 'jobs' ? (
                                         <button
                                             onClick={() => setSelectedProfileUser(item)}
-                                            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-lg text-[10px] uppercase tracking-wider transition border-none cursor-pointer flex-1"
+                                            className="px-2 py-1.5 sm:px-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-lg text-[9px] sm:text-[10px] uppercase tracking-wider transition border-none cursor-pointer flex-1 truncate"
                                         >
                                             View Details
                                         </button>
                                     ) : (
                                         <div className="flex-1"></div>
                                     )}
-
+ 
                                     {/* Delete Button */}
                                     <button
                                         onClick={() => setDeleteTarget({
@@ -306,7 +306,7 @@ function AdminDashboard() {
                                         className="p-1.5 bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-500 text-rose-500 hover:text-white rounded-lg transition border-none cursor-pointer flex items-center justify-center shrink-0"
                                         aria-label="Delete item"
                                     >
-                                        <HiTrash className="text-sm" />
+                                        <HiTrash className="text-xs sm:text-sm" />
                                     </button>
                                 </div>
                             </div>
