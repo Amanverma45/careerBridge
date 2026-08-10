@@ -357,125 +357,300 @@ function Profile({ isModal, onClose, viewUser }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {/* Left Column - User info, Photo, Contacts, Resume (Unified inside 1 Card) */}
-                        <div className="md:col-span-1 p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-6 shadow-sm flex flex-col justify-start">
-                            {/* Profile Photo Display with zoom preview wrapper */}
-                            <div className="flex flex-col items-center text-center relative group">
-                                <button
-                                    onClick={() => {
-                                        if (user.profilePhoto) {
-                                            setIsPreviewOpen(true);
-                                        } else {
-                                            toast.error("No profile image");
-                                        }
-                                    }}
-                                    type="button"
-                                    className="relative w-28 h-28 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center cursor-pointer group border-none p-0 outline-none"
-                                    title="Click to zoom photo"
-                                >
-                                    {user.profilePhoto ? (
-                                        <img
-                                            src={user.profilePhoto}
-                                            alt="Profile"
-                                            className="w-full h-full object-cover"
-                                        />
-                                    ) : (
-                                        <HiOutlineUser className="text-5xl text-slate-400" />
-                                    )}
-                                </button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {isRecruiter ? (
+                            <>
+                                {/* RECRUITER CARD 1: Header Profile Card */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col items-center text-center justify-center min-h-[220px]">
+                                    <button
+                                        onClick={() => {
+                                            if (user.profilePhoto) {
+                                                setIsPreviewOpen(true);
+                                            } else {
+                                                toast.error("No profile image");
+                                            }
+                                        }}
+                                        type="button"
+                                        className="relative w-24 h-24 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center cursor-pointer group border-none p-0 outline-none"
+                                        title="Click to zoom photo"
+                                    >
+                                        {user.profilePhoto ? (
+                                            <img
+                                                src={user.profilePhoto}
+                                                alt="Profile"
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <HiOutlineUser className="text-4xl text-slate-400" />
+                                        )}
+                                    </button>
 
-                                <h2 className="text-lg font-black text-slate-800 dark:text-white mt-4 leading-tight truncate w-full">
-                                    {isRecruiter ? (skills || "Company Name") : (name || "Name Not Added")}
-                                </h2>
-                                <p className="text-xs font-semibold text-brand-primary mt-1 select-none uppercase tracking-wider">
-                                    {user.role}
-                                </p>
-                            </div>
+                                    <div className="w-full">
+                                        <h2 className="text-lg font-black text-slate-800 dark:text-white mt-2 leading-tight truncate w-full">
+                                            {skills || "Company Name"}
+                                        </h2>
+                                        {user.name && (
+                                            <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-1">
+                                                Recruiter: {user.name}
+                                            </p>
+                                        )}
+                                        <p className="text-[10px] font-bold text-brand-primary mt-1.5 select-none uppercase tracking-wider bg-brand-primary/10 px-2 py-0.5 rounded-full inline-block">
+                                            {user.role}
+                                        </p>
+                                    </div>
+                                </div>
 
-                            <hr className="border-slate-200/60 dark:border-slate-800/60" />
+                                {/* RECRUITER CARD 2: Contact Info Card */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col justify-start">
+                                    <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider pb-1 border-b border-slate-100 dark:border-slate-800/60">Contact Info</h3>
+                                    <div className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400 mt-2">
+                                        <p className="flex items-center gap-2.5">
+                                            <HiOutlineMail className="text-base text-slate-400 shrink-0" />
+                                            <span className="truncate">{user.email}</span>
+                                        </p>
+                                        {user.phone && (
+                                            <p className="flex items-center gap-2.5">
+                                                <FaPhone className="text-sm text-slate-400 shrink-0" />
+                                                <span>{user.phone}</span>
+                                            </p>
+                                        )}
+                                        {user.location && (
+                                            <p className="flex items-center gap-2.5">
+                                                <FaMapMarkerAlt className="text-sm text-slate-400 shrink-0" />
+                                                <span>{user.location}</span>
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
 
-                            {/* Contacts & Metadata */}
-                            <div className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400">
-                                <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Contact Info</h3>
-
-                                <p className="flex items-center gap-2.5">
-                                    <HiOutlineMail className="text-base text-slate-400 shrink-0" />
-                                    <span className="truncate">{user.email}</span>
-                                </p>
-
-                                {user.phone && (
-                                    <p className="flex items-center gap-2.5">
-                                        <FaPhone className="text-sm text-slate-400 shrink-0" />
-                                        <span>{user.phone}</span>
+                                {/* RECRUITER CARD 3: Company Description */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col justify-start">
+                                    <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider pb-1 border-b border-slate-100 dark:border-slate-800/60">Company Description</h3>
+                                    <p className="text-xs leading-relaxed text-slate-650 dark:text-slate-355 whitespace-pre-line overflow-y-auto max-h-[140px] pr-1">
+                                        {bio || "No company description added yet."}
                                     </p>
-                                )}
+                                </div>
 
-                                {user.location && (
-                                    <p className="flex items-center gap-2.5">
-                                        <FaMapMarkerAlt className="text-sm text-slate-400 shrink-0" />
-                                        <span>{user.location}</span>
-                                    </p>
-                                )}
-                            </div>
+                                {/* RECRUITER CARD 4: Company Website & Meta */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col justify-between">
+                                    <div>
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider pb-1 border-b border-slate-100 dark:border-slate-800/60 mb-3">Company Website</h3>
+                                        {experience ? (
+                                            <a
+                                                href={experience.startsWith('http') ? experience : `https://${experience}`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-secondary/10 hover:bg-brand-secondary text-brand-secondary hover:text-white rounded-xl text-xs font-semibold transition-all active:scale-95 no-underline"
+                                            >
+                                                <HiOutlineGlobeAlt className="text-base shrink-0" /> <span className="truncate max-w-[200px]">{experience}</span>
+                                            </a>
+                                        ) : (
+                                            <p className="text-xs text-slate-400 italic">No website specified</p>
+                                        )}
+                                    </div>
+                                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Account Status</span>
+                                        <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-black uppercase tracking-wider">Verified Partner</span>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                {/* CANDIDATE CARD 1: Header Profile & Contacts */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-5 shadow-sm flex flex-col justify-start">
+                                    <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                                        <button
+                                            onClick={() => {
+                                                if (user.profilePhoto) {
+                                                    setIsPreviewOpen(true);
+                                                } else {
+                                                    toast.error("No profile image");
+                                                }
+                                            }}
+                                            type="button"
+                                            className="relative w-20 h-20 rounded-3xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-inner flex items-center justify-center cursor-pointer group border-none p-0 outline-none shrink-0"
+                                            title="Click to zoom photo"
+                                        >
+                                            {user.profilePhoto ? (
+                                                <img
+                                                    src={user.profilePhoto}
+                                                    alt="Profile"
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                <HiOutlineUser className="text-4xl text-slate-400" />
+                                            )}
+                                        </button>
 
-                            {/* Resume Panel (Users only) */}
-                            {!isRecruiter && (
-                                <>
+                                        <div className="min-w-0 flex-1">
+                                            <h2 className="text-lg font-black text-slate-800 dark:text-white leading-tight truncate w-full">
+                                                {name || "Name Not Added"}
+                                            </h2>
+                                            <p className="text-[10px] font-bold text-brand-primary mt-1 select-none uppercase tracking-wider bg-brand-primary/10 px-2 py-0.5 rounded-full inline-block">
+                                                {user.role}
+                                            </p>
+                                        </div>
+                                    </div>
+
                                     <hr className="border-slate-200/60 dark:border-slate-800/60" />
-                                    <div className="text-xs space-y-4">
-                                        <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">My Resume</h3>
 
+                                    <div className="space-y-3.5 text-xs text-slate-600 dark:text-slate-400">
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider">Contact Info</h3>
+                                        <p className="flex items-center gap-2.5">
+                                            <HiOutlineMail className="text-base text-slate-400 shrink-0" />
+                                            <span className="truncate">{user.email}</span>
+                                        </p>
+                                        {user.phone && (
+                                            <p className="flex items-center gap-2.5">
+                                                <FaPhone className="text-sm text-slate-400 shrink-0" />
+                                                <span>{user.phone}</span>
+                                            </p>
+                                        )}
+                                        {user.location && (
+                                            <p className="flex items-center gap-2.5">
+                                                <FaMapMarkerAlt className="text-sm text-slate-400 shrink-0" />
+                                                <span>{user.location}</span>
+                                            </p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* CANDIDATE CARD 2: About & Skills */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col justify-start">
+                                    <div>
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider pb-1 border-b border-slate-100 dark:border-slate-800/60">About Me</h3>
+                                        <p className="text-xs leading-relaxed text-slate-650 dark:text-slate-355 whitespace-pre-line mt-2 overflow-y-auto max-h-[100px] pr-1">
+                                            {bio || "No bio details added yet."}
+                                        </p>
+                                    </div>
+
+                                    <hr className="border-slate-200/60 dark:border-slate-800/60" />
+
+                                    <div className="space-y-3 flex-1 flex flex-col justify-start">
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider">Key Skills</h3>
+                                        {skills ? (
+                                            <div className="flex flex-wrap gap-1.5 mt-1 overflow-y-auto max-h-[100px] pr-1">
+                                                {skills.split(',').map(s => s.trim()).filter(Boolean).map((skill, i) => (
+                                                    <span
+                                                        key={i}
+                                                        className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800 text-[10px] font-semibold text-slate-755 dark:text-slate-300 shadow-sm"
+                                                    >
+                                                        {skill}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <p className="text-xs text-slate-400 italic">No skills listed yet.</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* CANDIDATE CARD 3: Experience & Education */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col justify-start">
+                                    <div className="space-y-3">
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider flex items-center gap-1.5">
+                                            <FaBriefcase className="text-slate-400 text-xs" /> Work Experience
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1.5">
+                                            <div className="space-y-0.5">
+                                                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Experience Level</p>
+                                                <p className="text-xs font-black text-slate-755 dark:text-white">{experience || "Not Specified"}</p>
+                                            </div>
+                                            {(experienceCompany || experienceRole) && (
+                                                <div className="space-y-0.5">
+                                                    <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">Last Employer / Role</p>
+                                                    <p className="text-xs font-black text-slate-755 dark:text-white truncate">
+                                                        {experienceRole || "Developer"} at {experienceCompany || "Company"}
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <hr className="border-slate-200/60 dark:border-slate-800/60" />
+
+                                    <div className="space-y-3 flex-1 flex flex-col justify-start">
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider flex items-center gap-1.5 pb-1 border-b border-slate-100 dark:border-slate-800/60">
+                                            <FaGraduationCap className="text-slate-400 text-sm" /> Education History
+                                        </h3>
+                                        <div className="space-y-2 mt-2 overflow-y-auto max-h-[140px] pr-1">
+                                            {educationGrad && (
+                                                <div className="p-2 bg-white dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/80 rounded-xl">
+                                                    <p className="text-[9px] font-black uppercase tracking-wider text-brand-primary">Graduation</p>
+                                                    <p className="text-xs font-extrabold text-slate-800 dark:text-white truncate mt-0.5">{educationGrad}</p>
+                                                </div>
+                                            )}
+                                            {education12 && (
+                                                <div className="p-2 bg-white dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800/80 rounded-xl">
+                                                    <p className="text-[9px] font-black uppercase tracking-wider text-brand-secondary">Class 12th</p>
+                                                    <p className="text-xs font-extrabold text-slate-800 dark:text-white truncate mt-0.5">{education12}</p>
+                                                </div>
+                                            )}
+                                            {education10 && (
+                                                <div className="p-2 bg-white dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800/80 rounded-xl">
+                                                    <p className="text-[9px] font-black uppercase tracking-wider text-amber-500">Class 10th</p>
+                                                    <p className="text-xs font-extrabold text-slate-800 dark:text-white truncate mt-0.5">{education10}</p>
+                                                </div>
+                                            )}
+                                            {!educationGrad && !education12 && !education10 && (
+                                                <p className="text-xs text-slate-400 italic">No education details recorded yet.</p>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* CANDIDATE CARD 4: Resume & Social Links */}
+                                <div className="p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-4 shadow-sm flex flex-col justify-start">
+                                    <div className="space-y-3">
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider">My Resume</h3>
                                         {user.resume ? (
-                                            <div className="space-y-3">
-                                                <div className="flex items-center gap-3 p-3 bg-white dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl">
-                                                    <FaFilePdf className="text-3xl text-rose-500 shrink-0" />
+                                            <div className="space-y-2 mt-1.5">
+                                                <div className="flex items-center gap-3 p-2 bg-white dark:bg-slate-950 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl">
+                                                    <FaFilePdf className="text-2xl text-rose-500 shrink-0" />
                                                     <div className="min-w-0 flex-1">
-                                                        <p className="font-bold text-slate-700 dark:text-slate-300 truncate">Resume.pdf</p>
-                                                        <p className="text-[10px] text-slate-405">Cloudinary Upload</p>
+                                                        <p className="font-bold text-xs text-slate-700 dark:text-slate-300 truncate">Resume.pdf</p>
+                                                        <p className="text-[9px] text-slate-400">Cloudinary Upload</p>
                                                     </div>
                                                 </div>
-
                                                 <div className="grid grid-cols-2 gap-2">
                                                     <a
                                                         href={user.resume}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="flex items-center justify-center gap-1.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 text-center no-underline border-none"
+                                                        className="flex items-center justify-center gap-1 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-[9px] uppercase tracking-wider transition active:scale-95 text-center no-underline border-none cursor-pointer"
                                                     >
-                                                        <FaEye /> View
+                                                        <FaEye className="text-[10px]" /> View
                                                     </a>
                                                     <a
                                                         href={user.resume}
                                                         download="Resume.pdf"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="flex items-center justify-center gap-1.5 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 text-center no-underline border-none"
+                                                        className="flex items-center justify-center gap-1 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold rounded-xl text-[9px] uppercase tracking-wider transition active:scale-95 text-center no-underline border-none cursor-pointer"
                                                     >
-                                                        <FaDownload /> Download
+                                                        <FaDownload className="text-[10px]" /> Download
                                                     </a>
                                                 </div>
-
                                                 {!viewUser && (
                                                     <button
                                                         onClick={() => resumeInputRef.current.click()}
                                                         disabled={uploadingResume}
-                                                        className="w-full py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2"
+                                                        className="w-full py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[9px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-1.5 cursor-pointer"
                                                     >
-                                                        <FaUpload /> {uploadingResume ? "Uploading..." : "Update Resume"}
+                                                        <FaUpload className="text-[10px]" /> {uploadingResume ? "Uploading..." : "Update Resume"}
                                                     </button>
                                                 )}
                                             </div>
                                         ) : (
-                                            <div className="text-center py-4 space-y-3">
-                                                <p className="text-slate-400 italic text-xs">No resume uploaded yet</p>
+                                            <div className="text-center py-2 space-y-2 mt-1.5">
+                                                <p className="text-slate-400 italic text-[11px]">No resume uploaded yet</p>
                                                 {!viewUser && (
                                                     <button
                                                         onClick={() => resumeInputRef.current.click()}
                                                         disabled={uploadingResume}
-                                                        className="px-4 py-2.5 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[10px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-2 mx-auto"
+                                                        className="px-4 py-2 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-xl text-[9px] uppercase tracking-wider transition active:scale-95 border-none flex items-center justify-center gap-1.5 mx-auto cursor-pointer"
                                                     >
-                                                        <FaUpload /> {uploadingResume ? "Uploading..." : "Upload Resume"}
+                                                        <FaUpload className="text-[10px]" /> {uploadingResume ? "Uploading..." : "Upload Resume"}
                                                     </button>
                                                 )}
                                             </div>
@@ -488,130 +663,15 @@ function Profile({ isModal, onClose, viewUser }) {
                                             className="hidden"
                                         />
                                     </div>
-                                </>
-                            )}
-                        </div>
-
-                        {/* Right Column - Experience, Education, Bio, Socials (Unified inside 1 Card) */}
-                        <div className="md:col-span-2 p-6 bg-slate-50/50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800/60 rounded-3xl space-y-6 shadow-sm flex flex-col justify-start">
-                            {/* Bio */}
-                            <div className="space-y-2">
-                                <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">
-                                    {isRecruiter ? "Company Description" : "About Me"}
-                                </h3>
-                                <p className="text-xs leading-relaxed text-slate-650 dark:text-slate-350 whitespace-pre-line">
-                                    {bio || (isRecruiter ? "No company description added yet." : "No bio details added yet. Edit profile to write about yourself.")}
-                                </p>
-                            </div>
-
-                            {/* Recruiter Details vs User Details */}
-                            {isRecruiter ? (
-                                <div className="space-y-4">
-                                    <hr className="border-slate-200/60 dark:border-slate-800/60" />
-                                    <div className="space-y-1">
-                                        <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Company Website</h3>
-                                        {experience ? (
-                                            <a
-                                                href={experience.startsWith('http') ? experience : `https://${experience}`}
-                                                target="_blank"
-                                                rel="noreferrer"
-                                                className="inline-flex items-center gap-1.5 text-brand-secondary hover:underline text-xs font-semibold"
-                                            >
-                                                <HiOutlineGlobeAlt className="text-sm shrink-0" /> {experience}
-                                            </a>
-                                        ) : (
-                                            <p className="text-xs text-slate-400 italic">No website specified</p>
-                                        )}
-                                    </div>
-                                </div>
-                            ) : (
-                                <>
-                                    <hr className="border-slate-200/60 dark:border-slate-800/60" />
-
-                                    {/* User Skills */}
-                                    <div className="space-y-3">
-                                        <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Key Skills</h3>
-                                        {skills ? (
-                                            <div className="flex flex-wrap gap-1.5">
-                                                {skills.split(',').map(s => s.trim()).filter(Boolean).map((skill, i) => (
-                                                    <span
-                                                        key={i}
-                                                        className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-955 border border-slate-200/50 dark:border-slate-800 text-[10px] sm:text-xs font-semibold text-slate-755 dark:text-slate-300 shadow-sm"
-                                                    >
-                                                        {skill}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        ) : (
-                                            <p className="text-xs text-slate-400 italic">No skills listed yet.</p>
-                                        )}
-                                    </div>
-
-                                    <hr className="border-slate-200/60 dark:border-slate-800/60" />
-
-                                    {/* User Work Details */}
-                                    <div className="space-y-4">
-                                        <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider flex items-center gap-1.5">
-                                            <FaBriefcase className="text-slate-400 text-xs" /> Work Experience
-                                        </h3>
-
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="space-y-0.5">
-                                                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Experience Level</p>
-                                                <p className="text-xs font-black text-slate-755 dark:text-white">{experience || "Not Specified"}</p>
-                                            </div>
-                                            {(experienceCompany || experienceRole) && (
-                                                <div className="space-y-0.5">
-                                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Last Employer / Role</p>
-                                                    <p className="text-xs font-black text-slate-755 dark:text-white">
-                                                        {experienceRole || "Developer"} at {experienceCompany || "Company"}
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <hr className="border-slate-200/60 dark:border-slate-800/60" />
-
-                                    {/* User Education Details */}
-                                    <div className="space-y-4">
-                                        <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider flex items-center gap-1.5">
-                                            <FaGraduationCap className="text-slate-400 text-sm" /> Education History
-                                        </h3>
-
-                                        <div className="space-y-3.5">
-                                            {educationGrad && (
-                                                <div className="p-3 bg-white dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/80 rounded-2xl">
-                                                    <p className="text-[10px] font-black uppercase tracking-wider text-brand-primary">Graduation</p>
-                                                    <p className="text-xs font-extrabold text-slate-800 dark:text-white mt-0.5">{educationGrad}</p>
-                                                </div>
-                                            )}
-                                            {education12 && (
-                                                <div className="p-3 bg-white dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/80 rounded-2xl">
-                                                    <p className="text-[10px] font-black uppercase tracking-wider text-brand-secondary">Class 12th</p>
-                                                    <p className="text-xs font-extrabold text-slate-800 dark:text-white mt-0.5">{education12}</p>
-                                                </div>
-                                            )}
-                                            {education10 && (
-                                                <div className="p-3 bg-white dark:bg-slate-950 border border-slate-200/50 dark:border-slate-800/80 rounded-2xl">
-                                                    <p className="text-[10px] font-black uppercase tracking-wider text-amber-500">Class 10th</p>
-                                                    <p className="text-xs font-extrabold text-slate-800 dark:text-white mt-0.5">{education10}</p>
-                                                </div>
-                                            )}
-                                            {!educationGrad && !education12 && !education10 && (
-                                                <p className="text-xs text-slate-400 italic">No education details recorded yet.</p>
-                                            )}
-                                        </div>
-                                    </div>
 
                                     {certification && (
                                         <>
                                             <hr className="border-slate-200/60 dark:border-slate-800/60" />
-                                            <div className="space-y-2">
-                                                <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider flex items-center gap-1.5">
-                                                    <FaCertificate className="text-slate-450 text-xs animate-pulse-slow" /> Certifications
+                                            <div className="space-y-1">
+                                                <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider flex items-center gap-1.5">
+                                                    <FaCertificate className="text-slate-400 text-xs shrink-0" /> Certifications
                                                 </h3>
-                                                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-relaxed">
+                                                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 leading-tight truncate">
                                                     {certification}
                                                 </p>
                                             </div>
@@ -620,52 +680,47 @@ function Profile({ isModal, onClose, viewUser }) {
 
                                     <hr className="border-slate-200/60 dark:border-slate-800/60" />
 
-                                    {/* Social links */}
-                                    <div className="space-y-4">
-                                        <h3 className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider">Social Links & Portfolios</h3>
-
-                                        <div className="flex flex-wrap gap-2.5">
+                                    <div className="space-y-3">
+                                        <h3 className="text-[10px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider">Social Profiles</h3>
+                                        <div className="flex flex-wrap gap-2 mt-1">
                                             {github && (
                                                 <a
                                                     href={github.startsWith('http') ? github : `https://${github}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 px-3 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-xs tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
+                                                    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-[10px] tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
                                                 >
-                                                    <FaGithub className="text-base" /> GitHub
+                                                    <FaGithub className="text-sm shrink-0" /> GitHub
                                                 </a>
                                             )}
-
                                             {linkedin && (
                                                 <a
                                                     href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
+                                                    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-[10px] tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
                                                 >
-                                                    <FaLinkedin className="text-base" /> LinkedIn
+                                                    <FaLinkedin className="text-sm shrink-0" /> LinkedIn
                                                 </a>
                                             )}
-
                                             {portfolio && (
                                                 <a
                                                     href={portfolio.startsWith('http') ? portfolio : `https://${portfolio}`}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="flex items-center gap-2 px-3 py-2 bg-brand-secondary hover:bg-brand-secondary-hover text-white font-bold rounded-xl text-xs tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
+                                                    className="flex items-center gap-1.5 px-2.5 py-1.5 bg-brand-secondary hover:bg-brand-secondary-hover text-white font-bold rounded-xl text-[10px] tracking-wide transition active:scale-95 no-underline shadow-sm border-none"
                                                 >
-                                                    <FaGlobe className="text-sm" /> Portfolio
+                                                    <FaGlobe className="text-xs shrink-0" /> Portfolio
                                                 </a>
                                             )}
-
                                             {!github && !linkedin && !portfolio && (
                                                 <p className="text-xs text-slate-400 italic">No social links added yet</p>
                                             )}
                                         </div>
                                     </div>
-                                </>
-                            )}
-                        </div>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             ) : (

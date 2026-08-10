@@ -50,13 +50,13 @@ function AdminDashboard() {
         const headers = { Authorization: `Bearer ${token}` };
         try {
             if (activeTab === 'recruiters') {
-                const res = await axios.get('http://localhost:5000/admin/recruiters', { headers });
+                const res = await axios.get('/admin/recruiters', { headers });
                 setRecruiters(res.data);
             } else if (activeTab === 'users') {
-                const res = await axios.get('http://localhost:5000/admin/users', { headers });
+                const res = await axios.get('/admin/users', { headers });
                 setUsers(res.data);
             } else if (activeTab === 'jobs') {
-                const res = await axios.get('http://localhost:5000/admin/jobs', { headers });
+                const res = await axios.get('/admin/jobs', { headers });
                 setJobs(res.data);
             }
         } catch (error) {
@@ -80,7 +80,7 @@ function AdminDashboard() {
         const headers = { Authorization: `Bearer ${token}` };
         try {
             if (deleteTarget.type === 'user') {
-                await axios.delete(`http://localhost:5000/admin/user/${deleteTarget.id}`, { headers });
+                await axios.delete(`/admin/user/${deleteTarget.id}`, { headers });
                 toast.success("User deleted successfully.");
                 if (activeTab === 'recruiters') {
                     setRecruiters(prev => prev.filter(r => r._id !== deleteTarget.id));
@@ -88,7 +88,7 @@ function AdminDashboard() {
                     setUsers(prev => prev.filter(u => u._id !== deleteTarget.id));
                 }
             } else if (deleteTarget.type === 'job') {
-                await axios.delete(`http://localhost:5000/admin/job/${deleteTarget.id}`, { headers });
+                await axios.delete(`/admin/job/${deleteTarget.id}`, { headers });
                 toast.success("Job posting deleted successfully.");
                 setJobs(prev => prev.filter(j => j._id !== deleteTarget.id));
             }
@@ -135,49 +135,49 @@ function AdminDashboard() {
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 transition-colors duration-300">
-            <main className="max-w-7xl mx-auto px-6 py-8">
+            <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
                 {/* Title Section */}
                 <div className="mb-8">
-                    <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white flex items-center gap-2 leading-none">
+                    <h1 className="text-xl sm:text-2xl font-black text-slate-800 dark:text-white flex flex-wrap items-center gap-2 leading-none">
                         Admin Control Panel 
-                        <span className="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-wider">Super Admin</span>
+                        <span className="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-500 text-[10px] font-black uppercase tracking-wider shrink-0">Super Admin</span>
                     </h1>
                     <p className="text-slate-500 dark:text-slate-400 text-xs mt-1.5">Manage system recruiters, candidates, and job postings.</p>
                 </div>
 
                 {/* Search and Navigation tabs row */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 w-full">
                     {/* Tabs */}
-                    <div className="flex gap-2 p-1 bg-slate-200/60 dark:bg-slate-900 rounded-2xl w-full md:w-auto">
+                    <div className="grid grid-cols-3 md:flex gap-1 sm:gap-2 p-1 bg-slate-200/60 dark:bg-slate-900 rounded-2xl w-full md:w-auto shrink-0">
                         <button
                             onClick={() => { setActiveTab('recruiters'); setSearchQuery(''); }}
-                            className={`flex-1 md:flex-none px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border-none cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`px-1.5 xs:px-3 md:px-4 py-2.5 rounded-xl text-[10px] xs:text-xs font-black uppercase tracking-wider transition-all border-none cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
                                 activeTab === 'recruiters' 
                                     ? "bg-white dark:bg-slate-850 text-brand-primary shadow-sm" 
                                     : "text-slate-500 hover:text-slate-850 dark:hover:text-slate-300"
                             }`}
                         >
-                            <HiOutlineOfficeBuilding className="text-sm" /> Recruiters
+                            <HiOutlineOfficeBuilding className="text-xs sm:text-sm shrink-0" /> <span className="truncate">Recruiters</span>
                         </button>
                         <button
                             onClick={() => { setActiveTab('users'); setSearchQuery(''); }}
-                            className={`flex-1 md:flex-none px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border-none cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`px-1.5 xs:px-3 md:px-4 py-2.5 rounded-xl text-[10px] xs:text-xs font-black uppercase tracking-wider transition-all border-none cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
                                 activeTab === 'users' 
                                     ? "bg-white dark:bg-slate-850 text-brand-primary shadow-sm" 
                                     : "text-slate-500 hover:text-slate-850 dark:hover:text-slate-300"
                             }`}
                         >
-                            <HiOutlineUser className="text-sm" /> Candidates
+                            <HiOutlineUser className="text-xs sm:text-sm shrink-0" /> <span className="truncate">Candidates</span>
                         </button>
                         <button
                             onClick={() => { setActiveTab('jobs'); setSearchQuery(''); }}
-                            className={`flex-1 md:flex-none px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border-none cursor-pointer flex items-center justify-center gap-1.5 ${
+                            className={`px-1.5 xs:px-3 md:px-4 py-2.5 rounded-xl text-[10px] xs:text-xs font-black uppercase tracking-wider transition-all border-none cursor-pointer flex items-center justify-center gap-1 sm:gap-1.5 ${
                                 activeTab === 'jobs' 
                                     ? "bg-white dark:bg-slate-850 text-brand-primary shadow-sm" 
                                     : "text-slate-500 hover:text-slate-850 dark:hover:text-slate-300"
                             }`}
                         >
-                            <HiOutlineBriefcase className="text-sm" /> Jobs
+                            <HiOutlineBriefcase className="text-xs sm:text-sm shrink-0" /> <span className="truncate">Jobs</span>
                         </button>
                     </div>
 

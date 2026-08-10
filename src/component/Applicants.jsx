@@ -23,7 +23,7 @@ function Applicants() {
         try {
             setLoading(true)
             const res = await axios.get(
-                `${window.API_URL || 'http://localhost:5000'}/application/applicants/${jobId}`
+                `/application/applicants/${jobId}`
             )
             setApplicants(res.data)
         } catch (error) {
@@ -86,7 +86,7 @@ function Applicants() {
         try {
             setStatusLoadingId(appId)
             await axios.put(
-                `${window.API_URL || 'http://localhost:5000'}/application/status/${appId}`,
+                `/application/status/${appId}`,
                 { status }
             )
             toast.success(`Candidate ${status === "shortlisted" ? "Shortlisted" : "Rejected"} successfully`)
