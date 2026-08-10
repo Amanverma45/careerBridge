@@ -181,7 +181,7 @@ function Profile({ isModal, onClose, viewUser }) {
             }
         }
 
-        // Validate phone, location, and socials for both recruiters and candidates
+        // Validate phone and location for both recruiters and candidates
         const phoneError = validatePhone(phone);
         if (phoneError) {
             toast.error(phoneError);
@@ -194,24 +194,6 @@ function Profile({ isModal, onClose, viewUser }) {
                 toast.error(locError);
                 return;
             }
-        }
-
-        const linkedinError = validateUrl(linkedin, "LinkedIn URL");
-        if (linkedinError) {
-            toast.error(linkedinError);
-            return;
-        }
-
-        const githubError = validateUrl(github, "GitHub URL");
-        if (githubError) {
-            toast.error(githubError);
-            return;
-        }
-
-        const portfolioError = validateUrl(portfolio, "Portfolio URL");
-        if (portfolioError) {
-            toast.error(portfolioError);
-            return;
         }
 
         if (!isRecruiter) {
@@ -263,6 +245,24 @@ function Profile({ isModal, onClose, viewUser }) {
                 }
             }
 
+            const linkedinError = validateUrl(linkedin, "LinkedIn URL");
+            if (linkedinError) {
+                toast.error(linkedinError);
+                return;
+            }
+
+            const githubError = validateUrl(github, "GitHub URL");
+            if (githubError) {
+                toast.error(githubError);
+                return;
+            }
+
+            const portfolioError = validateUrl(portfolio, "Portfolio URL");
+            if (portfolioError) {
+                toast.error(portfolioError);
+                return;
+            }
+
             if (certification) {
                 const certError = validateText(certification, "Certification");
                 if (certError) {
@@ -285,15 +285,15 @@ function Profile({ isModal, onClose, viewUser }) {
 
                 phone,
                 location,
-                linkedin,
-                github,
-                portfolio,
 
                 educationGrad: isRecruiter ? undefined : educationGrad,
                 education12: isRecruiter ? undefined : education12,
                 education10: isRecruiter ? undefined : education10,
                 experienceCompany: isRecruiter ? undefined : experienceCompany,
                 experienceRole: isRecruiter ? undefined : experienceRole,
+                linkedin: isRecruiter ? undefined : linkedin,
+                github: isRecruiter ? undefined : github,
+                portfolio: isRecruiter ? undefined : portfolio,
                 certification: isRecruiter ? undefined : certification,
             }
 
@@ -422,43 +422,6 @@ function Profile({ isModal, onClose, viewUser }) {
                                             </p>
                                         )}
                                     </div>
-                                    {(github || linkedin || portfolio) && (
-                                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800/60 mt-3">
-                                            <p className="text-[9px] uppercase font-black text-slate-405 dark:text-slate-500 tracking-wider mb-2">Social Profiles</p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {github && (
-                                                    <a
-                                                        href={github.startsWith('http') ? github : `https://${github}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-[9px] tracking-wide transition active:scale-95 no-underline shadow-sm border-none cursor-pointer"
-                                                    >
-                                                        <FaGithub className="text-xs shrink-0" /> GitHub
-                                                    </a>
-                                                )}
-                                                {linkedin && (
-                                                    <a
-                                                        href={linkedin.startsWith('http') ? linkedin : `https://${linkedin}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-[9px] tracking-wide transition active:scale-95 no-underline shadow-sm border-none cursor-pointer"
-                                                    >
-                                                        <FaLinkedin className="text-xs shrink-0" /> LinkedIn
-                                                    </a>
-                                                )}
-                                                {portfolio && (
-                                                    <a
-                                                        href={portfolio.startsWith('http') ? portfolio : `https://${portfolio}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-brand-secondary hover:bg-brand-secondary-hover text-white font-bold rounded-xl text-[9px] tracking-wide transition active:scale-95 no-underline shadow-sm border-none cursor-pointer"
-                                                    >
-                                                        <FaGlobe className="text-xs shrink-0" /> Portfolio
-                                                    </a>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
                                 </div>
 
                                 {/* RECRUITER CARD 3: Company Description */}
@@ -1014,52 +977,51 @@ function Profile({ isModal, onClose, viewUser }) {
                                         placeholder="e.g. AWS Cloud Practitioner / Oracle Java Certified"
                                         className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
                                     />
+                                    <div className="md:col-span-2 border-t border-slate-150 dark:border-slate-800/80 pt-4">
+                                        <h3 className="text-xs uppercase font-black text-slate-405 dark:text-slate-505 tracking-wider font-bold">Social Links & Portfolios</h3>
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-350">
+                                            GitHub Link
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={github}
+                                            onChange={(e) => setGithub(e.target.value)}
+                                            placeholder="e.g. https://github.com/username"
+                                            className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-350">
+                                            LinkedIn Link
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={linkedin}
+                                            onChange={(e) => setLinkedin(e.target.value)}
+                                            placeholder="e.g. https://linkedin.com/in/username"
+                                            className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
+                                        />
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-355">
+                                            Portfolio Website Link
+                                        </label>
+                                        <input
+                                            type="text"
+                                            value={portfolio}
+                                            onChange={(e) => setPortfolio(e.target.value)}
+                                            placeholder="e.g. https://myportfolio.com"
+                                            className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
+                                        />
+                                    </div>
                                 </div>
                             </>
                         )}
-
-                        <div className="md:col-span-2 border-t border-slate-150 dark:border-slate-800/80 pt-4">
-                            <h3 className="text-xs uppercase font-black text-slate-400 dark:text-slate-505 tracking-wider font-bold">Social Links & Portfolios</h3>
-                        </div>
-
-                        <div>
-                            <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-355">
-                                GitHub Link
-                            </label>
-                            <input
-                                type="text"
-                                value={github}
-                                onChange={(e) => setGithub(e.target.value)}
-                                placeholder="e.g. https://github.com/username"
-                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-355">
-                                LinkedIn Link
-                            </label>
-                            <input
-                                type="text"
-                                value={linkedin}
-                                onChange={(e) => setLinkedin(e.target.value)}
-                                placeholder="e.g. https://linkedin.com/in/username"
-                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
-                            />
-                        </div>
-
-                        <div className="md:col-span-2">
-                            <label className="block mb-1.5 font-bold text-xs text-slate-700 dark:text-slate-355">
-                                Portfolio Website Link
-                            </label>
-                            <input
-                                type="text"
-                                value={portfolio}
-                                onChange={(e) => setPortfolio(e.target.value)}
-                                placeholder="e.g. https://myportfolio.com"
-                                className="w-full bg-slate-50 dark:bg-slate-955 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition text-slate-800 dark:text-slate-100 text-sm"
-                            />
-                        </div>
                     </div>
 
                     <div className="flex gap-4 pt-4 border-t border-slate-150 dark:border-slate-800/80">
