@@ -62,7 +62,7 @@ function Login({ isModal, onClose }) {
 
     let script;
     const initGoogleGSI = () => {
-      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "534125867119-nksq5hsn3bqpqskb3n2b7v7nqd37aor8.apps.googleusercontent.com";
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
       window.google?.accounts.id.initialize({
         client_id: clientId,
         callback: handleGoogleLogin,
