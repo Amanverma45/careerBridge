@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import Button from './Button';
@@ -12,6 +12,80 @@ function Signup({ isModal, onClose }) {
   const [role, setrole] = useState('')
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate()
+
+  const handleGoogleLogin = async (googleResponse) => {
+    if (!role) {
+      toast.error("Please select a role first to register with Google");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const googleToken = googleResponse.credential;
+      const res = await axios.post("/api/googleLogin", { token: googleToken, role });
+      
+      const token = res.data.token;
+      const user = res.data.user;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("loginTime", Date.now());
+
+        toast.success("Registered and Logged In Successfully via Google");
+        
+        if (onClose) {
+          onClose();
+        }
+
+        if (user.role === "admin") {
+          navigate("/admindashboard", { replace: true });
+        } else if (user.role === "recruiter") {
+          navigate("/recruiterdashboard", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Google Authentication Failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    let script;
+    const initGoogleGSI = () => {
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "534125867119-nksq5hsn3bqpqskb3n2b7v7nqd37aor8.apps.googleusercontent.com";
+      window.google?.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleLogin,
+      });
+
+      const btnContainer = document.getElementById("googleSignUpButton");
+      if (btnContainer) {
+        window.google?.accounts.id.renderButton(btnContainer, {
+          theme: "outline",
+          size: "large",
+          width: btnContainer.offsetWidth || 350,
+          text: "signup_with",
+        });
+      }
+    };
+
+    if (!document.getElementById("google-gsi-client")) {
+      script = document.createElement("script");
+      script.id = "google-gsi-client";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = initGoogleGSI;
+      document.body.appendChild(script);
+    } else {
+      initGoogleGSI();
+    }
+  }, [role]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,6 +226,13 @@ function Signup({ isModal, onClose }) {
           {loading ? "Creating Account..." : "Create Account"}
         </Button>
 
+        <div className="relative flex py-2 items-center">
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+          <span className="flex-shrink mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-wider">Or</span>
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+        </div>
+
+        <div id="googleSignUpButton" className="w-full flex justify-center mt-1"></div>
       </form>
     </div>
   );

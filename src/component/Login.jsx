@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Button from './Button';
@@ -20,6 +20,77 @@ function Login({ isModal, onClose }) {
   const [resetLoading, setResetLoading] = useState(false);
 
   const navigate = useNavigate()
+
+  const handleGoogleLogin = async (googleResponse) => {
+    try {
+      setLoading(true);
+      const googleToken = googleResponse.credential;
+      const res = await axios.post("/api/googleLogin", { token: googleToken });
+      
+      const token = res.data.token;
+      const user = res.data.user;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("loginTime", Date.now());
+
+        toast.success("Login Successful via Google");
+        
+        if (onClose) {
+          onClose();
+        }
+
+        if (user.role === "admin") {
+          navigate("/admindashboard", { replace: true });
+        } else if (user.role === "recruiter") {
+          navigate("/recruiterdashboard", { replace: true });
+        } else {
+          navigate("/dashboard", { replace: true });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.message || "Google Login Failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (view !== "login") return;
+
+    let script;
+    const initGoogleGSI = () => {
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "534125867119-nksq5hsn3bqpqskb3n2b7v7nqd37aor8.apps.googleusercontent.com";
+      window.google?.accounts.id.initialize({
+        client_id: clientId,
+        callback: handleGoogleLogin,
+      });
+
+      const btnContainer = document.getElementById("googleSignInButton");
+      if (btnContainer) {
+        window.google?.accounts.id.renderButton(btnContainer, {
+          theme: "outline",
+          size: "large",
+          width: btnContainer.offsetWidth || 350,
+          text: "signin_with",
+        });
+      }
+    };
+
+    if (!document.getElementById("google-gsi-client")) {
+      script = document.createElement("script");
+      script.id = "google-gsi-client";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.async = true;
+      script.defer = true;
+      script.onload = initGoogleGSI;
+      document.body.appendChild(script);
+    } else {
+      initGoogleGSI();
+    }
+  }, [view]);
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -212,6 +283,14 @@ function Login({ isModal, onClose }) {
             >
               {loading ? "Signing in..." : "Sign In"}
             </Button>
+
+            <div className="relative flex py-2 items-center">
+              <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+              <span className="flex-shrink mx-4 text-slate-400 text-[10px] font-bold uppercase tracking-wider">Or</span>
+              <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+            </div>
+
+            <div id="googleSignInButton" className="w-full flex justify-center mt-1"></div>
           </form>
         </>
       )}
